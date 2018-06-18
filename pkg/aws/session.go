@@ -10,9 +10,10 @@ type Session struct {
 }
 
 // New returns a new *Session embedding *session.Session
-func New() (*Session, error) {
+func New(input *SessionInput) (*Session, error) {
 
 	cfg := new(aws.Config)
+	cfg.Region = aws.String(input.region)
 
 	awsSession, awsSessionErr := session.NewSession(cfg)
 	if awsSessionErr != nil {

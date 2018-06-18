@@ -10,7 +10,11 @@ import (
 
 func TestSnsPublish(t *testing.T) {
 
-	awsSvc, awsSvcErr := pkgAws.New()
+	region := "eu-central-1"
+
+	svcIn := pkgAws.NewSessionInput(region)
+
+	awsSvc, awsSvcErr := pkgAws.New(svcIn)
 
 	assert.NoError(t, awsSvcErr)
 	assert.NotEmpty(t, awsSvc)

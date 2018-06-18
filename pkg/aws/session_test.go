@@ -7,7 +7,13 @@ import (
 
 func TestNew(t *testing.T) {
 
-	svc, err := New()
+	region := "eu-central-1"
+
+	in := NewSessionInput(region)
+
+	assert.NotEmpty(t, in)
+
+	svc, err := New(in)
 
 	assert.NotEmpty(t, svc)
 	assert.NoError(t, err)

@@ -8,7 +8,11 @@ import (
 
 func TestNew(t *testing.T) {
 
-	awsSvc, awsSvcErr := aws.New()
+	region := "eu-central-1"
+
+	in := aws.NewSessionInput(region)
+
+	awsSvc, awsSvcErr := aws.New(in)
 
 	assert.NoError(t, awsSvcErr)
 	assert.NotEmpty(t, awsSvc)
