@@ -4,7 +4,6 @@
 [[projects]]
   name = "github.com/aws/aws-sdk-go"
   packages = [
-    ".",
     "aws",
     "aws/awserr",
     "aws/awsutil",
@@ -30,6 +29,7 @@
     "private/protocol/query/queryutil",
     "private/protocol/rest",
     "private/protocol/xml/xmlutil",
+    "service/sns",
     "service/sts"
   ]
   revision = "bfc1a07cf158c30c41a3eefba8aae043d0bb5bff"
@@ -59,14 +59,25 @@
   version = "v1.0.0"
 
 [[projects]]
+  name = "github.com/stretchr/objx"
+  packages = ["."]
+  revision = "477a77ecc69700c7cdeb1fa9e129548e1c1c393c"
+  version = "v0.1.1"
+
+[[projects]]
   name = "github.com/stretchr/testify"
-  packages = ["assert"]
+  packages = [
+    ".",
+    "assert",
+    "http",
+    "mock"
+  ]
   revision = "f35b8ab0b5a2cef36673838d662e249dd9c94686"
   version = "v1.2.2"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "526e0d4d8f0c1682d3fc215e6fbeee676b4636a45250bd1b5f3502c459751a11"
+  inputs-digest = "c2da0cd1b922de152f62703031a7cb9572007ed13100ea02bad8f4196a958edf"
   solver-name = "gps-cdcl"
   solver-version = 1
