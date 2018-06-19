@@ -59,25 +59,20 @@
   version = "v1.0.0"
 
 [[projects]]
-  name = "github.com/stretchr/objx"
-  packages = ["."]
-  revision = "477a77ecc69700c7cdeb1fa9e129548e1c1c393c"
-  version = "v0.1.1"
-
-[[projects]]
   name = "github.com/stretchr/testify"
-  packages = [
-    ".",
-    "assert",
-    "http",
-    "mock"
-  ]
+  packages = ["assert"]
   revision = "f35b8ab0b5a2cef36673838d662e249dd9c94686"
   version = "v1.2.2"
+
+[[projects]]
+  name = "github.com/tkanos/gonfig"
+  packages = ["."]
+  revision = "e83209aed2d171bab5ffb312a1e630110481cb99"
+  version = "1.0"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c2da0cd1b922de152f62703031a7cb9572007ed13100ea02bad8f4196a958edf"
+  inputs-digest = "45f95eb1088e7a61f43936de93d11feb6df6fadb189dc6ad9f84bc5776858e51"
   solver-name = "gps-cdcl"
   solver-version = 1
