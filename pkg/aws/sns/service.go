@@ -2,6 +2,7 @@ package sns
 
 import "github.com/aws/aws-sdk-go/service/sns"
 
+// PublishInput embeds sns.PublishInput to be used to call SnsPublish
 type PublishInput struct {
 	*sns.PublishInput
 }

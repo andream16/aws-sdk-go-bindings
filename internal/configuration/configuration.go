@@ -10,6 +10,7 @@ import (
 
 const confFileName = "configuration.json"
 
+// Configuration contains parameters used in multiple parts of the code base
 type Configuration struct {
 	Region    string `json:"region"`
 	TargetArn string `json:"target_arn"`

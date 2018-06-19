@@ -5,6 +5,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/sns"
 )
 
+// Session embeds sns.SNS to be used to call New
 type Session struct {
 	*sns.SNS
 }

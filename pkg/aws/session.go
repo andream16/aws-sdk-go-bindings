@@ -5,6 +5,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 )
 
+// Session embeds session.Session
 type Session struct {
 	*session.Session
 }

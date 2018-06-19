@@ -1,5 +1,6 @@
 package aws
 
+// SessionInput contains the input to be passed to New
 type SessionInput struct {
 	region string
 }

@@ -9,6 +9,7 @@ import (
 
 const messageStructure = "json"
 
+// Body is used to initialize a valid SNS message
 type Body struct {
 	Default string `json:"default"`
 }
