@@ -5,7 +5,7 @@ Helper to easily access some [aws-sdk-go](https://github.com/aws/aws-sdk-go)'s m
 
 ## Development
 
-If you want to fork it or just use it in local, edit `internal/configuration/configuration.json` by setting your aws options like:
+Install [dep](https://github.com/golang/dep) and run `dep ensure` inside the project's folder to get project's vendors. If you want to fork it or just use it in local, edit `internal/configuration/configuration.json` by setting your aws options like:
 
 ```
 {
