@@ -3,6 +3,10 @@
 # aws-sdk-go-bindings
 Helper to easily access some [aws-sdk-go](https://github.com/aws/aws-sdk-go)'s methods. It also contains multiple methods to cover tricky problems like preparing and sns default message and unmarshal an image coming out from a stream. At the moment it covers SNS, DynamoDB, Rekognition and S3.
 
+## Utilization
+
+You can import code from both `cmd` and `pkg` root package. `cmd` contains high level methods that interact with `pkg` ones while `pkg` directly interacts with aws-sdk-go.
+
 ## Development
 
 Install [dep](https://github.com/golang/dep) and run `dep ensure` inside the project's folder to get project's vendors. If you want to fork it or just use it in local, edit `internal/configuration/configuration.json` by setting your aws options like:
