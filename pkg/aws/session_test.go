@@ -3,13 +3,14 @@ package aws
 import (
 	"testing"
 	"github.com/stretchr/testify/assert"
+	"github.com/andream16/aws-sdk-go-bindings/testdata"
 )
 
 func TestNew(t *testing.T) {
 
-	region := "eu-central-1"
+	cfg := testdata.MockConfiguration(t)
 
-	in := NewSessionInput(region)
+	in := NewSessionInput(cfg.Region)
 
 	assert.NotEmpty(t, in)
 
