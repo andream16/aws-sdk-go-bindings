@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestSnsPublish(t *testing.T) {
+func TestSession_SnsPublish(t *testing.T) {
 
 	cfg := testdata.MockConfiguration(t)
 
