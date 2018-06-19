@@ -1,9 +1,9 @@
 package sns
 
 import (
-	"testing"
 	"github.com/andream16/aws-sdk-go-bindings/pkg/aws"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestNew(t *testing.T) {

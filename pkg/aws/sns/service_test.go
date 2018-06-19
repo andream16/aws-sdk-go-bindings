@@ -1,12 +1,12 @@
 package sns
 
 import (
-	"testing"
 	pkgAws "github.com/andream16/aws-sdk-go-bindings/pkg/aws"
-	"github.com/stretchr/testify/assert"
-	"github.com/aws/aws-sdk-go/service/sns"
-	"github.com/aws/aws-sdk-go/aws"
 	"github.com/andream16/aws-sdk-go-bindings/testdata"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/sns"
+	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestSnsPublish(t *testing.T) {
@@ -38,4 +38,3 @@ func TestSnsPublish(t *testing.T) {
 	assert.NoError(t, err)
 
 }
-

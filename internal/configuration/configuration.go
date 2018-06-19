@@ -2,16 +2,16 @@
 package configuration
 
 import (
-	"runtime"
+	"github.com/tkanos/gonfig"
 	"path"
 	"path/filepath"
-	"github.com/tkanos/gonfig"
+	"runtime"
 )
 
 const confFileName = "configuration.json"
 
 type Configuration struct {
-	Region string `json:"region"`
+	Region    string `json:"region"`
 	TargetArn string `json:"target_arn"`
 }
 
