@@ -1,8 +1,8 @@
 package sns
 
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 type TestSNSMessage struct {
@@ -31,4 +31,3 @@ func TestUnescapeMessageString(t *testing.T) {
 	assert.Equal(t, `{"some_param":"some_value"}`, s)
 
 }
-

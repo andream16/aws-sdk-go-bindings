@@ -1,8 +1,8 @@
 package sns
 
 import (
-	"strings"
 	"encoding/json"
+	"strings"
 )
 
 // UnmarshalMessage unmarshal an SNS Message to a given interface
