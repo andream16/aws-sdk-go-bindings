@@ -20,7 +20,7 @@ func TestSession_SnsPublish(t *testing.T) {
 	assert.NoError(t, awsSvcErr)
 	assert.NotEmpty(t, awsSvc)
 
-	snsSvc, snsSvcErr := New(awsSvc.Session)
+	snsSvc, snsSvcErr := New(awsSvc)
 
 	assert.NoError(t, snsSvcErr)
 	assert.NotEmpty(t, snsSvc)
@@ -28,7 +28,7 @@ func TestSession_SnsPublish(t *testing.T) {
 	in := &PublishInput{
 		PublishInput: &sns.PublishInput{
 			Message:          aws.String(`{"default":"{\"par1\":\"pr1\",\"par2\":\"pr2\"}"}`),
-			TargetArn:        aws.String(cfg.TargetArn),
+			TargetArn:        aws.String(cfg.SNS.TargetArn),
 			MessageStructure: aws.String(`json`),
 		},
 	}

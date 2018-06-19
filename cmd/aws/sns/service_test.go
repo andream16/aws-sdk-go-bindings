@@ -2,7 +2,6 @@ package sns
 
 import (
 	"github.com/andream16/aws-sdk-go-bindings/cmd/aws"
-	pkgSns "github.com/andream16/aws-sdk-go-bindings/pkg/aws/sns"
 	"github.com/andream16/aws-sdk-go-bindings/testdata"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -21,20 +20,14 @@ func TestSns_Publish(t *testing.T) {
 	assert.NoError(t, awsSvcErr)
 	assert.NotEmpty(t, awsSvc)
 
-	svc, svcErr := New(awsSvc)
+	svc, svcErr := New(awsSvc.Session)
 
 	assert.NoError(t, svcErr)
 	assert.NotEmpty(t, svc)
 
-	sns := Sns{
-		&pkgSns.Session{
-			SNS: svc.SNS,
-		},
-	}
-
-	err := sns.Publish(
+	err := svc.Publish(
 		TestPublishType{"some_val"},
-		cfg.TargetArn,
+		cfg.SNS.TargetArn,
 	)
 
 	assert.NoError(t, err)

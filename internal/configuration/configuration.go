@@ -13,6 +13,19 @@ const confFileName = "configuration.json"
 // Configuration contains parameters used in multiple parts of the code base
 type Configuration struct {
 	Region    string `json:"region"`
+	SNS SNS `json:"SNS"`
+	DynamoDB DynamoDB `json:"DynamoDB"`
+}
+
+// DynamoDB contains test parameters for DynamoDB
+type DynamoDB struct {
+	Endpoint string `json:"endpoint"`
+	TableName string `json:"table_name"`
+	PrimaryKey string `json:"primary_key"`
+}
+
+// SNS contains test parameters for SNS
+type SNS struct {
 	TargetArn string `json:"target_arn"`
 }
 

@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/aws/aws-lambda-go"
+  packages = ["events"]
+  revision = "4d30d0ff60440c2d0480a15747c96ee71c3c53d4"
+  version = "v1.2.0"
+
+[[projects]]
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
@@ -25,10 +31,14 @@
     "internal/sdkrand",
     "internal/shareddefaults",
     "private/protocol",
+    "private/protocol/json/jsonutil",
+    "private/protocol/jsonrpc",
     "private/protocol/query",
     "private/protocol/query/queryutil",
     "private/protocol/rest",
     "private/protocol/xml/xmlutil",
+    "service/dynamodb",
+    "service/dynamodb/dynamodbattribute",
     "service/sns",
     "service/sts"
   ]
@@ -73,6 +83,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "45f95eb1088e7a61f43936de93d11feb6df6fadb189dc6ad9f84bc5776858e51"
+  inputs-digest = "9fd3b9fea796ad44f65761740fa145ddac3910f3cdba94190f455144dff90eb1"
   solver-name = "gps-cdcl"
   solver-version = 1

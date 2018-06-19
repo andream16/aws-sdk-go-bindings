@@ -1,10 +1,10 @@
 package dynamodb
 
 import (
-	"testing"
+	"encoding/json"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/stretchr/testify/assert"
-	"encoding/json"
+	"testing"
 )
 
 type TestUnmarshalStreamImageType struct {
@@ -46,4 +46,3 @@ func TestUnmarshalStreamImage(t *testing.T) {
 	assert.Equal(t, someVal, out.SomeParam)
 
 }
-
