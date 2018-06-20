@@ -1,7 +1,34 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/AndreaM16/aws-sdk-go-bindings)](https://goreportcard.com/report/github.com/AndreaM16/aws-sdk-go-bindings) [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/andream16/aws-sdk-go-bindings/blob/master/LICENSE.txt)
 
 # aws-sdk-go-bindings
-Helper to easily access some [aws-sdk-go](https://github.com/aws/aws-sdk-go)'s methods. It also contains multiple methods to cover tricky problems like preparing and sns default message and unmarshal an image coming out from a stream. At the moment it covers SNS, DynamoDB, Rekognition and S3.
+Helper to easily access some [aws-sdk-go](https://github.com/aws/aws-sdk-go)'s methods. It also contains multiple methods to cover tricky problems like preparing and sns default message and unmarshal an image coming out from a stream like:
+
+```
+// UnmarshalStreamImage unmarshals a dynamo stream image in a pointer to an interface
+func UnmarshalStreamImage(in map[string]events.DynamoDBAttributeValue, out interface{}) error {
+
+	dbAttrMap := make(map[string]*dynamodb.AttributeValue)
+
+	for k, v := range in {
+
+		bytes, marshalErr := v.MarshalJSON()
+		if marshalErr != nil {
+			return marshalErr
+		}
+
+		var dbAttr dynamodb.AttributeValue
+
+		json.Unmarshal(bytes, &dbAttr)
+		dbAttrMap[k] = &dbAttr
+
+	}
+
+	return dynamodbattribute.UnmarshalMap(dbAttrMap, out)
+
+}
+```
+
+At the moment it covers SNS, DynamoDB, Rekognition and S3.
 
 ## Utilization
 
