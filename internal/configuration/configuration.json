@@ -1,4 +1,16 @@
 {
-  "region" : "yourRegion",
-  "target_arn" : "yourTarget"
+  "region" : "eu-central-1",
+  "SNS" : {
+    "target_arn" : "arn:aws:sns:eu-central-1:${your_aws_account_id}:${your_resource_name}"
+  },
+  "DynamoDB" : {
+    "endpoint" : "your_local_dynamo_endpoint",
+    "pkg_table_name" : "some_table_1",
+    "cmd_table_name" : "some_table_2",
+    "primary_key" : "some_param"
+  },
+  "S3" : {
+      "bucket" : "your_bucket",
+      "source_image" : "path_to_a_test_image"
+    }
 }
