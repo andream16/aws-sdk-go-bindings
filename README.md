@@ -33,4 +33,4 @@ If you want to fork it or just use it in local, edit `internal/configuration/con
 
 Also, to make `dynamodb` tests work you need to start a [local dynamodb](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html)
 and run it on the same endpoint you put in the configuration above like `java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb -port 4200
-` if you used `"DynamoDB.endpoint" : "localhost:4200/"`.
+` if you used `"DynamoDB.endpoint" : "http://localhost:4200/"`.
