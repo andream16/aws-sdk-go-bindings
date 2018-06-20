@@ -9,9 +9,11 @@ import (
 
 func CreateTableIfNotExists(t *testing.T, dynamo dynamodb.DynamoDB, tableName string, attributes []*dynamodb.AttributeDefinition, keys []*dynamodb.KeySchemaElement) {
 
-	if !tableExists(t, dynamo, tableName) {
-		createTable(t, dynamo, tableName, attributes, keys)
+	if tableExists(t, dynamo, tableName) {
+		deleteTable(t, dynamo, tableName)
 	}
+
+	createTable(t, dynamo, tableName, attributes, keys)
 
 }
 
@@ -28,6 +30,18 @@ func tableExists(t *testing.T, svc dynamodb.DynamoDB, tableName string) bool {
 	}
 
 	return true
+
+}
+
+func deleteTable(t *testing.T, dynamo dynamodb.DynamoDB, tableName string) {
+
+	t.Helper()
+
+	_, err := dynamo.DeleteTable(&dynamodb.DeleteTableInput{
+		TableName: aws.String(tableName),
+	})
+
+	assert.NoError(t, err)
 
 }
 

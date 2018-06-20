@@ -11,6 +11,19 @@ type TestUnmarshalStreamImageType struct {
 	SomeParam string `json:"some_param"`
 }
 
+func TestNewPutItemInput(t *testing.T) {
+
+	tableName := "some_name"
+	in := new(TestUnmarshalStreamImageType)
+	in.SomeParam = "some_val"
+
+	out, err := NewPutItemInput(in, tableName)
+
+	assert.NoError(t, err)
+	assert.Equal(t, tableName, *out.TableName)
+
+}
+
 func TestUnmarshalStreamImage(t *testing.T) {
 
 	input := []byte(`

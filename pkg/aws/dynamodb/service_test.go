@@ -5,7 +5,6 @@ import (
 	"github.com/andream16/aws-sdk-go-bindings/testdata"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -43,18 +42,14 @@ func TestDynamoDB_DynamoPutItem(t *testing.T) {
 	var input TestDynamoDBDynamoPutItemType
 	input.SomeParam = cfg.DynamoDB.PrimaryKey
 
-	dynamoInput, dynamoInputErr := dynamodbattribute.MarshalMap(input)
+	putItemIn, putItemInErr := newPutItemInput(input, cfg.DynamoDB.TableName)
 
-	assert.NoError(t, dynamoInputErr)
-
-	var putItemIn PutItemInput
-	putItemIn.TableName = aws.String(cfg.DynamoDB.TableName)
-	putItemIn.Item = dynamoInput
+	assert.NoError(t, putItemInErr)
 
 	dynamoNewSvc := new(DynamoDB)
 	dynamoNewSvc.DynamoDB = dynamoSvc
 
-	err := dynamoNewSvc.DynamoPutItem(&putItemIn)
+	err := dynamoNewSvc.DynamoPutItem(putItemIn)
 
 	assert.NoError(t, err)
 
