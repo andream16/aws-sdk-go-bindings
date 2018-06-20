@@ -1,11 +1,11 @@
 package dynamodb
 
 import (
-	"testing"
 	"github.com/andream16/aws-sdk-go-bindings/testdata"
-	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 type TestDynamoDBDynamoPutItemType struct {
@@ -36,13 +36,12 @@ func TestDynamoDB_DynamoPutItem(t *testing.T) {
 				KeyType:       aws.String("HASH"),
 			},
 		},
-
 	)
 
 	var input TestDynamoDBDynamoPutItemType
 	input.SomeParam = cfg.DynamoDB.PrimaryKey
 
-	putItemIn, putItemInErr := newPutItemInput(input, cfg.DynamoDB.TableName)
+	putItemIn, putItemInErr := NewPutItemInput(input, cfg.DynamoDB.TableName)
 
 	assert.NoError(t, putItemInErr)
 

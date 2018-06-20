@@ -1,4 +1,4 @@
-package sns
+package dynamodb
 
 import (
 	"github.com/andream16/aws-sdk-go-bindings/cmd/aws"

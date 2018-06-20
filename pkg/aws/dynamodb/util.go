@@ -3,21 +3,22 @@ package dynamodb
 import (
 	"encoding/json"
 	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-	"github.com/aws/aws-sdk-go/aws"
 )
 
 // NewPutItemInput returns a new *PutItemInput
 func NewPutItemInput(in interface{}, tableName string) (*PutItemInput, error) {
 
-	dynamoInput, dynamoInputErr := dynamodbattribute.MarshalMap(in); if dynamoInputErr != nil {
+	dynamoInput, dynamoInputErr := dynamodbattribute.MarshalMap(in)
+	if dynamoInputErr != nil {
 		return nil, dynamoInputErr
 	}
 
 	out := &PutItemInput{
 		&dynamodb.PutItemInput{
-			Item: dynamoInput,
+			Item:      dynamoInput,
 			TableName: aws.String(tableName),
 		},
 	}
