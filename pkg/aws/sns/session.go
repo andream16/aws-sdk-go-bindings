@@ -6,12 +6,12 @@ import (
 	"github.com/aws/aws-sdk-go/service/sns"
 )
 
-// Session embeds sns.SNS to be used to call New
+// SNS embeds sns.SNS to be used to call New
 type SNS struct {
 	*sns.SNS
 }
 
-// New returns a new *Session embedding *sns.SNS
+// New returns a new *SNS embedding *sns.SNS
 func New(svc *aws.Session) (*SNS, error) {
 
 	newSvc, newSvcErr := session.NewSession(svc.Config)

@@ -15,6 +15,7 @@ type Configuration struct {
 	Region   string   `json:"region"`
 	SNS      SNS      `json:"SNS"`
 	DynamoDB DynamoDB `json:"DynamoDB"`
+	S3       S3       `json:"S3"`
 }
 
 // DynamoDB contains test parameters for DynamoDB
@@ -28,6 +29,12 @@ type DynamoDB struct {
 // SNS contains test parameters for SNS
 type SNS struct {
 	TargetArn string `json:"target_arn"`
+}
+
+// S3 contains test parameters for S3
+type S3 struct {
+	Bucket      string `json:"bucket"`
+	SourceImage string `json:"source_image"`
 }
 
 // Get returns Configuration leaded from configuration file
