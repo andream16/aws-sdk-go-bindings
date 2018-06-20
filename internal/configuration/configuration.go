@@ -12,10 +12,11 @@ const confFileName = "configuration.json"
 
 // Configuration contains parameters used in multiple parts of the code base
 type Configuration struct {
-	Region   string   `json:"region"`
-	SNS      SNS      `json:"SNS"`
-	DynamoDB DynamoDB `json:"DynamoDB"`
-	S3       S3       `json:"S3"`
+	Region      string      `json:"region"`
+	SNS         SNS         `json:"SNS"`
+	DynamoDB    DynamoDB    `json:"DynamoDB"`
+	S3          S3          `json:"S3"`
+	Rekognition Rekognition `json:"Rekognition"`
 }
 
 // DynamoDB contains test parameters for DynamoDB
@@ -35,6 +36,22 @@ type SNS struct {
 type S3 struct {
 	Bucket      string `json:"bucket"`
 	SourceImage string `json:"source_image"`
+}
+
+// Rekognition contains test parameters for Rekognition
+type Rekognition struct {
+	Region       string `json:"region"`
+	CompareFaces struct {
+		Similarity  float64 `json:"similarity"`
+		SourceImage string  `json:"source_image"`
+		TargetImage string  `json:"target_image"`
+	} `json:"compare_faces"`
+	DetectFaces struct {
+		SourceImage string `json:"source_image"`
+	} `json:"detect_faces"`
+	DetectText struct {
+		SourceImage string `json:"source_image"`
+	} `json:"detect_text"`
 }
 
 // Get returns Configuration leaded from configuration file
