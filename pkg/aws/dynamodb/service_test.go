@@ -2,8 +2,6 @@ package dynamodb
 
 import (
 	"github.com/andream16/aws-sdk-go-bindings/testdata"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -18,30 +16,12 @@ func TestDynamoDB_DynamoPutItem(t *testing.T) {
 
 	cfg := testdata.MockConfiguration(t)
 
-	in := []*dynamodb.AttributeDefinition{
-		{
-			AttributeName: aws.String(cfg.DynamoDB.PrimaryKey),
-			AttributeType: aws.String("S"),
-		},
-	}
-
-	testdata.CreateTableIfNotExists(
-		t,
-		*dynamoSvc,
-		cfg.DynamoDB.TableName,
-		in,
-		[]*dynamodb.KeySchemaElement{
-			{
-				AttributeName: aws.String(cfg.DynamoDB.PrimaryKey),
-				KeyType:       aws.String("HASH"),
-			},
-		},
-	)
+	testdata.MockDynamoDBTable(t, dynamoSvc, cfg.DynamoDB.PkgTableName)
 
 	var input TestDynamoDBDynamoPutItemType
 	input.SomeParam = cfg.DynamoDB.PrimaryKey
 
-	putItemIn, putItemInErr := NewPutItemInput(input, cfg.DynamoDB.TableName)
+	putItemIn, putItemInErr := NewPutItemInput(input, cfg.DynamoDB.PkgTableName)
 
 	assert.NoError(t, putItemInErr)
 

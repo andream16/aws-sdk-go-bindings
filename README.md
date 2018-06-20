@@ -14,6 +14,14 @@ Install [dep](https://github.com/golang/dep) and run `dep ensure` inside the pro
 ```
 {
   "region" : "eu-central-1",
-  "target_arn" : "arn:aws:sns:eu-central-1:your_aws_accound_id:some_arn_name"
+  "SNS" : {
+    "target_arn" : "arn:aws:sns:eu-central-1:${your_aws_account_id}:${your_resource_name}"
+  },
+  "DynamoDB" : {
+    "endpoint" : "your_local_dynamo_endpoint",
+    "pkg_table_name" : "some_table_1",
+    "cmd_table_name" : "some_table_2",
+    "primary_key" : "some_param"
+  }
 }
 ```

@@ -1,7 +1,8 @@
 package dynamodb
 
 import (
-	"github.com/andream16/aws-sdk-go-bindings/pkg/aws"
+	pkgAws "github.com/andream16/aws-sdk-go-bindings/pkg/aws"
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 )
@@ -11,7 +12,12 @@ type DynamoDB struct {
 	*dynamodb.DynamoDB
 }
 
-func New(svc *aws.Session) (*DynamoDB, error) {
+// New returns a new *DynamoDB
+func New(svc *pkgAws.Session, endpoint string) (*DynamoDB, error) {
+
+	if len(endpoint) > 0 {
+		svc.Config.Endpoint = aws.String(endpoint)
+	}
 
 	newSvc, newSvcErr := session.NewSession(svc.Config)
 	if newSvcErr != nil {

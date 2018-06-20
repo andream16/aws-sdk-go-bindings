@@ -2,6 +2,7 @@ package dynamodb
 
 import "github.com/aws/aws-sdk-go/service/dynamodb"
 
+// PutItemInput embeds *dynamodb.PutItemInput
 type PutItemInput struct {
 	*dynamodb.PutItemInput
 }

@@ -39,3 +39,31 @@ func MockDynamoDB(t *testing.T) *dynamodb.DynamoDB {
 	return dynamodb.New(dynamoSession)
 
 }
+
+func MockDynamoDBTable(t *testing.T, svc *dynamodb.DynamoDB, tableName string) {
+
+	t.Helper()
+
+	cfg := MockConfiguration(t)
+
+	in := []*dynamodb.AttributeDefinition{
+		{
+			AttributeName: aws.String(cfg.DynamoDB.PrimaryKey),
+			AttributeType: aws.String("S"),
+		},
+	}
+
+	CreateTableIfNotExists(
+		t,
+		*svc,
+		tableName,
+		in,
+		[]*dynamodb.KeySchemaElement{
+			{
+				AttributeName: aws.String(cfg.DynamoDB.PrimaryKey),
+				KeyType:       aws.String("HASH"),
+			},
+		},
+	)
+
+}

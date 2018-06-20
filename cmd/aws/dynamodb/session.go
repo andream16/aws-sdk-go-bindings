@@ -11,9 +11,9 @@ type DynamoDB struct {
 }
 
 // New returns a *DynamoDB given a *aws.Session
-func New(svc *aws.Session) (*DynamoDB, error) {
+func New(svc *aws.Session, endpoint string) (*DynamoDB, error) {
 
-	snsSvc, err := dynamodb.New(svc.Session)
+	snsSvc, err := dynamodb.New(svc.Session, endpoint)
 	if err != nil {
 		return nil, err
 	}

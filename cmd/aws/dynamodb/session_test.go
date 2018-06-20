@@ -15,7 +15,7 @@ func TestNew(t *testing.T) {
 
 	assert.NoError(t, svcErr)
 
-	snsSvc, snsSvcErr := New(svc)
+	snsSvc, snsSvcErr := New(svc, "")
 
 	assert.NoError(t, snsSvcErr)
 	assert.NotEmpty(t, snsSvc)

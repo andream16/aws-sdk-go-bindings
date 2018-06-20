@@ -19,9 +19,10 @@ type Configuration struct {
 
 // DynamoDB contains test parameters for DynamoDB
 type DynamoDB struct {
-	Endpoint   string `json:"endpoint"`
-	TableName  string `json:"table_name"`
-	PrimaryKey string `json:"primary_key"`
+	Endpoint     string `json:"endpoint"`
+	PkgTableName string `json:"pkg_table_name"`
+	CmdTableName string `json:"cmd_table_name"`
+	PrimaryKey   string `json:"primary_key"`
 }
 
 // SNS contains test parameters for SNS
