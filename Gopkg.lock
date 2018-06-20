@@ -57,6 +57,12 @@
   version = "v1.1.0"
 
 [[projects]]
+  name = "github.com/fatih/structs"
+  packages = ["."]
+  revision = "a720dfa8df582c51dee1b36feabb906bde1588bd"
+  version = "v1.0"
+
+[[projects]]
   name = "github.com/go-ini/ini"
   packages = ["."]
   revision = "06f5f3d67269ccec1fe5fe4134ba6e982984f7f5"
@@ -88,6 +94,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "fe9766269e83f30a6ccce37a79263cad39a7cb8567005f84f7d559e7fd2b80ce"
+  inputs-digest = "c7b0219f738edd64343ab1397a43b4f827364090b5351ed4fe4d05edf65c43d0"
   solver-name = "gps-cdcl"
   solver-version = 1

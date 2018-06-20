@@ -25,8 +25,22 @@ If you want to fork it or just use it in local, edit `internal/configuration/con
     "primary_key" : "some_param"
   },
   "S3" : {
-      "bucket" : "your_bucket",
-      "source_image" : "path_to_a_test_image"
+    "bucket" : "your_bucket",
+    "source_image" : "path_to_a_test_image"
+  },
+  "Rekognition" : {
+      "region" : "rekognition_region",
+      "compare_faces" : {
+        "source_image" : "path_to_a_test_image",
+        "target_image" : "path_to_a_test_image",
+        "similarity" : 70.0
+      },
+      "detect_faces" : {
+        "source_image" : "path_to_a_test_image"
+      },
+      "detect_text" : {
+        "source_image" : "path_to_a_test_image"
+      }
     }
 }
 ```
