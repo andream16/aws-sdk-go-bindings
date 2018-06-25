@@ -1,6 +1,7 @@
 package rekognition
 
 import (
+	"github.com/andream16/aws-sdk-go-bindings/internal/configuration"
 	"github.com/andream16/aws-sdk-go-bindings/pkg/aws"
 	"github.com/andream16/aws-sdk-go-bindings/pkg/aws/s3"
 	"github.com/andream16/aws-sdk-go-bindings/testdata"
@@ -8,9 +9,19 @@ import (
 	"testing"
 )
 
-func TestRekognition_RekognitionCompareFaces(t *testing.T) {
+func TestRekognition_RekognitionMethods(t *testing.T) {
 
 	cfg := testdata.MockConfiguration(t)
+
+	testRekognitionRekognitionCompareFaces(t, cfg)
+	testRekognitionRekognitionDetectFaces(t, cfg)
+	testRekognitionRekognitionDetectText(t, cfg)
+
+}
+
+func testRekognitionRekognitionCompareFaces(t *testing.T, cfg configuration.Configuration) {
+
+	t.Helper()
 
 	svcIn := aws.NewSessionInput(cfg.Region)
 
@@ -70,9 +81,9 @@ func TestRekognition_RekognitionCompareFaces(t *testing.T) {
 
 }
 
-func TestRekognition_RekognitionDetectFaces(t *testing.T) {
+func testRekognitionRekognitionDetectFaces(t *testing.T, cfg configuration.Configuration) {
 
-	cfg := testdata.MockConfiguration(t)
+	t.Helper()
 
 	svcIn := aws.NewSessionInput(cfg.Region)
 
@@ -114,9 +125,9 @@ func TestRekognition_RekognitionDetectFaces(t *testing.T) {
 
 }
 
-func TestRekognition_RekognitionDetectText(t *testing.T) {
+func testRekognitionRekognitionDetectText(t *testing.T, cfg configuration.Configuration) {
 
-	cfg := testdata.MockConfiguration(t)
+	t.Helper()
 
 	svcIn := aws.NewSessionInput(cfg.Region)
 

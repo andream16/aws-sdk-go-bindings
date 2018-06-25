@@ -27,6 +27,25 @@ func NewPutItemInput(in interface{}, tableName string) (*PutItemInput, error) {
 
 }
 
+// NewGetItemInput returns a new *GetItemInput
+func NewGetItemInput(tableName, keyName, keyValue string) *GetItemInput {
+
+	in := &dynamodb.GetItemInput{
+		TableName: aws.String(tableName),
+		Key: map[string]*dynamodb.AttributeValue{
+			keyName: {
+				S: aws.String(keyValue),
+			},
+		},
+	}
+
+	out := new(GetItemInput)
+	out.GetItemInput = in
+
+	return out
+
+}
+
 // UnmarshalStreamImage unmarshals a dynamo stream image in a pointer to an interface
 func UnmarshalStreamImage(in map[string]events.DynamoDBAttributeValue, out interface{}) error {
 
@@ -47,5 +66,17 @@ func UnmarshalStreamImage(in map[string]events.DynamoDBAttributeValue, out inter
 	}
 
 	return dynamodbattribute.UnmarshalMap(dbAttrMap, out)
+
+}
+
+// UnmarshalGetItemOutput unmarshals a *GetItemOutput into a passed interface reference
+func UnmarshalGetItemOutput(in *GetItemOutput, out interface{}) error {
+
+	unmarshalError := dynamodbattribute.UnmarshalMap(in.GetItemOutput.Item, out)
+	if unmarshalError != nil {
+		return unmarshalError
+	}
+
+	return nil
 
 }

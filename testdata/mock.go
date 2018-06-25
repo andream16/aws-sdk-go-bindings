@@ -22,11 +22,9 @@ func MockConfiguration(t *testing.T) configuration.Configuration {
 
 }
 
-func MockDynamoDB(t *testing.T) *dynamodb.DynamoDB {
+func MockDynamoDB(t *testing.T, cfg configuration.Configuration) *dynamodb.DynamoDB {
 
 	t.Helper()
-
-	cfg := MockConfiguration(t)
 
 	conf := &aws.Config{
 		Region:   aws.String(cfg.Region),
@@ -40,11 +38,9 @@ func MockDynamoDB(t *testing.T) *dynamodb.DynamoDB {
 
 }
 
-func MockDynamoDBTable(t *testing.T, svc *dynamodb.DynamoDB, tableName string) {
+func MockDynamoDBTable(t *testing.T, svc *dynamodb.DynamoDB, tableName string, cfg configuration.Configuration) {
 
 	t.Helper()
-
-	cfg := MockConfiguration(t)
 
 	in := []*dynamodb.AttributeDefinition{
 		{

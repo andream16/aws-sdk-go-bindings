@@ -3,14 +3,25 @@ package rekognition
 import (
 	"github.com/andream16/aws-sdk-go-bindings/cmd/aws"
 	"github.com/andream16/aws-sdk-go-bindings/cmd/aws/s3"
+	"github.com/andream16/aws-sdk-go-bindings/internal/configuration"
 	"github.com/andream16/aws-sdk-go-bindings/testdata"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-func TestRekognition_CompareFaces(t *testing.T) {
+func TestRekognition_Methods(t *testing.T) {
 
 	cfg := testdata.MockConfiguration(t)
+
+	testRekognitionCompareFaces(t, cfg)
+	testRekognitionDetectFaces(t, cfg)
+	testRekognitionDetectText(t, cfg)
+
+}
+
+func testRekognitionCompareFaces(t *testing.T, cfg configuration.Configuration) {
+
+	t.Helper()
 
 	awsSvc, awsSvcErr := aws.New(cfg.Region)
 
@@ -54,9 +65,9 @@ func TestRekognition_CompareFaces(t *testing.T) {
 
 }
 
-func TestRekognition_DetectFaces(t *testing.T) {
+func testRekognitionDetectFaces(t *testing.T, cfg configuration.Configuration) {
 
-	cfg := testdata.MockConfiguration(t)
+	t.Helper()
 
 	awsSvc, awsSvcErr := aws.New(cfg.Region)
 
@@ -88,9 +99,9 @@ func TestRekognition_DetectFaces(t *testing.T) {
 
 }
 
-func TestRekognition_DetectText(t *testing.T) {
+func testRekognitionDetectText(t *testing.T, cfg configuration.Configuration) {
 
-	cfg := testdata.MockConfiguration(t)
+	t.Helper()
 
 	awsSvc, awsSvcErr := aws.New(cfg.Region)
 
