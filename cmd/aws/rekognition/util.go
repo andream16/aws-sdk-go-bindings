@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/andream16/aws-sdk-go-bindings/pkg/aws/rekognition"
 	"github.com/fatih/structs"
+	"reflect"
 )
 
 // CompareFacesInput contains parameters to be sent to CompareFaces
@@ -100,15 +101,27 @@ type Quality struct {
 
 // UnmarshalCompareFacesOutput unmarshals a rekognition.CompareFacesOutput to *CompareFacesOutput
 func UnmarshalCompareFacesOutput(input rekognition.CompareFacesOutput, output *CompareFacesOutput) error {
+
+	if reflect.DeepEqual(input, reflect.Zero(reflect.TypeOf(input)).Interface()) {
+		return errors.New(ErrEmptyParameter)
+	}
+
 	err := unmarshalRekognitionOut(input.CompareFacesOutput, output)
 	if err != nil {
 		return err
 	}
+
 	return nil
+
 }
 
 // UnmarshalDetectFacesOutput unmarshals a rekognition.DetectFacesOutput to *DetectFacesOutput
 func UnmarshalDetectFacesOutput(input rekognition.DetectFacesOutput, output *DetectFacesOutput) error {
+
+	if reflect.DeepEqual(input, reflect.Zero(reflect.TypeOf(input)).Interface()) {
+		return errors.New(ErrEmptyParameter)
+	}
+
 	err := unmarshalRekognitionOut(input.DetectFacesOutput, output)
 	if err != nil {
 		return err
@@ -118,22 +131,32 @@ func UnmarshalDetectFacesOutput(input rekognition.DetectFacesOutput, output *Det
 
 // UnmarshalDetectTextOutput unmarshals a rekognition.DetectTextOutput to *DetectTextOutput
 func UnmarshalDetectTextOutput(input rekognition.DetectTextOutput, output *DetectTextOutput) error {
+
+	if reflect.DeepEqual(input, reflect.Zero(reflect.TypeOf(input)).Interface()) {
+		return errors.New(ErrEmptyParameter)
+	}
+
 	err := unmarshalRekognitionOut(input.DetectTextOutput, output)
 	if err != nil {
 		return err
 	}
+
 	return nil
+
 }
 
 // unmarshalRekognitionOut unmarshals a rekognition.*Output to a given interface.
 // Returns error if something went wrong.
 func unmarshalRekognitionOut(input, output interface{}) error {
 
+	if reflect.DeepEqual(input, reflect.Zero(reflect.TypeOf(input)).Interface()) {
+		return errors.New(ErrEmptyParameter)
+	}
+
 	m := structs.Map(input)
 
 	if len(m) == 0 {
-		emptyMapErr := errors.New("empty map")
-		return emptyMapErr
+		return errors.New(ErrEmptyMap)
 	}
 
 	bytes, marshalErr := json.Marshal(m)

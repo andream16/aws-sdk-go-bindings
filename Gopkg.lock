@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  branch = "master"
+  name = "github.com/andream16/go-logger"
+  packages = ["."]
+  revision = "b85043c3c75ede3da14cfe4851670e785f29e309"
+
+[[projects]]
   name = "github.com/aws/aws-lambda-go"
   packages = ["events"]
   revision = "4d30d0ff60440c2d0480a15747c96ee71c3c53d4"
@@ -94,6 +100,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c7b0219f738edd64343ab1397a43b4f827364090b5351ed4fe4d05edf65c43d0"
+  inputs-digest = "4dcbaee9b415d357ec1585d3fc4e0da4665bc1adcfd594b24fe32a383a07147d"
   solver-name = "gps-cdcl"
   solver-version = 1

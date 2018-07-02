@@ -29,4 +29,20 @@ func TestS3_GetObject(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotEqual(t, 0, len(b))
 
+	_, shouldBeErr1 := svc.GetObject(
+		"",
+		cfg.S3.SourceImage,
+	)
+
+	assert.Error(t, shouldBeErr1)
+	assert.Equal(t, ErrEmptyParameter, shouldBeErr1.Error())
+
+	_, shouldBeErr2 := svc.GetObject(
+		"",
+		cfg.S3.SourceImage,
+	)
+
+	assert.Error(t, shouldBeErr2)
+	assert.Equal(t, ErrEmptyParameter, shouldBeErr2.Error())
+
 }

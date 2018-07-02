@@ -149,7 +149,6 @@ func TestUnmarshalDetectFacesOutput(t *testing.T) {
 	outErr := UnmarshalDetectFacesOutput(detectFacesOutputMock, &out)
 
 	assert.NoError(t, outErr)
-
 	assert.NotEmpty(t, out)
 
 }

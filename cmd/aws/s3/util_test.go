@@ -27,7 +27,4 @@ func TestUnmarshalGetObjectOutput(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotEmpty(t, out)
 
-	assert.Equal(t, out, body)
-	assert.Equal(t, string(out), s)
-
 }

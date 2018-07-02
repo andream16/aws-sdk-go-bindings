@@ -10,7 +10,7 @@ type Rekognition struct {
 	*rekognition.Rekognition
 }
 
-// New returns a *Rekognition given a *aws.Session
+// New returns a *Rekognition given a *aws.Session. Region is optional.
 func New(svc *aws.Session, region string) (*Rekognition, error) {
 
 	rekSvc, err := rekognition.New(svc.Session, region)

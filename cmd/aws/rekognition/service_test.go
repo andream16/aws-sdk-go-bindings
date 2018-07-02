@@ -63,6 +63,33 @@ func testRekognitionCompareFaces(t *testing.T, cfg configuration.Configuration) 
 	assert.NoError(t, err)
 	assert.NotEmpty(t, out)
 
+	_, shouldBeErr1 := rekSvc.CompareFaces(
+		[]byte{},
+		encodedTargetObject,
+		cfg.Rekognition.CompareFaces.Similarity,
+	)
+
+	assert.Error(t, shouldBeErr1)
+	assert.Equal(t, ErrEmptyBytes, shouldBeErr1.Error())
+
+	_, shouldBeErr2 := rekSvc.CompareFaces(
+		encodedSourceObject,
+		[]byte{},
+		cfg.Rekognition.CompareFaces.Similarity,
+	)
+
+	assert.Error(t, shouldBeErr2)
+	assert.Equal(t, ErrEmptyBytes, shouldBeErr2.Error())
+
+	_, shouldBeErr3 := rekSvc.CompareFaces(
+		encodedSourceObject,
+		encodedTargetObject,
+		0,
+	)
+
+	assert.Error(t, shouldBeErr3)
+	assert.Equal(t, ErrBadSimilarity, shouldBeErr3.Error())
+
 }
 
 func testRekognitionDetectFaces(t *testing.T, cfg configuration.Configuration) {
@@ -97,6 +124,11 @@ func testRekognitionDetectFaces(t *testing.T, cfg configuration.Configuration) {
 	assert.NoError(t, err)
 	assert.NotEmpty(t, out)
 
+	_, shouldBeErr := rekSvc.DetectFaces([]byte{})
+
+	assert.Error(t, shouldBeErr)
+	assert.Equal(t, ErrEmptyBytes, shouldBeErr.Error())
+
 }
 
 func testRekognitionDetectText(t *testing.T, cfg configuration.Configuration) {
@@ -130,5 +162,10 @@ func testRekognitionDetectText(t *testing.T, cfg configuration.Configuration) {
 
 	assert.NoError(t, err)
 	assert.NotEmpty(t, out)
+
+	_, shouldBeErr := rekSvc.DetectText([]byte{})
+
+	assert.Error(t, shouldBeErr)
+	assert.Equal(t, ErrEmptyBytes, shouldBeErr.Error())
 
 }

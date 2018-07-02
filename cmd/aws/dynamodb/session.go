@@ -10,7 +10,7 @@ type DynamoDB struct {
 	*dynamodb.DynamoDB
 }
 
-// New returns a *DynamoDB given a *aws.Session
+// New returns a *DynamoDB given a *aws.Session. Endpoint is optional.
 func New(svc *aws.Session, endpoint string) (*DynamoDB, error) {
 
 	snsSvc, err := dynamodb.New(svc.Session, endpoint)

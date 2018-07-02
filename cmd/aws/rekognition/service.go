@@ -1,9 +1,20 @@
 package rekognition
 
-import "github.com/andream16/aws-sdk-go-bindings/pkg/aws/rekognition"
+import (
+	"errors"
+	"github.com/andream16/aws-sdk-go-bindings/pkg/aws/rekognition"
+)
 
 // CompareFaces returns a *CompareFacesOutput
 func (svc *Rekognition) CompareFaces(sourceImage, targetImage []byte, similarity float64) (*CompareFacesOutput, error) {
+
+	if len(sourceImage) == 0 || len(targetImage) == 0 {
+		return nil, errors.New(ErrEmptyBytes)
+	}
+
+	if similarity == 0.0 {
+		return nil, errors.New(ErrBadSimilarity)
+	}
 
 	cmpFacesIn := rekognition.NewCompareFacesInput(
 		sourceImage,
@@ -35,6 +46,10 @@ func (svc *Rekognition) CompareFaces(sourceImage, targetImage []byte, similarity
 // DetectFaces returns a *DetectFacesOutput
 func (svc *Rekognition) DetectFaces(sourceImage []byte) (*DetectFacesOutput, error) {
 
+	if len(sourceImage) == 0 {
+		return nil, errors.New(ErrEmptyBytes)
+	}
+
 	dtcFacesIn := rekognition.NewDetectFacesInput(
 		sourceImage,
 	)
@@ -62,6 +77,10 @@ func (svc *Rekognition) DetectFaces(sourceImage []byte) (*DetectFacesOutput, err
 
 // DetectText returns a *DetectTextOutput
 func (svc *Rekognition) DetectText(sourceImage []byte) (*DetectTextOutput, error) {
+
+	if len(sourceImage) == 0 {
+		return nil, errors.New(ErrEmptyBytes)
+	}
 
 	dtcTextIn := rekognition.NewDetectTextInput(
 		sourceImage,
