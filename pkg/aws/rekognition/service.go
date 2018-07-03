@@ -1,6 +1,6 @@
 package rekognition
 
-// RekognitionCompare compares two faces returning their similarity
+// RekognitionCompareFaces compares two faces returning their similarity
 func (svc *Rekognition) RekognitionCompareFaces(input *CompareFacesInput) (*CompareFacesOutput, error) {
 
 	compareFacesOut, err := svc.CompareFaces(input.CompareFacesInput)

@@ -2,7 +2,7 @@ package dynamodb
 
 const (
 
-	// ErrEmptyInput is used when a generic parameter is empty
+	// ErrEmptyParameter is used when a generic parameter is empty
 	ErrEmptyParameter = "EmptyInput"
 
 	// ErrNoPointerParameter is used when a parameter is expected to be a pointer but it wasn't

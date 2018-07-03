@@ -7,10 +7,12 @@ import (
 	"io"
 )
 
+// GetObjectInput embeds *s3.GetObjectInput
 type GetObjectInput struct {
 	*s3.GetObjectInput
 }
 
+// GetObjectOutput embeds *s3.GetObjectOutput
 type GetObjectOutput struct {
 	*s3.GetObjectOutput
 }
