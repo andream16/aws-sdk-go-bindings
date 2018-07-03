@@ -32,4 +32,20 @@ func TestSns_Publish(t *testing.T) {
 
 	assert.NoError(t, err)
 
+	shouldBeErr1 := svc.Publish(
+		TestPublishType{"some_val"},
+		"",
+	)
+
+	assert.Error(t, shouldBeErr1)
+	assert.Equal(t, ErrEmptyParameter, shouldBeErr1.Error())
+
+	shouldBeErr2 := svc.Publish(
+		TestPublishType{},
+		cfg.SNS.TargetArn,
+	)
+
+	assert.Error(t, shouldBeErr2)
+	assert.Equal(t, ErrEmptyParameter, shouldBeErr2.Error())
+
 }

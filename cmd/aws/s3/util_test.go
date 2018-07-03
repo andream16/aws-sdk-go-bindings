@@ -27,4 +27,28 @@ func TestUnmarshalGetObjectOutput(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotEmpty(t, out)
 
+	_, errEmptyContentLength := UnmarshalGetObjectOutput(
+		&pkgS3.GetObjectOutput{
+			GetObjectOutput: &s3.GetObjectOutput{
+				Body:          ioutil.NopCloser(bytes.NewReader(body)),
+				ContentLength: aws.Int64(0),
+			},
+		},
+	)
+
+	assert.Error(t, errEmptyContentLength)
+	assert.Equal(t, ErrEmptyContentLength, errEmptyContentLength.Error())
+
+	_, errEmptyBody := UnmarshalGetObjectOutput(
+		&pkgS3.GetObjectOutput{
+			GetObjectOutput: &s3.GetObjectOutput{
+				Body:          ioutil.NopCloser(bytes.NewReader([]byte{})),
+				ContentLength: aws.Int64(40),
+			},
+		},
+	)
+
+	assert.Error(t, errEmptyBody)
+	assert.Equal(t, ErrEmptyBody, errEmptyBody.Error())
+
 }

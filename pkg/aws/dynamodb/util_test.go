@@ -24,6 +24,11 @@ func TestNewPutItemInput(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, tableName, *out.TableName)
 
+	_, errEmptyParamater := NewPutItemInput(in, "")
+
+	assert.Error(t, errEmptyParamater)
+	assert.Equal(t, ErrEmptyParameter, errEmptyParamater.Error())
+
 }
 
 func TestNewGetItemInput(t *testing.T) {
@@ -67,6 +72,16 @@ func TestUnmarshalStreamImage(t *testing.T) {
 	assert.NotEmpty(t, mock)
 	assert.Equal(t, "Joe", mock.SomeParam)
 
+	errNoPointerParameter := UnmarshalStreamImage(m, TestUnmarshalStreamImageType{})
+
+	assert.Error(t, errNoPointerParameter)
+	assert.Equal(t, ErrNoPointerParameter, errNoPointerParameter.Error())
+
+	errEmptyMap := UnmarshalStreamImage(map[string]events.DynamoDBAttributeValue{}, &mock)
+
+	assert.Error(t, errEmptyMap)
+	assert.Equal(t, ErrEmptyMap, errEmptyMap.Error())
+
 }
 
 func TestUnmarshalGetItemOutput(t *testing.T) {
@@ -90,5 +105,10 @@ func TestUnmarshalGetItemOutput(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.Equal(t, s, out.SomeParam)
+
+	errNoPointerParameter := UnmarshalGetItemOutput(in, TestUnmarshalStreamImageType{})
+
+	assert.Error(t, errNoPointerParameter)
+	assert.Equal(t, ErrNoPointerParameter, errNoPointerParameter.Error())
 
 }

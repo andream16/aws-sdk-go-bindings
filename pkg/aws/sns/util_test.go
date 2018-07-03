@@ -34,4 +34,9 @@ func TestBuildPublishInput(t *testing.T) {
 	assert.Equal(t, "edp", *res.PublishInput.TargetArn)
 	assert.NotEqual(t, 0, len(*res.PublishInput.Message))
 
+	_, errEmptyParameter := NewPublishInput(testB, "")
+
+	assert.Error(t, errEmptyParameter)
+	assert.Equal(t, ErrEmptyParameter, errEmptyParameter.Error())
+
 }

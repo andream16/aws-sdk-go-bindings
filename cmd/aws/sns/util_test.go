@@ -9,7 +9,7 @@ type TestSNSMessage struct {
 	Param1 string `json:"param1"`
 }
 
-func TestMessageToJson(t *testing.T) {
+func TestUnmarshalMessage(t *testing.T) {
 
 	var p TestSNSMessage
 
@@ -19,6 +19,16 @@ func TestMessageToJson(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.Equal(t, "some_value", p.Param1)
+
+	shouldBeErr1 := UnmarshalMessage("", &p)
+
+	assert.Error(t, shouldBeErr1)
+	assert.Equal(t, ErrEmptyParameter, shouldBeErr1.Error())
+
+	shouldBeErr2 := UnmarshalMessage("some_val", p)
+
+	assert.Error(t, shouldBeErr2)
+	assert.Equal(t, ErrNoPointerParameter, shouldBeErr2.Error())
 
 }
 

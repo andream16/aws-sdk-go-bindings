@@ -2,11 +2,21 @@ package sns
 
 import (
 	"encoding/json"
+	"errors"
+	"reflect"
 	"strings"
 )
 
 // UnmarshalMessage unmarshal an SNS Message to a given interface
 func UnmarshalMessage(msg string, in interface{}) error {
+
+	if msg == "" {
+		return errors.New(ErrEmptyParameter)
+	}
+
+	if reflect.ValueOf(in).Kind() != reflect.Ptr {
+		return errors.New(ErrNoPointerParameter)
+	}
 
 	uS := unescapeMessageString(msg)
 

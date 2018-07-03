@@ -19,4 +19,11 @@ func TestNew(t *testing.T) {
 	assert.NotEmpty(t, svc)
 	assert.NoError(t, err)
 
+	_, errNoRegionProvided := New(&SessionInput{
+		region: "",
+	})
+
+	assert.Error(t, errNoRegionProvided)
+	assert.Equal(t, ErrNoRegionProvided, errNoRegionProvided.Error())
+
 }

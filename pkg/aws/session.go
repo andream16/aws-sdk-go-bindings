@@ -1,6 +1,7 @@
 package aws
 
 import (
+	"errors"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 )
@@ -12,6 +13,10 @@ type Session struct {
 
 // New returns a new *Session embedding *session.Session
 func New(input *SessionInput) (*Session, error) {
+
+	if input.region == "" {
+		return nil, errors.New(ErrNoRegionProvided)
+	}
 
 	cfg := new(aws.Config)
 	cfg.Region = aws.String(input.region)

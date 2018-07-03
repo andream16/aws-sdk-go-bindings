@@ -34,7 +34,7 @@ func UnmarshalIOReadCloser(input io.ReadCloser) ([]byte, error) {
 	buf := new(bytes.Buffer)
 	_, err := buf.ReadFrom(input)
 	if err != nil {
-		return []byte{}, err
+		return nil, err
 	}
 
 	return buf.Bytes(), nil

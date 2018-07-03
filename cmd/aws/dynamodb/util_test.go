@@ -45,4 +45,9 @@ func TestUnmarshalStreamImage(t *testing.T) {
 	assert.NoError(t, unmarshalErr)
 	assert.Equal(t, someVal, out.SomeParam)
 
+	shouldBeErr := UnmarshalStreamImage(event, out)
+
+	assert.Error(t, shouldBeErr)
+	assert.Equal(t, ErrNoPointerParameter, shouldBeErr.Error())
+
 }

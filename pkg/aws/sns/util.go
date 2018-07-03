@@ -2,6 +2,7 @@ package sns
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/sns"
 	"strings"
@@ -16,6 +17,10 @@ type Body struct {
 
 // NewPublishInput returns a new *PublishInput given a body and an endpoint
 func NewPublishInput(body interface{}, endpoint string) (*PublishInput, error) {
+
+	if endpoint == "" {
+		return nil, errors.New(ErrEmptyParameter)
+	}
 
 	inBytes, inErr := json.Marshal(body)
 	if inErr != nil {

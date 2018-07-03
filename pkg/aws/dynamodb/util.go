@@ -2,14 +2,20 @@ package dynamodb
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	"reflect"
 )
 
 // NewPutItemInput returns a new *PutItemInput
 func NewPutItemInput(in interface{}, tableName string) (*PutItemInput, error) {
+
+	if tableName == "" {
+		return nil, errors.New(ErrEmptyParameter)
+	}
 
 	dynamoInput, dynamoInputErr := dynamodbattribute.MarshalMap(in)
 	if dynamoInputErr != nil {
@@ -49,6 +55,14 @@ func NewGetItemInput(tableName, keyName, keyValue string) *GetItemInput {
 // UnmarshalStreamImage unmarshals a dynamo stream image in a pointer to an interface
 func UnmarshalStreamImage(in map[string]events.DynamoDBAttributeValue, out interface{}) error {
 
+	if reflect.ValueOf(out).Kind() != reflect.Ptr {
+		return errors.New(ErrNoPointerParameter)
+	}
+
+	if len(in) == 0 {
+		return errors.New(ErrEmptyMap)
+	}
+
 	dbAttrMap := make(map[string]*dynamodb.AttributeValue)
 
 	for k, v := range in {
@@ -71,6 +85,10 @@ func UnmarshalStreamImage(in map[string]events.DynamoDBAttributeValue, out inter
 
 // UnmarshalGetItemOutput unmarshals a *GetItemOutput into a passed interface reference
 func UnmarshalGetItemOutput(in *GetItemOutput, out interface{}) error {
+
+	if reflect.ValueOf(out).Kind() != reflect.Ptr {
+		return errors.New(ErrNoPointerParameter)
+	}
 
 	unmarshalError := dynamodbattribute.UnmarshalMap(in.GetItemOutput.Item, out)
 	if unmarshalError != nil {

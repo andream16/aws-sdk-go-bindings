@@ -1,9 +1,9 @@
-package dynamodb
+package sns
 
 const (
 
-	// ErrEmptyInput is used when a generic parameter is empty
-	ErrEmptyParameter = "EmptyInput"
+	// ErrEmptyParameter is used when a required parameter is empty
+	ErrEmptyParameter = "EmptyParameter"
 
 	// ErrNoPointerParameter is used when a parameter is expected to be a pointer but it wasn't
 	ErrNoPointerParameter = "NoPointerParameter"
