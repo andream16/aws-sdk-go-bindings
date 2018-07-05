@@ -18,7 +18,8 @@ func (svc *SQS) CreateQueue(queueName string) error {
 		return createQueueInErr
 	}
 
-	if err := svc.SQSCreateQueue(createQueueIn); err != nil {
+	err := svc.SQSCreateQueue(createQueueIn)
+	if err != nil {
 		return err
 	}
 
@@ -45,7 +46,8 @@ func (svc *SQS) SendMessage(input interface{}, queueUrl string) error {
 		return sendMsgInErr
 	}
 
-	if err := svc.SQSSendMessage(sendMsgIn); err != nil {
+	err := svc.SQSSendMessage(sendMsgIn)
+	if err != nil {
 		return err
 	}
 
