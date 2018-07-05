@@ -2,12 +2,6 @@
 
 
 [[projects]]
-  branch = "master"
-  name = "github.com/andream16/go-logger"
-  packages = ["."]
-  revision = "b85043c3c75ede3da14cfe4851670e785f29e309"
-
-[[projects]]
   name = "github.com/aws/aws-lambda-go"
   packages = ["events"]
   revision = "4d30d0ff60440c2d0480a15747c96ee71c3c53d4"
@@ -51,6 +45,7 @@
     "service/rekognition",
     "service/s3",
     "service/sns",
+    "service/sqs",
     "service/sts"
   ]
   revision = "bfc1a07cf158c30c41a3eefba8aae043d0bb5bff"
@@ -100,6 +95,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "4dcbaee9b415d357ec1585d3fc4e0da4665bc1adcfd594b24fe32a383a07147d"
+  inputs-digest = "5d46383f2857aeae9bf43529cc3960350194419007e099ea7802d429a695af60"
   solver-name = "gps-cdcl"
   solver-version = 1

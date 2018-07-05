@@ -10,5 +10,4 @@ const (
 
 	// ErrEmptyContentLength is used when no content length has been passed
 	ErrEmptyContentLength = "EmptyContentLength"
-
 )

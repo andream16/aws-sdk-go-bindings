@@ -16,6 +16,7 @@ type Configuration struct {
 	DynamoDB    DynamoDB    `json:"DynamoDB"`
 	S3          S3          `json:"S3"`
 	Rekognition Rekognition `json:"Rekognition"`
+	SQS         SQS         `json:"SQS"`
 }
 
 // DynamoDB contains test parameters for DynamoDB
@@ -51,6 +52,11 @@ type Rekognition struct {
 	DetectText struct {
 		SourceImage string `json:"source_image"`
 	} `json:"detect_text"`
+}
+
+// SQS embeds sqs information
+type SQS struct {
+	QueueUrl string `json:"queue_url"`
 }
 
 // Get returns Configuration leaded from configuration file

@@ -5,36 +5,6 @@ import (
 	"github.com/aws/aws-sdk-go/service/rekognition"
 )
 
-// CompareFacesInput embeds *rekognition.CompareFacesInput
-type CompareFacesInput struct {
-	*rekognition.CompareFacesInput
-}
-
-// CompareFacesOutput embeds *rekognition.CompareFacesOutput
-type CompareFacesOutput struct {
-	*rekognition.CompareFacesOutput
-}
-
-// DetectFacesInput embeds *rekognition.DetectFacesInput
-type DetectFacesInput struct {
-	*rekognition.DetectFacesInput
-}
-
-// DetectFacesOutput embeds *rekognition.DetectFacesOutput
-type DetectFacesOutput struct {
-	*rekognition.DetectFacesOutput
-}
-
-// DetectTextInput embeds *rekognition.DetectTextInput
-type DetectTextInput struct {
-	*rekognition.DetectTextInput
-}
-
-// DetectTextOutput embeds *rekognition.DetectTextOutput
-type DetectTextOutput struct {
-	*rekognition.DetectTextOutput
-}
-
 // NewCompareFacesInput builds a CompareFacesInput starting from the two images, their bucket and a similarity threshold
 func NewCompareFacesInput(source, target []byte, similarity float64) *CompareFacesInput {
 
