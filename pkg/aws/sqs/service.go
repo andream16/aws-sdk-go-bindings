@@ -12,6 +12,11 @@ type GetQueueAttributesInput struct {
 	*sqs.GetQueueAttributesInput
 }
 
+// GetQueueAttributesOutput embeds *sqs.GetQueueAttributesOutput
+type GetQueueAttributesOutput struct {
+	*sqs.GetQueueAttributesOutput
+}
+
 // SendMessageInput embeds *sqs.SendMessageInput
 type SendMessageInput struct {
 	*sqs.SendMessageInput
@@ -29,13 +34,17 @@ func (svc *SQS) SQSCreateQueue(input *CreateQueueInput) error {
 }
 
 // SQSGetQueueAttributes returns error if queue does not exist, nil otherwise
-func (svc *SQS) SQSGetQueueAttributes(input *GetQueueAttributesInput) error {
+func (svc *SQS) SQSGetQueueAttributes(input *GetQueueAttributesInput) (*GetQueueAttributesOutput, error) {
 
-	if _, err := svc.GetQueueAttributes(input.GetQueueAttributesInput); err != nil {
-		return err
+	attrs, err := svc.GetQueueAttributes(input.GetQueueAttributesInput)
+	if err != nil {
+		return nil, err
 	}
 
-	return nil
+	out := new(GetQueueAttributesOutput)
+	out.GetQueueAttributesOutput = attrs
+
+	return out, nil
 
 }
 

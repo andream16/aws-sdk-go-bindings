@@ -45,6 +45,10 @@ func NewGetQueueAttributesInput(queueUrl string) (*GetQueueAttributesInput, erro
 // NewSendMessageInput returns a new *SendMessageInput initialized with queueUrl and messageBody
 func NewSendMessageInput(input interface{}, queueUrl string) (*SendMessageInput, error) {
 
+	if reflect.DeepEqual(reflect.TypeOf(input).Kind(), reflect.Ptr) {
+		return nil, errors.New(ErrNoPointerParameterAllowed)
+	}
+
 	if len(queueUrl) == 0 {
 		return nil, errors.New(ErrEmptyParameter)
 	}

@@ -39,7 +39,7 @@ func TestSQS_SQSGetQueueAttributes(t *testing.T) {
 	assert.NoError(t, getQueueAttrsErr)
 	assert.Equal(t, queueUrl, *getQueueAttrsIn.GetQueueAttributesInput.QueueUrl)
 
-	err := svc.SQSGetQueueAttributes(
+	_, err := svc.SQSGetQueueAttributes(
 		getQueueAttrsIn,
 	)
 
@@ -49,7 +49,7 @@ func TestSQS_SQSGetQueueAttributes(t *testing.T) {
 
 	badGetQueueAttrsIn, _ := NewGetQueueAttributesInput(badQueueUrl)
 
-	shouldBeErr := svc.SQSGetQueueAttributes(
+	_, shouldBeErr := svc.SQSGetQueueAttributes(
 		badGetQueueAttrsIn,
 	)
 
