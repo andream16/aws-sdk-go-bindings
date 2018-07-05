@@ -10,8 +10,9 @@ func TestNew(t *testing.T) {
 
 	cfg := testdata.MockConfiguration(t)
 
-	in := NewSessionInput(cfg.Region)
+	in, inErr := NewSessionInput(cfg.Region)
 
+	assert.NoError(t, inErr)
 	assert.NotEmpty(t, in)
 
 	svc, err := New(in)

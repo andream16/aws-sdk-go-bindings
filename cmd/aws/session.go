@@ -10,7 +10,10 @@ type Session struct {
 // New returns a new *aws.Session
 func New(region string) (*Session, error) {
 
-	in := aws.NewSessionInput(region)
+	in, inErr := aws.NewSessionInput(region)
+	if inErr != nil {
+		return nil, inErr
+	}
 
 	svc, err := aws.New(in)
 	if err != nil {

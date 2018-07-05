@@ -68,7 +68,9 @@ func testDynamoDBDynamoGetItem(t *testing.T, cfg configuration.Configuration) {
 
 	assert.NoError(t, err)
 
-	getItemInput := NewGetItemInput(tableName, primaryKey, keyValue)
+	getItemInput, getItemInputErr := NewGetItemInput(tableName, primaryKey, keyValue)
+
+	assert.NoError(t, getItemInputErr)
 
 	getItemOut, err := dynamoNewSvc.DynamoGetItem(getItemInput)
 

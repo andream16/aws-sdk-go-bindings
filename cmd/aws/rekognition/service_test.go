@@ -69,17 +69,14 @@ func testRekognitionCompareFaces(t *testing.T, cfg configuration.Configuration) 
 		cfg.Rekognition.CompareFaces.Similarity,
 	)
 
-	assert.Error(t, shouldBeErr1)
-	assert.Equal(t, ErrEmptyBytes, shouldBeErr1.Error())
-
 	_, shouldBeErr2 := rekSvc.CompareFaces(
 		encodedSourceObject,
 		[]byte{},
 		cfg.Rekognition.CompareFaces.Similarity,
 	)
 
-	assert.Error(t, shouldBeErr2)
-	assert.Equal(t, ErrEmptyBytes, shouldBeErr2.Error())
+	assert.Error(t, shouldBeErr1, shouldBeErr2)
+	assert.Equal(t, ErrEmptyBytes, shouldBeErr1.Error(), shouldBeErr2.Error())
 
 	_, shouldBeErr3 := rekSvc.CompareFaces(
 		encodedSourceObject,

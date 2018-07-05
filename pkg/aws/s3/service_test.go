@@ -11,7 +11,9 @@ func TestS3_S3GetObject(t *testing.T) {
 
 	cfg := testdata.MockConfiguration(t)
 
-	svcIn := aws.NewSessionInput(cfg.Region)
+	svcIn, svcInErr := aws.NewSessionInput(cfg.Region)
+
+	assert.NoError(t, svcInErr)
 
 	awsSvc, awsSvcErr := aws.New(svcIn)
 
@@ -23,10 +25,12 @@ func TestS3_S3GetObject(t *testing.T) {
 	assert.NoError(t, s3SvcErr)
 	assert.NotEmpty(t, s3Svc)
 
-	in := NewGetObjectInput(
+	in, inErr := NewGetObjectInput(
 		cfg.S3.Bucket,
 		cfg.S3.SourceImage,
 	)
+
+	assert.NoError(t, inErr)
 
 	out, err := s3Svc.S3GetObject(in)
 

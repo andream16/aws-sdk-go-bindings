@@ -34,7 +34,11 @@ func NewPutItemInput(in interface{}, tableName string) (*PutItemInput, error) {
 }
 
 // NewGetItemInput returns a new *GetItemInput
-func NewGetItemInput(tableName, keyName, keyValue string) *GetItemInput {
+func NewGetItemInput(tableName, keyName, keyValue string) (*GetItemInput, error) {
+
+	if len(tableName) == 0 || len(keyName) == 0 || len(keyValue) == 0 {
+		return nil, errors.New(ErrEmptyParameter)
+	}
 
 	in := &dynamodb.GetItemInput{
 		TableName: aws.String(tableName),
@@ -48,7 +52,7 @@ func NewGetItemInput(tableName, keyName, keyValue string) *GetItemInput {
 	out := new(GetItemInput)
 	out.GetItemInput = in
 
-	return out
+	return out, nil
 
 }
 

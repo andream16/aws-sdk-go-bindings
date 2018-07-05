@@ -16,11 +16,14 @@ func (svc *Rekognition) CompareFaces(sourceImage, targetImage []byte, similarity
 		return nil, errors.New(ErrBadSimilarity)
 	}
 
-	cmpFacesIn := rekognition.NewCompareFacesInput(
+	cmpFacesIn, cmpFacesInErr := rekognition.NewCompareFacesInput(
 		sourceImage,
 		targetImage,
 		similarity,
 	)
+	if cmpFacesInErr != nil {
+		return nil, cmpFacesInErr
+	}
 
 	valid := cmpFacesIn.Validate()
 	if valid != nil {
@@ -50,9 +53,12 @@ func (svc *Rekognition) DetectFaces(sourceImage []byte) (*DetectFacesOutput, err
 		return nil, errors.New(ErrEmptyBytes)
 	}
 
-	dtcFacesIn := rekognition.NewDetectFacesInput(
+	dtcFacesIn, dtcFacesInErr := rekognition.NewDetectFacesInput(
 		sourceImage,
 	)
+	if dtcFacesInErr != nil {
+		return nil, dtcFacesInErr
+	}
 
 	valid := dtcFacesIn.Validate()
 	if valid != nil {
@@ -82,9 +88,12 @@ func (svc *Rekognition) DetectText(sourceImage []byte) (*DetectTextOutput, error
 		return nil, errors.New(ErrEmptyBytes)
 	}
 
-	dtcTextIn := rekognition.NewDetectTextInput(
+	dtcTextIn, dtcTextInErr := rekognition.NewDetectTextInput(
 		sourceImage,
 	)
+	if dtcTextInErr != nil {
+		return nil, dtcTextInErr
+	}
 
 	valid := dtcTextIn.Validate()
 	if valid != nil {

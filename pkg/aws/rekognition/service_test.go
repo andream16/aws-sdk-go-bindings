@@ -23,7 +23,9 @@ func testRekognitionRekognitionCompareFaces(t *testing.T, cfg configuration.Conf
 
 	t.Helper()
 
-	svcIn := aws.NewSessionInput(cfg.Region)
+	svcIn, svcInErr := aws.NewSessionInput(cfg.Region)
+
+	assert.NoError(t, svcInErr)
 
 	awsSvc, awsSvcErr := aws.New(svcIn)
 
@@ -35,10 +37,12 @@ func testRekognitionRekognitionCompareFaces(t *testing.T, cfg configuration.Conf
 	assert.NoError(t, s3SvcErr)
 	assert.NotEmpty(t, s3Svc)
 
-	getSourceObjectIn := s3.NewGetObjectInput(
+	getSourceObjectIn, getSourceObjectInErr := s3.NewGetObjectInput(
 		cfg.S3.Bucket,
 		cfg.Rekognition.CompareFaces.SourceImage,
 	)
+
+	assert.NoError(t, getSourceObjectInErr)
 
 	getSourceObjectOut, getSourceObjectErr := s3Svc.S3GetObject(getSourceObjectIn)
 
@@ -49,10 +53,12 @@ func testRekognitionRekognitionCompareFaces(t *testing.T, cfg configuration.Conf
 	assert.NoError(t, bSourceErr)
 	assert.NotEqual(t, 0, len(bSource))
 
-	getTargetObjectIn := s3.NewGetObjectInput(
+	getTargetObjectIn, getTargetObjectInErr := s3.NewGetObjectInput(
 		cfg.S3.Bucket,
 		cfg.Rekognition.CompareFaces.TargetImage,
 	)
+
+	assert.NoError(t, getTargetObjectInErr)
 
 	getTargetObjectOut, getTargetObjectOutErr := s3Svc.S3GetObject(getTargetObjectIn)
 
@@ -68,11 +74,13 @@ func testRekognitionRekognitionCompareFaces(t *testing.T, cfg configuration.Conf
 	assert.NoError(t, rekSvcErr)
 	assert.NotEmpty(t, rekSvc)
 
-	rekIn := NewCompareFacesInput(
+	rekIn, rekInErr := NewCompareFacesInput(
 		bSource,
 		bTarget,
 		cfg.Rekognition.CompareFaces.Similarity,
 	)
+
+	assert.NoError(t, rekInErr)
 
 	out, err := rekSvc.RekognitionCompareFaces(rekIn)
 
@@ -85,7 +93,9 @@ func testRekognitionRekognitionDetectFaces(t *testing.T, cfg configuration.Confi
 
 	t.Helper()
 
-	svcIn := aws.NewSessionInput(cfg.Region)
+	svcIn, svcInErr := aws.NewSessionInput(cfg.Region)
+
+	assert.NoError(t, svcInErr)
 
 	awsSvc, awsSvcErr := aws.New(svcIn)
 
@@ -97,10 +107,12 @@ func testRekognitionRekognitionDetectFaces(t *testing.T, cfg configuration.Confi
 	assert.NoError(t, s3SvcErr)
 	assert.NotEmpty(t, s3Svc)
 
-	getObjectIn := s3.NewGetObjectInput(
+	getObjectIn, getObjectInErr := s3.NewGetObjectInput(
 		cfg.S3.Bucket,
 		cfg.Rekognition.DetectFaces.SourceImage,
 	)
+
+	assert.NoError(t, getObjectInErr)
 
 	getObjectOut, getObjectErr := s3Svc.S3GetObject(getObjectIn)
 
@@ -116,7 +128,9 @@ func testRekognitionRekognitionDetectFaces(t *testing.T, cfg configuration.Confi
 	assert.NoError(t, rekSvcErr)
 	assert.NotEmpty(t, rekSvc)
 
-	rekIn := NewDetectFacesInput(b)
+	rekIn, rekInErr := NewDetectFacesInput(b)
+
+	assert.NoError(t, rekInErr)
 
 	out, err := rekSvc.RekognitionDetectFaces(rekIn)
 
@@ -129,7 +143,9 @@ func testRekognitionRekognitionDetectText(t *testing.T, cfg configuration.Config
 
 	t.Helper()
 
-	svcIn := aws.NewSessionInput(cfg.Region)
+	svcIn, svcInErr := aws.NewSessionInput(cfg.Region)
+
+	assert.NoError(t, svcInErr)
 
 	awsSvc, awsSvcErr := aws.New(svcIn)
 
@@ -141,10 +157,12 @@ func testRekognitionRekognitionDetectText(t *testing.T, cfg configuration.Config
 	assert.NoError(t, s3SvcErr)
 	assert.NotEmpty(t, s3Svc)
 
-	getObjectIn := s3.NewGetObjectInput(
+	getObjectIn, getObjectInErr := s3.NewGetObjectInput(
 		cfg.S3.Bucket,
 		cfg.Rekognition.DetectText.SourceImage,
 	)
+
+	assert.NoError(t, getObjectInErr)
 
 	getObjectOut, getObjectErr := s3Svc.S3GetObject(getObjectIn)
 
@@ -160,7 +178,9 @@ func testRekognitionRekognitionDetectText(t *testing.T, cfg configuration.Config
 	assert.NoError(t, rekSvcErr)
 	assert.NotEmpty(t, rekSvc)
 
-	rekIn := NewDetectTextInput(b)
+	rekIn, rekInErr := NewDetectTextInput(b)
+
+	assert.NoError(t, rekInErr)
 
 	out, err := rekSvc.RekognitionDetectText(rekIn)
 

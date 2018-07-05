@@ -13,8 +13,9 @@ func TestSession_SnsPublish(t *testing.T) {
 
 	cfg := testdata.MockConfiguration(t)
 
-	svcIn := pkgAws.NewSessionInput(cfg.Region)
+	svcIn, svcInErr := pkgAws.NewSessionInput(cfg.Region)
 
+	assert.NoError(t, svcInErr)
 	awsSvc, awsSvcErr := pkgAws.New(svcIn)
 
 	assert.NoError(t, awsSvcErr)

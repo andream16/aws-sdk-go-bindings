@@ -1,9 +1,9 @@
 package sqs
 
 import (
+	"encoding/json"
 	"errors"
 	"github.com/aws/aws-sdk-go/service/sqs"
-	"gitlab.easy-network.it/sender-alert/leprotto/pkg/json"
 	"reflect"
 )
 

@@ -106,7 +106,9 @@ func newSQSSvc(t *testing.T) *SQS {
 
 	cfg := testdata.MockConfiguration(t)
 
-	svcIn := pkgAws.NewSessionInput(cfg.Region)
+	svcIn, svcInErr := pkgAws.NewSessionInput(cfg.Region)
+
+	assert.NoError(t, svcInErr)
 
 	awsSvc, awsSvcErr := pkgAws.New(svcIn)
 

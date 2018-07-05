@@ -12,10 +12,15 @@ func TestNewGetObjectInput(t *testing.T) {
 	bucket := "some_bucket"
 	img := "some_img"
 
-	out := NewGetObjectInput(bucket, img)
+	out, err := NewGetObjectInput(bucket, img)
 
+	assert.NoError(t, err)
 	assert.Equal(t, bucket, *out.Bucket)
 	assert.Equal(t, img, *out.Key)
+
+	_, shouldBeEmptyErr1 := NewGetObjectInput("", img)
+	_, shouldBeEmptyErr2 := NewGetObjectInput(bucket, "")
+	assert.Equal(t, ErrEmptyParameter, shouldBeEmptyErr1.Error(), shouldBeEmptyErr2.Error())
 
 }
 

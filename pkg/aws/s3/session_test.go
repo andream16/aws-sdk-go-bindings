@@ -11,8 +11,9 @@ func TestNew(t *testing.T) {
 
 	cfg := testdata.MockConfiguration(t)
 
-	in := aws.NewSessionInput(cfg.Region)
+	in, inErr := aws.NewSessionInput(cfg.Region)
 
+	assert.NoError(t, inErr)
 	awsSvc, awsSvcErr := aws.New(in)
 
 	assert.NoError(t, awsSvcErr)

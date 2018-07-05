@@ -37,12 +37,13 @@ func TestNewGetItemInput(t *testing.T) {
 	keyName := "some_key"
 	keyValue := "some_key_value"
 
-	out := NewGetItemInput(
+	out, outErr := NewGetItemInput(
 		tableName,
 		keyName,
 		keyValue,
 	)
 
+	assert.NoError(t, outErr)
 	assert.Equal(t, tableName, *out.TableName)
 	assert.Equal(t, keyValue, *out.Key[keyName].S)
 

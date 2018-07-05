@@ -34,11 +34,14 @@ func (svc *DynamoDB) GetItem(tableName, keyName, keyValue string) (*GetItemOutPu
 		return nil, errors.New(ErrEmptyParameter)
 	}
 
-	in := dynamodb.NewGetItemInput(
+	in, inErr := dynamodb.NewGetItemInput(
 		tableName,
 		keyName,
 		keyValue,
 	)
+	if inErr != nil {
+		return nil, inErr
+	}
 
 	getItemOut, getItemErr := svc.DynamoGetItem(in)
 	if getItemErr != nil {

@@ -8,14 +8,17 @@ import (
 // GetObject returns a []byte encoding the image
 func (svc *S3) GetObject(bucket, sourceImage string) ([]byte, error) {
 
-	if bucket == "" || sourceImage == "" {
+	if len(bucket) == 0 || len(sourceImage) == 0 {
 		return nil, errors.New(ErrEmptyParameter)
 	}
 
-	s3In := s3.NewGetObjectInput(
+	s3In, s3InErr := s3.NewGetObjectInput(
 		bucket,
 		sourceImage,
 	)
+	if s3InErr != nil {
+		return nil, s3InErr
+	}
 
 	obj, objErr := svc.S3GetObject(s3In)
 	if objErr != nil {

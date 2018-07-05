@@ -2,13 +2,18 @@ package s3
 
 import (
 	"bytes"
+	"errors"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"io"
 )
 
 // NewGetObjectInput returns a new *GetObjectInput given a bucket and a source image
-func NewGetObjectInput(bucket, source string) *GetObjectInput {
+func NewGetObjectInput(bucket, source string) (*GetObjectInput, error) {
+
+	if len(bucket) == 0 || len(source) == 0 {
+		return nil, errors.New(ErrEmptyParameter)
+	}
 
 	out := new(GetObjectInput)
 	out.GetObjectInput = &s3.GetObjectInput{
@@ -16,7 +21,7 @@ func NewGetObjectInput(bucket, source string) *GetObjectInput {
 		Key:    aws.String(source),
 	}
 
-	return out
+	return out, nil
 
 }
 
