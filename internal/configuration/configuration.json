@@ -26,5 +26,8 @@
     "detect_text" : {
       "source_image" : "path_to_a_test_image"
     }
+  },
+  "SQS" : {
+      "queue_url" : "some_queue_url"
   }
 }
