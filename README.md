@@ -29,7 +29,7 @@ func UnmarshalStreamImage(in map[string]events.DynamoDBAttributeValue, out inter
 }
 ```
 
-At the moment it covers SNS, DynamoDB, Rekognition and S3.
+At the moment it covers SNS, SQS, DynamoDB, Rekognition and S3.
 
 ## Utilization
 
@@ -69,7 +69,10 @@ If you want to fork it or just use it in local, edit `internal/configuration/con
       "detect_text" : {
         "source_image" : "path_to_a_test_image"
       }
-    }
+  },
+  "SQS" : {
+      "queue_url" : "some_queue_url"
+  }
 }
 ```
 
