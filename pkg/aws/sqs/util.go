@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/aws/aws-sdk-go/service/sqs"
 	"reflect"
+	"encoding/base64"
 )
 
 // NewCreateQueueInput creates a new queue given its name
@@ -42,7 +43,7 @@ func NewGetQueueAttributesInput(queueUrl string) (*GetQueueAttributesInput, erro
 
 }
 
-// NewSendMessageInput returns a new *SendMessageInput initialized with queueUrl and messageBody
+// NewSendMessageInput returns a new *SendMessageInput initialized with queueUrl and messageBody encoded in base64
 func NewSendMessageInput(input interface{}, queueUrl string) (*SendMessageInput, error) {
 
 	if reflect.DeepEqual(reflect.TypeOf(input).Kind(), reflect.Ptr) {
@@ -55,12 +56,14 @@ func NewSendMessageInput(input interface{}, queueUrl string) (*SendMessageInput,
 
 	sendMsgInput := new(sqs.SendMessageInput)
 
-	msgBody, err := marshalStructToJsonString(input)
+	msgBody, err := marshalStructToJson(input)
 	if err != nil {
 		return nil, err
 	}
 
-	sendMsgInput = sendMsgInput.SetMessageBody(msgBody).SetQueueUrl(queueUrl)
+	b64MsgBody := base64.StdEncoding.EncodeToString(msgBody)
+
+	sendMsgInput = sendMsgInput.SetMessageBody(b64MsgBody).SetQueueUrl(queueUrl)
 
 	out := new(SendMessageInput)
 
@@ -70,18 +73,18 @@ func NewSendMessageInput(input interface{}, queueUrl string) (*SendMessageInput,
 
 }
 
-// marshalStructToJsonString marshals input into a string contains its json representation
-func marshalStructToJsonString(input interface{}) (string, error) {
+// marshalStructToJson marshals input into a []byte contains its json encoding
+func marshalStructToJson(input interface{}) ([]byte, error) {
 
 	if reflect.DeepEqual(reflect.TypeOf(input).Kind(), reflect.Ptr) {
-		return "", errors.New(ErrNoPointerParameterAllowed)
+		return nil, errors.New(ErrNoPointerParameterAllowed)
 	}
 
 	b, marshalErr := json.Marshal(input)
 	if marshalErr != nil {
-		return "", marshalErr
+		return nil, marshalErr
 	}
 
-	return string(b), nil
+	return b, nil
 
 }

@@ -5,6 +5,8 @@ import (
 	"github.com/andream16/aws-sdk-go-bindings/testdata"
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"encoding/base64"
+	"encoding/json"
 )
 
 const (
@@ -76,7 +78,18 @@ func TestSQS_SQSSendMessage(t *testing.T) {
 	)
 
 	assert.NoError(t, sendMsgInErr)
-	assert.Contains(t, *sendMsgIn.MessageBody, val1, val2)
+
+	b, bErr := base64.StdEncoding.DecodeString(*sendMsgIn.MessageBody)
+
+	assert.NoError(t, bErr)
+
+	var o TestSQSUtilType
+
+	marshalErr := json.Unmarshal([]byte(b), &o)
+
+	assert.NoError(t, marshalErr)
+	assert.Equal(t, o.SomeParam1, val1)
+	assert.Equal(t, o.SomeParam2, val2)
 
 	err := svc.SQSSendMessage(sendMsgIn)
 

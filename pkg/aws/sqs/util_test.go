@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"encoding/base64"
 )
 
 func TestNewCreateQueueInput(t *testing.T) {
@@ -49,11 +50,15 @@ func TestNewSendMessageInput(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.Equal(t, queueUrl, *out.SendMessageInput.QueueUrl)
-	assert.Contains(t, *out.SendMessageInput.MessageBody, val1, val2)
+
+	b, bErr := base64.StdEncoding.DecodeString(*out.SendMessageInput.MessageBody)
+
+	assert.NoError(t, bErr)
+	assert.NotEmpty(t, b, val1, val2)
 
 	var m TestSQSUtilType
 
-	unmarshalErr := json.Unmarshal([]byte(*out.SendMessageInput.MessageBody), &m)
+	unmarshalErr := json.Unmarshal([]byte(b), &m)
 
 	assert.NoError(t, unmarshalErr)
 	assert.Equal(t, val1, m.SomeParam1)
@@ -84,11 +89,11 @@ func TestMarshalStructToJsonString(t *testing.T) {
 		SomeParam2: val2,
 	}
 
-	res, err := marshalStructToJsonString(s)
+	res, err := marshalStructToJson(s)
 
 	assert.NoError(t, err)
 	assert.NotEmpty(t, res)
-	assert.Contains(t, res, val1, val2)
+	assert.Contains(t, string(res), val1, val2)
 
 	var out TestSQSUtilType
 
@@ -98,7 +103,7 @@ func TestMarshalStructToJsonString(t *testing.T) {
 	assert.Equal(t, val1, out.SomeParam1)
 	assert.Equal(t, val2, out.SomeParam2)
 
-	_, shouldBeErrNoPointerParameterAllowed := marshalStructToJsonString(&s)
+	_, shouldBeErrNoPointerParameterAllowed := marshalStructToJson(&s)
 
 	assert.Error(t, shouldBeErrNoPointerParameterAllowed)
 	assert.Equal(t, ErrNoPointerParameterAllowed, shouldBeErrNoPointerParameterAllowed.Error())
