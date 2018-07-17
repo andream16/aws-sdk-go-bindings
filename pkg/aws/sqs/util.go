@@ -1,11 +1,11 @@
 package sqs
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"github.com/aws/aws-sdk-go/service/sqs"
 	"reflect"
-	"encoding/base64"
 )
 
 // NewCreateQueueInput creates a new queue given its name
