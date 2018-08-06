@@ -2,8 +2,9 @@ package sqs
 
 import (
 	"errors"
-	"github.com/andream16/aws-sdk-go-bindings/pkg/aws/sqs"
 	"reflect"
+
+	"github.com/andream16/aws-sdk-go-bindings/pkg/aws/sqs"
 )
 
 // CreateQueue creates a new queue given its name

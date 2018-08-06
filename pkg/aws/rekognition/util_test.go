@@ -1,8 +1,9 @@
 package rekognition
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewCompareFacesInput(t *testing.T) {

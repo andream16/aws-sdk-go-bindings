@@ -1,11 +1,13 @@
 package rekognition
 
 import (
-	pkgRek "github.com/andream16/aws-sdk-go-bindings/pkg/aws/rekognition"
+	"testing"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/rekognition"
 	"github.com/stretchr/testify/assert"
-	"testing"
+
+	pkgRek "github.com/andream16/aws-sdk-go-bindings/pkg/aws/rekognition"
 )
 
 var compareFacesOutputMock = pkgRek.CompareFacesOutput{

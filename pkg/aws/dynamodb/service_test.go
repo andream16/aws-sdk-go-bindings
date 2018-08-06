@@ -1,10 +1,12 @@
 package dynamodb
 
 import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	"github.com/andream16/aws-sdk-go-bindings/internal/configuration"
 	"github.com/andream16/aws-sdk-go-bindings/testdata"
-	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 type TestDynamoDBDynamoPutItemType struct {

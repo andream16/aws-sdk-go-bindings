@@ -2,9 +2,10 @@ package s3
 
 import (
 	"bytes"
-	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewGetObjectInput(t *testing.T) {

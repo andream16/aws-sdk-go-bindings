@@ -3,8 +3,9 @@ package sqs
 import (
 	"encoding/base64"
 	"encoding/json"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewCreateQueueInput(t *testing.T) {

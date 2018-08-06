@@ -2,12 +2,14 @@ package s3
 
 import (
 	"bytes"
-	pkgS3 "github.com/andream16/aws-sdk-go-bindings/pkg/aws/s3"
+	"io/ioutil"
+	"testing"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/stretchr/testify/assert"
-	"io/ioutil"
-	"testing"
+
+	pkgS3 "github.com/andream16/aws-sdk-go-bindings/pkg/aws/s3"
 )
 
 func TestUnmarshalGetObjectOutput(t *testing.T) {

@@ -3,8 +3,9 @@ package s3
 import (
 	"bytes"
 	"errors"
-	"github.com/andream16/aws-sdk-go-bindings/pkg/aws/s3"
 	"io/ioutil"
+
+	"github.com/andream16/aws-sdk-go-bindings/pkg/aws/s3"
 )
 
 // UnmarshalGetObjectOutput extracts bytes from *s3.GetObjectOutput

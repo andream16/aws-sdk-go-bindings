@@ -2,6 +2,7 @@ package s3
 
 import (
 	"errors"
+
 	"github.com/andream16/aws-sdk-go-bindings/pkg/aws/s3"
 )
 

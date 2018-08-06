@@ -1,10 +1,9 @@
 package configuration
 
 import (
-	"github.com/tkanos/gonfig"
-	"path"
-	"path/filepath"
-	"runtime"
+	"encoding/json"
+	"os"
+	"strings"
 )
 
 const confFileName = "configuration.json"
@@ -29,6 +28,7 @@ type DynamoDB struct {
 
 // SNS contains test parameters for SNS
 type SNS struct {
+	Endpoint  string `json:"endpoint"`
 	TargetArn string `json:"target_arn"`
 }
 
@@ -56,17 +56,36 @@ type Rekognition struct {
 
 // SQS embeds sqs information
 type SQS struct {
+	Endpoint string `json:"endpoint"`
 	QueueUrl string `json:"queue_url"`
 }
 
 // Get returns Configuration leaded from configuration file
-func Get() (conf Configuration, err error) {
+func Get() (*Configuration, error) {
 
-	_, dirname, _, _ := runtime.Caller(0)
-	filePath := path.Join(filepath.Dir(dirname), confFileName)
+	var cfg Configuration
 
-	err = gonfig.GetConf(filePath, &conf)
+	wd, wdErr := os.Getwd()
+	if wdErr != nil {
+		return nil, wdErr
+	}
 
-	return
+	dynamicPath := strings.Join([]string{wd, confFileName}, "/")
+
+	file, fileErr := os.Open(dynamicPath)
+	if fileErr != nil {
+		return nil, fileErr
+	}
+
+	defer file.Close()
+
+	decoder := json.NewDecoder(file)
+
+	err := decoder.Decode(&cfg)
+	if err != nil {
+		return nil, err
+	}
+
+	return &cfg, nil
 
 }

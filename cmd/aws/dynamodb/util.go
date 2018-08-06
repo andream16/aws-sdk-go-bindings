@@ -2,9 +2,11 @@ package dynamodb
 
 import (
 	"errors"
-	"github.com/andream16/aws-sdk-go-bindings/pkg/aws/dynamodb"
-	"github.com/aws/aws-lambda-go/events"
 	"reflect"
+
+	"github.com/aws/aws-lambda-go/events"
+
+	"github.com/andream16/aws-sdk-go-bindings/pkg/aws/dynamodb"
 )
 
 // GetItemOutPut contains information about an item retrieved from DynamoDB

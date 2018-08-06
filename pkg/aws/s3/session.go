@@ -1,9 +1,10 @@
 package s3
 
 import (
-	"github.com/andream16/aws-sdk-go-bindings/pkg/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
+
+	"github.com/andream16/aws-sdk-go-bindings/pkg/aws"
 )
 
 // S3 embeds *s3.S3 to be used to call New

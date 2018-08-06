@@ -1,10 +1,12 @@
 package s3
 
 import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	"github.com/andream16/aws-sdk-go-bindings/pkg/aws"
 	"github.com/andream16/aws-sdk-go-bindings/testdata"
-	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestS3_S3GetObject(t *testing.T) {

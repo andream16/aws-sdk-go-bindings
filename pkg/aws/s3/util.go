@@ -3,9 +3,10 @@ package s3
 import (
 	"bytes"
 	"errors"
+	"io"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
-	"io"
 )
 
 // NewGetObjectInput returns a new *GetObjectInput given a bucket and a source image

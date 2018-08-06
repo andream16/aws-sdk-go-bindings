@@ -3,11 +3,12 @@ package dynamodb
 import (
 	"encoding/json"
 	"errors"
+	"reflect"
+
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-	"reflect"
 )
 
 // NewPutItemInput returns a new *PutItemInput

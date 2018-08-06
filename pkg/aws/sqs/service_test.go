@@ -3,10 +3,12 @@ package sqs
 import (
 	"encoding/base64"
 	"encoding/json"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	pkgAws "github.com/andream16/aws-sdk-go-bindings/pkg/aws"
 	"github.com/andream16/aws-sdk-go-bindings/testdata"
-	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 const (

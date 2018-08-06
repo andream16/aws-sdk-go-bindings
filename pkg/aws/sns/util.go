@@ -3,9 +3,10 @@ package sns
 import (
 	"encoding/json"
 	"errors"
+	"strings"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/sns"
-	"strings"
 )
 
 const messageStructure = "json"

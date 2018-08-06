@@ -9,7 +9,12 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 )
 
-func MockConfiguration(t *testing.T) configuration.Configuration {
+const (
+	dynamodbStringType = "S"
+	dynamodbHashType = "HASH"
+)
+
+func MockConfiguration(t *testing.T) *configuration.Configuration {
 
 	t.Helper()
 
@@ -22,7 +27,7 @@ func MockConfiguration(t *testing.T) configuration.Configuration {
 
 }
 
-func MockDynamoDB(t *testing.T, cfg configuration.Configuration) *dynamodb.DynamoDB {
+func MockDynamoDB(t *testing.T, cfg *configuration.Configuration) *dynamodb.DynamoDB {
 
 	t.Helper()
 
@@ -38,14 +43,14 @@ func MockDynamoDB(t *testing.T, cfg configuration.Configuration) *dynamodb.Dynam
 
 }
 
-func MockDynamoDBTable(t *testing.T, svc *dynamodb.DynamoDB, tableName string, cfg configuration.Configuration) {
+func MockDynamoDBTable(t *testing.T, svc *dynamodb.DynamoDB, tableName string, cfg *configuration.Configuration) {
 
 	t.Helper()
 
 	in := []*dynamodb.AttributeDefinition{
 		{
 			AttributeName: aws.String(cfg.DynamoDB.PrimaryKey),
-			AttributeType: aws.String("S"),
+			AttributeType: aws.String(dynamodbStringType),
 		},
 	}
 
@@ -57,7 +62,7 @@ func MockDynamoDBTable(t *testing.T, svc *dynamodb.DynamoDB, tableName string, c
 		[]*dynamodb.KeySchemaElement{
 			{
 				AttributeName: aws.String(cfg.DynamoDB.PrimaryKey),
-				KeyType:       aws.String("HASH"),
+				KeyType:       aws.String(dynamodbHashType),
 			},
 		},
 	)

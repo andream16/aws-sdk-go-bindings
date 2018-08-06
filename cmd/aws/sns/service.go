@@ -2,8 +2,9 @@ package sns
 
 import (
 	"errors"
-	"github.com/andream16/aws-sdk-go-bindings/pkg/aws/sns"
 	"reflect"
+
+	"github.com/andream16/aws-sdk-go-bindings/pkg/aws/sns"
 )
 
 // Publish publishes a given input to in a given targetArn

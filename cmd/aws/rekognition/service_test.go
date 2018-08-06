@@ -1,12 +1,14 @@
 package rekognition
 
 import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	"github.com/andream16/aws-sdk-go-bindings/cmd/aws"
 	"github.com/andream16/aws-sdk-go-bindings/cmd/aws/s3"
 	"github.com/andream16/aws-sdk-go-bindings/internal/configuration"
 	"github.com/andream16/aws-sdk-go-bindings/testdata"
-	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestRekognition_Methods(t *testing.T) {

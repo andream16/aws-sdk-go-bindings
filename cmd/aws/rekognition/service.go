@@ -2,6 +2,7 @@ package rekognition
 
 import (
 	"errors"
+
 	"github.com/andream16/aws-sdk-go-bindings/pkg/aws/rekognition"
 )
 

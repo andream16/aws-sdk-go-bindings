@@ -1,10 +1,11 @@
 package rekognition
 
 import (
-	pkgAws "github.com/andream16/aws-sdk-go-bindings/pkg/aws"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/rekognition"
+
+	pkgAws "github.com/andream16/aws-sdk-go-bindings/pkg/aws"
 )
 
 // Rekognition embeds *rekognition.Rekognition to be used to call New
