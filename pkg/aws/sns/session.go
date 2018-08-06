@@ -3,8 +3,9 @@ package sns
 import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sns"
+	"github.com/aws/aws-sdk-go/aws"
 
-	"github.com/andream16/aws-sdk-go-bindings/pkg/aws"
+	pkgAws "github.com/andream16/aws-sdk-go-bindings/pkg/aws"
 )
 
 // SNS embeds sns.SNS to be used to call New
@@ -13,7 +14,11 @@ type SNS struct {
 }
 
 // New returns a new *SNS embedding *sns.SNS
-func New(svc *aws.Session) (*SNS, error) {
+func New(svc *pkgAws.Session, endpoint string) (*SNS, error) {
+
+	if len(endpoint) > 0 {
+		svc.Config.Endpoint = aws.String(endpoint)
+	}
 
 	newSvc, newSvcErr := session.NewSession(svc.Config)
 	if newSvcErr != nil {

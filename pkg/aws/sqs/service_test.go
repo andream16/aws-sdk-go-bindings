@@ -12,7 +12,6 @@ import (
 )
 
 const (
-	queueName = "some_queue_name"
 	val1      = "some_val1"
 	val2      = "some_val2"
 )
@@ -24,32 +23,43 @@ type TestSQSUtilType struct {
 
 func TestSQS_SQSCreateQueue(t *testing.T) {
 
+	cfg := testdata.MockConfiguration(t)
+
 	svc := newSQSSvc(t)
 
-	createSQSQueue(t, svc, queueName)
+	createSQSQueue(t, svc, cfg.SQS.QueueName)
 
 }
 
 func TestSQS_SQSGetQueueAttributes(t *testing.T) {
 
-	queueUrl := testdata.MockConfiguration(t).SQS.QueueUrl
+	cfg := testdata.MockConfiguration(t)
 
 	svc := newSQSSvc(t)
 
-	createSQSQueue(t, svc, queueName)
+	createSQSQueue(t, svc, cfg.SQS.QueueName)
 
-	getQueueAttrsIn, getQueueAttrsErr := NewGetQueueAttributesInput(queueUrl)
-
-	assert.NoError(t, getQueueAttrsErr)
-	assert.Equal(t, queueUrl, *getQueueAttrsIn.GetQueueAttributesInput.QueueUrl)
-
-	_, err := svc.SQSGetQueueAttributes(
-		getQueueAttrsIn,
-	)
+	getQueueUrlIn, err := NewGetQueueUrlInput(cfg.SQS.QueueName)
 
 	assert.NoError(t, err)
 
-	badQueueUrl := `https://sqs.eu-central-1.amazonaws.com/150285746666/some_queue_name`
+	url, urlErr := svc.SQSGetQueueUrl(getQueueUrlIn)
+
+	assert.NoError(t, urlErr)
+	assert.NotEmpty(t, url)
+
+	getQueueAttrsIn, getQueueAttrsInErr := NewGetQueueAttributesInput(url)
+
+	assert.NoError(t, getQueueAttrsInErr)
+	assert.Equal(t, cfg.SQS.QueueUrl, *getQueueAttrsIn.GetQueueAttributesInput.QueueUrl)
+
+	_, getQueueAttrsErr := svc.SQSGetQueueAttributes(
+		getQueueAttrsIn,
+	)
+
+	assert.NoError(t, getQueueAttrsErr)
+
+	badQueueUrl := `badURL`
 
 	badGetQueueAttrsIn, _ := NewGetQueueAttributesInput(badQueueUrl)
 
@@ -63,11 +73,11 @@ func TestSQS_SQSGetQueueAttributes(t *testing.T) {
 
 func TestSQS_SQSSendMessage(t *testing.T) {
 
-	queueUrl := testdata.MockConfiguration(t).SQS.QueueUrl
+	cfg := testdata.MockConfiguration(t)
 
 	svc := newSQSSvc(t)
 
-	createSQSQueue(t, svc, queueName)
+	createSQSQueue(t, svc, cfg.SQS.QueueName)
 
 	m := TestSQSUtilType{
 		SomeParam1: val1,
@@ -76,7 +86,7 @@ func TestSQS_SQSSendMessage(t *testing.T) {
 
 	sendMsgIn, sendMsgInErr := NewSendMessageInput(
 		m,
-		queueUrl,
+		cfg.SQS.QueueName,
 	)
 
 	assert.NoError(t, sendMsgInErr)
@@ -130,7 +140,7 @@ func newSQSSvc(t *testing.T) *SQS {
 	assert.NoError(t, awsSvcErr)
 	assert.NotEmpty(t, awsSvc)
 
-	sqsSvc, sqsSvcErr := New(awsSvc)
+	sqsSvc, sqsSvcErr := New(awsSvc, cfg.SQS.Endpoint)
 
 	assert.NoError(t, sqsSvcErr)
 	assert.NotEmpty(t, sqsSvc)

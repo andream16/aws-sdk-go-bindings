@@ -22,7 +22,7 @@ func TestDynamoDB_Methods(t *testing.T) {
 
 }
 
-func testDynamoDBDynamoPutItem(t *testing.T, cfg configuration.Configuration) {
+func testDynamoDBDynamoPutItem(t *testing.T, cfg *configuration.Configuration) {
 
 	dynamoSvc := testdata.MockDynamoDB(t, cfg)
 
@@ -46,7 +46,7 @@ func testDynamoDBDynamoPutItem(t *testing.T, cfg configuration.Configuration) {
 
 }
 
-func testDynamoDBDynamoGetItem(t *testing.T, cfg configuration.Configuration) {
+func testDynamoDBDynamoGetItem(t *testing.T, cfg *configuration.Configuration) {
 
 	dynamoSvc := testdata.MockDynamoDB(t, cfg)
 

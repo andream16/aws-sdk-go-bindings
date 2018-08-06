@@ -1,9 +1,11 @@
 package configuration
 
 import (
-	"encoding/json"
-	"os"
-	"strings"
+	"runtime"
+	"path"
+	"path/filepath"
+
+	"github.com/tkanos/gonfig"
 )
 
 const confFileName = "configuration.json"
@@ -58,6 +60,7 @@ type Rekognition struct {
 type SQS struct {
 	Endpoint string `json:"endpoint"`
 	QueueUrl string `json:"queue_url"`
+	QueueName string `json:"queue_name"`
 }
 
 // Get returns Configuration leaded from configuration file
@@ -65,24 +68,10 @@ func Get() (*Configuration, error) {
 
 	var cfg Configuration
 
-	wd, wdErr := os.Getwd()
-	if wdErr != nil {
-		return nil, wdErr
-	}
+	_, dirname, _, _ := runtime.Caller(0)
+	filePath := path.Join(filepath.Dir(dirname), confFileName)
 
-	dynamicPath := strings.Join([]string{wd, confFileName}, "/")
-
-	file, fileErr := os.Open(dynamicPath)
-	if fileErr != nil {
-		return nil, fileErr
-	}
-
-	defer file.Close()
-
-	decoder := json.NewDecoder(file)
-
-	err := decoder.Decode(&cfg)
-	if err != nil {
+	if err := gonfig.GetConf(filePath, &cfg); err != nil {
 		return nil, err
 	}
 

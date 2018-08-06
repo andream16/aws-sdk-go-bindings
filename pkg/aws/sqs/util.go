@@ -74,6 +74,23 @@ func NewSendMessageInput(input interface{}, queueUrl string) (*SendMessageInput,
 
 }
 
+// NewGetQueueUrlInput returns a new GetQueueUrlInput given a queue name
+func NewGetQueueUrlInput(queueName string) (*GetQueueUrlInput, error) {
+
+	if len(queueName) == 0 {
+		return nil, errors.New(ErrEmptyParameter)
+	}
+
+	getQueueUrlInput := new(sqs.GetQueueUrlInput)
+	getQueueUrlInput = getQueueUrlInput.SetQueueName(queueName)
+
+	out := new(GetQueueUrlInput)
+	out.GetQueueUrlInput = getQueueUrlInput
+
+	return out, nil
+
+}
+
 // marshalStructToJson marshals input into a []byte contains its json encoding
 func marshalStructToJson(input interface{}) ([]byte, error) {
 

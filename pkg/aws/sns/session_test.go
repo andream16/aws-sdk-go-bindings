@@ -22,7 +22,7 @@ func TestNew(t *testing.T) {
 	assert.NoError(t, awsSvcErr)
 	assert.NotEmpty(t, awsSvc)
 
-	snsSvc, snsSvcErr := New(awsSvc)
+	snsSvc, snsSvcErr := New(awsSvc, cfg.SNS.Endpoint)
 
 	assert.NoError(t, snsSvcErr)
 	assert.NotEmpty(t, snsSvc)
