@@ -1,10 +1,12 @@
 package s3
 
 import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	"github.com/andream16/aws-sdk-go-bindings/cmd/aws"
 	"github.com/andream16/aws-sdk-go-bindings/testdata"
-	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestNew(t *testing.T) {
@@ -15,7 +17,7 @@ func TestNew(t *testing.T) {
 
 	assert.NoError(t, svcErr)
 
-	s3Svc, s3SvcErr := New(svc)
+	s3Svc, s3SvcErr := New(svc, cfg.S3.Endpoint)
 
 	assert.NoError(t, s3SvcErr)
 	assert.NotEmpty(t, s3Svc)

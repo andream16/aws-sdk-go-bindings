@@ -3,17 +3,18 @@ package dynamodb
 import (
 	"encoding/json"
 	"errors"
+	"reflect"
+
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-	"reflect"
 )
 
 // NewPutItemInput returns a new *PutItemInput
 func NewPutItemInput(in interface{}, tableName string) (*PutItemInput, error) {
 
-	if tableName == "" {
+	if len(tableName) == 0 {
 		return nil, errors.New(ErrEmptyParameter)
 	}
 
@@ -22,12 +23,12 @@ func NewPutItemInput(in interface{}, tableName string) (*PutItemInput, error) {
 		return nil, dynamoInputErr
 	}
 
-	out := &PutItemInput{
-		&dynamodb.PutItemInput{
-			Item:      dynamoInput,
-			TableName: aws.String(tableName),
-		},
-	}
+	putItemInput := new(dynamodb.PutItemInput)
+	putItemInput = putItemInput.SetItem(dynamoInput)
+	putItemInput = putItemInput.SetTableName(tableName)
+
+	out := new(PutItemInput)
+	out.PutItemInput = putItemInput
 
 	return out, nil
 
@@ -40,17 +41,18 @@ func NewGetItemInput(tableName, keyName, keyValue string) (*GetItemInput, error)
 		return nil, errors.New(ErrEmptyParameter)
 	}
 
-	in := &dynamodb.GetItemInput{
-		TableName: aws.String(tableName),
-		Key: map[string]*dynamodb.AttributeValue{
+	getItemInput := new(dynamodb.GetItemInput)
+	getItemInput = getItemInput.SetTableName(tableName)
+	getItemInput = getItemInput.SetKey(
+		map[string]*dynamodb.AttributeValue{
 			keyName: {
 				S: aws.String(keyValue),
 			},
 		},
-	}
+	)
 
 	out := new(GetItemInput)
-	out.GetItemInput = in
+	out.GetItemInput = getItemInput
 
 	return out, nil
 

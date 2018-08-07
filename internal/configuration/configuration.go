@@ -1,10 +1,11 @@
 package configuration
 
 import (
-	"github.com/tkanos/gonfig"
 	"path"
 	"path/filepath"
 	"runtime"
+
+	"github.com/tkanos/gonfig"
 )
 
 const confFileName = "configuration.json"
@@ -29,11 +30,13 @@ type DynamoDB struct {
 
 // SNS contains test parameters for SNS
 type SNS struct {
+	Endpoint  string `json:"endpoint"`
 	TargetArn string `json:"target_arn"`
 }
 
 // S3 contains test parameters for S3
 type S3 struct {
+	Endpoint    string `json:"endpoint"`
 	Bucket      string `json:"bucket"`
 	SourceImage string `json:"source_image"`
 }
@@ -56,17 +59,23 @@ type Rekognition struct {
 
 // SQS embeds sqs information
 type SQS struct {
-	QueueUrl string `json:"queue_url"`
+	Endpoint  string `json:"endpoint"`
+	QueueUrl  string `json:"queue_url"`
+	QueueName string `json:"queue_name"`
 }
 
 // Get returns Configuration leaded from configuration file
-func Get() (conf Configuration, err error) {
+func Get() (*Configuration, error) {
+
+	var cfg Configuration
 
 	_, dirname, _, _ := runtime.Caller(0)
 	filePath := path.Join(filepath.Dir(dirname), confFileName)
 
-	err = gonfig.GetConf(filePath, &conf)
+	if err := gonfig.GetConf(filePath, &cfg); err != nil {
+		return nil, err
+	}
 
-	return
+	return &cfg, nil
 
 }

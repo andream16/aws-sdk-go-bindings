@@ -1,10 +1,12 @@
 package dynamodb
 
 import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	"github.com/andream16/aws-sdk-go-bindings/internal/configuration"
 	"github.com/andream16/aws-sdk-go-bindings/testdata"
-	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 type TestDynamoDBDynamoPutItemType struct {
@@ -20,7 +22,7 @@ func TestDynamoDB_Methods(t *testing.T) {
 
 }
 
-func testDynamoDBDynamoPutItem(t *testing.T, cfg configuration.Configuration) {
+func testDynamoDBDynamoPutItem(t *testing.T, cfg *configuration.Configuration) {
 
 	dynamoSvc := testdata.MockDynamoDB(t, cfg)
 
@@ -44,7 +46,7 @@ func testDynamoDBDynamoPutItem(t *testing.T, cfg configuration.Configuration) {
 
 }
 
-func testDynamoDBDynamoGetItem(t *testing.T, cfg configuration.Configuration) {
+func testDynamoDBDynamoGetItem(t *testing.T, cfg *configuration.Configuration) {
 
 	dynamoSvc := testdata.MockDynamoDB(t, cfg)
 

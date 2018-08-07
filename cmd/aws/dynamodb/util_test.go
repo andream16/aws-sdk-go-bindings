@@ -2,9 +2,10 @@ package dynamodb
 
 import (
 	"encoding/json"
+	"testing"
+
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 type TestUnmarshalStreamImageType struct {

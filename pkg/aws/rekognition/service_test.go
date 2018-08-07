@@ -1,41 +1,114 @@
 package rekognition
 
 import (
+	"net/http"
+	"os"
+	"testing"
+	"time"
+
+	"github.com/stretchr/testify/assert"
+
 	"github.com/andream16/aws-sdk-go-bindings/internal/configuration"
 	"github.com/andream16/aws-sdk-go-bindings/pkg/aws"
 	"github.com/andream16/aws-sdk-go-bindings/pkg/aws/s3"
 	"github.com/andream16/aws-sdk-go-bindings/testdata"
-	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestRekognition_RekognitionMethods(t *testing.T) {
 
 	cfg := testdata.MockConfiguration(t)
 
-	testRekognitionRekognitionCompareFaces(t, cfg)
-	testRekognitionRekognitionDetectFaces(t, cfg)
-	testRekognitionRekognitionDetectText(t, cfg)
+	s3Svc, rekSvc := mockSessions(cfg, t)
+
+	createBucketInput, createBucketInputErr := s3.NewCreateBucketInput(cfg.S3.Bucket)
+
+	assert.NoError(t, createBucketInputErr)
+	assert.NotEmpty(t, createBucketInput)
+
+	s3Svc.S3CreateBucket(createBucketInput)
+
+	uploadImages(cfg, s3Svc, t)
+
+	funcs := []func(*configuration.Configuration, *s3.S3, *Rekognition, *testing.T){
+		testRekognition_RekognitionCompareFaces,
+		testRekognition_RekognitionDetectFaces,
+		testRekognition_RekognitionDetectText,
+	}
+
+	for i := 0; i < len(funcs); i++ {
+		funcs[i](cfg, s3Svc, rekSvc, t)
+	}
 
 }
 
-func testRekognitionRekognitionCompareFaces(t *testing.T, cfg configuration.Configuration) {
+func uploadImages(cfg *configuration.Configuration, svc *s3.S3, t *testing.T) {
 
 	t.Helper()
 
-	svcIn, svcInErr := aws.NewSessionInput(cfg.Region)
+	images := map[string]string{
+		cfg.Rekognition.CompareFaces.SourceImage: "../../../assets/compare_faces_test-source.jpg",
+		cfg.Rekognition.CompareFaces.TargetImage: "../../../assets/compare_faces_test-target.jpg",
+		cfg.Rekognition.DetectFaces.SourceImage:  "../../../assets/detect_faces_test-source.jpg",
+		cfg.Rekognition.DetectText.SourceImage:   "../../../assets/detect_text_test-source.jpg",
+	}
 
-	assert.NoError(t, svcInErr)
+	for k, v := range images {
 
-	awsSvc, awsSvcErr := aws.New(svcIn)
+		k := k
+		v := v
 
-	assert.NoError(t, awsSvcErr)
-	assert.NotEmpty(t, awsSvc)
+		go func() {
 
-	s3Svc, s3SvcErr := s3.New(awsSvc)
+			body, contentType, size := readImage(v, t)
 
-	assert.NoError(t, s3SvcErr)
-	assert.NotEmpty(t, s3Svc)
+			in, inErr := s3.NewPutObjectInput(
+				cfg.S3.Bucket,
+				k,
+				contentType,
+				body,
+				size,
+			)
+
+			assert.NoError(t, inErr)
+
+			err := svc.S3PutObject(in)
+
+			assert.NoError(t, err)
+
+		}()
+
+	}
+
+	time.Sleep(100 * time.Millisecond)
+
+}
+
+func readImage(path string, t *testing.T) ([]byte, string, int64) {
+
+	file, fileErr := os.Open(path)
+
+	assert.NoError(t, fileErr)
+	assert.NotEmpty(t, file)
+
+	defer file.Close()
+
+	fileInfo, fileInfoErr := file.Stat()
+
+	assert.NoError(t, fileInfoErr)
+
+	size := fileInfo.Size()
+	buffer := make([]byte, size)
+
+	file.Read(buffer)
+	fileType := http.DetectContentType(buffer)
+
+	return buffer, fileType, size
+
+}
+
+func testRekognition_RekognitionCompareFaces(cfg *configuration.Configuration, s3Svc *s3.S3, rekSvc *Rekognition, t *testing.T) {
+
+	t.Helper()
 
 	getSourceObjectIn, getSourceObjectInErr := s3.NewGetObjectInput(
 		cfg.S3.Bucket,
@@ -69,11 +142,6 @@ func testRekognitionRekognitionCompareFaces(t *testing.T, cfg configuration.Conf
 	assert.NoError(t, bTargetErr)
 	assert.NotEqual(t, 0, len(bTarget))
 
-	rekSvc, rekSvcErr := New(awsSvc, cfg.Rekognition.Region)
-
-	assert.NoError(t, rekSvcErr)
-	assert.NotEmpty(t, rekSvc)
-
 	rekIn, rekInErr := NewCompareFacesInput(
 		bSource,
 		bTarget,
@@ -89,23 +157,9 @@ func testRekognitionRekognitionCompareFaces(t *testing.T, cfg configuration.Conf
 
 }
 
-func testRekognitionRekognitionDetectFaces(t *testing.T, cfg configuration.Configuration) {
+func testRekognition_RekognitionDetectFaces(cfg *configuration.Configuration, s3Svc *s3.S3, rekSvc *Rekognition, t *testing.T) {
 
 	t.Helper()
-
-	svcIn, svcInErr := aws.NewSessionInput(cfg.Region)
-
-	assert.NoError(t, svcInErr)
-
-	awsSvc, awsSvcErr := aws.New(svcIn)
-
-	assert.NoError(t, awsSvcErr)
-	assert.NotEmpty(t, awsSvc)
-
-	s3Svc, s3SvcErr := s3.New(awsSvc)
-
-	assert.NoError(t, s3SvcErr)
-	assert.NotEmpty(t, s3Svc)
 
 	getObjectIn, getObjectInErr := s3.NewGetObjectInput(
 		cfg.S3.Bucket,
@@ -123,11 +177,6 @@ func testRekognitionRekognitionDetectFaces(t *testing.T, cfg configuration.Confi
 	assert.NoError(t, bErr)
 	assert.NotEqual(t, 0, len(b))
 
-	rekSvc, rekSvcErr := New(awsSvc, cfg.Rekognition.Region)
-
-	assert.NoError(t, rekSvcErr)
-	assert.NotEmpty(t, rekSvc)
-
 	rekIn, rekInErr := NewDetectFacesInput(b)
 
 	assert.NoError(t, rekInErr)
@@ -139,23 +188,9 @@ func testRekognitionRekognitionDetectFaces(t *testing.T, cfg configuration.Confi
 
 }
 
-func testRekognitionRekognitionDetectText(t *testing.T, cfg configuration.Configuration) {
+func testRekognition_RekognitionDetectText(cfg *configuration.Configuration, s3Svc *s3.S3, rekSvc *Rekognition, t *testing.T) {
 
 	t.Helper()
-
-	svcIn, svcInErr := aws.NewSessionInput(cfg.Region)
-
-	assert.NoError(t, svcInErr)
-
-	awsSvc, awsSvcErr := aws.New(svcIn)
-
-	assert.NoError(t, awsSvcErr)
-	assert.NotEmpty(t, awsSvc)
-
-	s3Svc, s3SvcErr := s3.New(awsSvc)
-
-	assert.NoError(t, s3SvcErr)
-	assert.NotEmpty(t, s3Svc)
 
 	getObjectIn, getObjectInErr := s3.NewGetObjectInput(
 		cfg.S3.Bucket,
@@ -173,11 +208,6 @@ func testRekognitionRekognitionDetectText(t *testing.T, cfg configuration.Config
 	assert.NoError(t, bErr)
 	assert.NotEqual(t, 0, len(b))
 
-	rekSvc, rekSvcErr := New(awsSvc, cfg.Rekognition.Region)
-
-	assert.NoError(t, rekSvcErr)
-	assert.NotEmpty(t, rekSvc)
-
 	rekIn, rekInErr := NewDetectTextInput(b)
 
 	assert.NoError(t, rekInErr)
@@ -186,5 +216,37 @@ func testRekognitionRekognitionDetectText(t *testing.T, cfg configuration.Config
 
 	assert.NoError(t, err)
 	assert.NotEmpty(t, out)
+
+}
+
+func mockSessions(cfg *configuration.Configuration, t *testing.T) (*s3.S3, *Rekognition) {
+
+	t.Helper()
+
+	svcIn, svcInErr := aws.NewSessionInput(cfg.Region)
+
+	assert.NoError(t, svcInErr)
+
+	awsSvc, awsSvcErr := aws.New(svcIn)
+
+	assert.NoError(t, awsSvcErr)
+	assert.NotEmpty(t, awsSvc)
+
+	s3Svc, s3SvcErr := s3.New(awsSvc, cfg.S3.Endpoint)
+
+	assert.NoError(t, s3SvcErr)
+	assert.NotEmpty(t, s3Svc)
+
+	awsSvc, awsSvcErr = aws.New(svcIn)
+
+	assert.NoError(t, awsSvcErr)
+	assert.NotEmpty(t, awsSvc)
+
+	rekSvc, rekSvcErr := New(awsSvc, cfg.Rekognition.Region)
+
+	assert.NoError(t, rekSvcErr)
+	assert.NotEmpty(t, rekSvc)
+
+	return s3Svc, rekSvc
 
 }

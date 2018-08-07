@@ -2,8 +2,9 @@ package dynamodb
 
 import (
 	"errors"
-	"github.com/andream16/aws-sdk-go-bindings/pkg/aws/dynamodb"
 	"reflect"
+
+	"github.com/andream16/aws-sdk-go-bindings/pkg/aws/dynamodb"
 )
 
 // PutItem puts a passed input into a passed table

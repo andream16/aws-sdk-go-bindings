@@ -3,9 +3,11 @@ package rekognition
 import (
 	"encoding/json"
 	"errors"
-	"github.com/andream16/aws-sdk-go-bindings/pkg/aws/rekognition"
-	"github.com/fatih/structs"
 	"reflect"
+
+	"github.com/fatih/structs"
+
+	"github.com/andream16/aws-sdk-go-bindings/pkg/aws/rekognition"
 )
 
 // CompareFacesInput contains parameters to be sent to CompareFaces

@@ -1,10 +1,12 @@
 package sns
 
 import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	"github.com/andream16/aws-sdk-go-bindings/cmd/aws"
 	"github.com/andream16/aws-sdk-go-bindings/testdata"
-	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 type TestPublishType struct {
@@ -20,7 +22,7 @@ func TestSns_Publish(t *testing.T) {
 	assert.NoError(t, awsSvcErr)
 	assert.NotEmpty(t, awsSvc)
 
-	svc, svcErr := New(awsSvc)
+	svc, svcErr := New(awsSvc, cfg.SNS.Endpoint)
 
 	assert.NoError(t, svcErr)
 	assert.NotEmpty(t, svc)

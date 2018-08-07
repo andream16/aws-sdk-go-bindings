@@ -1,9 +1,11 @@
 package s3
 
 import (
-	"github.com/andream16/aws-sdk-go-bindings/pkg/aws"
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
+
+	pkgAws "github.com/andream16/aws-sdk-go-bindings/pkg/aws"
 )
 
 // S3 embeds *s3.S3 to be used to call New
@@ -12,7 +14,11 @@ type S3 struct {
 }
 
 // New returns a new *S3 embedding *s3.S3
-func New(svc *aws.Session) (*S3, error) {
+func New(svc *pkgAws.Session, endpoint string) (*S3, error) {
+
+	if len(endpoint) > 0 {
+		svc.Config.Endpoint = aws.String(endpoint)
+	}
 
 	newSvc, newSvcErr := session.NewSession(svc.Config)
 	if newSvcErr != nil {

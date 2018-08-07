@@ -10,10 +10,10 @@ type SNS struct {
 	*sns.SNS
 }
 
-// New returns a *SNS given a *aws.Session
-func New(svc *aws.Session) (*SNS, error) {
+// New returns a *SNS given a *aws.Session and an optional endpoint
+func New(svc *aws.Session, endpoint string) (*SNS, error) {
 
-	snsSvc, err := sns.New(svc.Session)
+	snsSvc, err := sns.New(svc.Session, endpoint)
 	if err != nil {
 		return nil, err
 	}

@@ -1,9 +1,11 @@
 package sqs
 
 import (
-	"github.com/andream16/aws-sdk-go-bindings/pkg/aws"
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sqs"
+
+	pkgAws "github.com/andream16/aws-sdk-go-bindings/pkg/aws"
 )
 
 // SQS embeds *sns.SNS
@@ -12,7 +14,11 @@ type SQS struct {
 }
 
 // New returns a new *SQS
-func New(svc *aws.Session) (*SQS, error) {
+func New(svc *pkgAws.Session, endpoint string) (*SQS, error) {
+
+	if len(endpoint) > 0 {
+		svc.Config.Endpoint = aws.String(endpoint)
+	}
 
 	newSvc, newSvcErr := session.NewSession(svc.Config)
 	if newSvcErr != nil {

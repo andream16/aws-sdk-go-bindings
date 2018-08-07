@@ -10,10 +10,10 @@ type SQS struct {
 	*sqs.SQS
 }
 
-// New returns a *SQS given a *aws.Session
-func New(svc *aws.Session) (*SQS, error) {
+// New returns a *SQS given a *aws.Session and an optional endpoint
+func New(svc *aws.Session, endpoint string) (*SQS, error) {
 
-	snsSvc, err := sqs.New(svc.Session)
+	snsSvc, err := sqs.New(svc.Session, endpoint)
 	if err != nil {
 		return nil, err
 	}

@@ -2,8 +2,9 @@ package sqs
 
 import (
 	"errors"
-	"github.com/andream16/aws-sdk-go-bindings/pkg/aws/sqs"
 	"reflect"
+
+	"github.com/andream16/aws-sdk-go-bindings/pkg/aws/sqs"
 )
 
 // CreateQueue creates a new queue given its name
@@ -27,20 +28,32 @@ func (svc *SQS) CreateQueue(queueName string) error {
 
 }
 
-// SendMessage sends a new message on a sns queue given an input and a valid queue url
-func (svc *SQS) SendMessage(input interface{}, queueUrl string) error {
+// SendMessage sends a new message on a sns queue given an input and a valid queue queueName.
+// If base64Encode = true then the message will be encoded in base64
+func (svc *SQS) SendMessage(input interface{}, queueName string, base64Encode bool) error {
 
 	if reflect.DeepEqual(reflect.TypeOf(input).Kind(), reflect.Ptr) {
 		return errors.New(ErrNoPointerParameterAllowed)
 	}
 
-	if len(queueUrl) == 0 {
+	if len(queueName) == 0 {
 		return errors.New(ErrEmptyParameter)
+	}
+
+	getQueueUrlIn, getQueueUrlInErr := sqs.NewGetQueueUrlInput(queueName)
+	if getQueueUrlInErr != nil {
+		return getQueueUrlInErr
+	}
+
+	queueUrl, queueUrlErr := svc.SQSGetQueueUrl(getQueueUrlIn)
+	if queueUrlErr != nil {
+		return queueUrlErr
 	}
 
 	sendMsgIn, sendMsgInErr := sqs.NewSendMessageInput(
 		input,
 		queueUrl,
+		base64Encode,
 	)
 	if sendMsgInErr != nil {
 		return sendMsgInErr

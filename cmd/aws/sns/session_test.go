@@ -1,10 +1,12 @@
 package sns
 
 import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	"github.com/andream16/aws-sdk-go-bindings/cmd/aws"
 	"github.com/andream16/aws-sdk-go-bindings/testdata"
-	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestNew(t *testing.T) {
@@ -15,7 +17,7 @@ func TestNew(t *testing.T) {
 
 	assert.NoError(t, svcErr)
 
-	snsSvc, snsSvcErr := New(svc)
+	snsSvc, snsSvcErr := New(svc, cfg.SNS.Endpoint)
 
 	assert.NoError(t, snsSvcErr)
 	assert.NotEmpty(t, snsSvc)

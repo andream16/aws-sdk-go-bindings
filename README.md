@@ -38,44 +38,4 @@ You can import code from both `cmd` and `pkg` root package. `cmd` contains high 
 ## Development
 
 Install [dep](https://github.com/golang/dep) and run `dep ensure` inside the project's folder to get project's vendors.
-If you want to fork it or just use it in local, edit `internal/configuration/configuration.json` by setting your aws options like:
-
-```
-{
-  "region" : "eu-central-1",
-  "SNS" : {
-    "target_arn" : "arn:aws:sns:eu-central-1:${your_aws_account_id}:${your_resource_name}"
-  },
-  "DynamoDB" : {
-    "endpoint" : "your_local_dynamo_endpoint",
-    "pkg_table_name" : "some_table_1",
-    "cmd_table_name" : "some_table_2",
-    "primary_key" : "some_param"
-  },
-  "S3" : {
-    "bucket" : "your_bucket",
-    "source_image" : "path_to_a_test_image"
-  },
-  "Rekognition" : {
-      "region" : "rekognition_region",
-      "compare_faces" : {
-        "source_image" : "path_to_a_test_image",
-        "target_image" : "path_to_a_test_image",
-        "similarity" : 70.0
-      },
-      "detect_faces" : {
-        "source_image" : "path_to_a_test_image"
-      },
-      "detect_text" : {
-        "source_image" : "path_to_a_test_image"
-      }
-  },
-  "SQS" : {
-      "queue_url" : "some_queue_url"
-  }
-}
-```
-
-Also, to make `dynamodb` tests work you need to start a [local dynamodb](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html)
-and run it on the same endpoint you put in the configuration above like `java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb -port 4200
-` if you used `"DynamoDB.endpoint" : "http://localhost:4200/"`.
+If you want to fork it or just use it in local, edit `internal/configuration/configuration.json` as you wish. The default configuration contains endpoints to run the tests on [localstack](https://github.com/localstack/localstack). To run `Rekognition` tests you need to have an AWS account and use a region where the latter is available.

@@ -1,9 +1,11 @@
 package aws
 
 import (
-	"github.com/andream16/aws-sdk-go-bindings/testdata"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+
+	"github.com/andream16/aws-sdk-go-bindings/testdata"
 )
 
 func TestNew(t *testing.T) {

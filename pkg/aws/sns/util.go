@@ -3,9 +3,9 @@ package sns
 import (
 	"encoding/json"
 	"errors"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/sns"
 	"strings"
+
+	"github.com/aws/aws-sdk-go/service/sns"
 )
 
 const messageStructure = "json"
@@ -46,14 +46,13 @@ func NewPublishInput(body interface{}, endpoint string) (*PublishInput, error) {
 		return nil, msgErr
 	}
 
-	pubIn := &sns.PublishInput{
-		Message:          aws.String(string(msgBytes)),
-		MessageStructure: aws.String(messageStructure),
-		TargetArn:        aws.String(endpoint),
-	}
+	publishInput := new(sns.PublishInput)
+	publishInput = publishInput.SetMessage(string(msgBytes))
+	publishInput = publishInput.SetMessageStructure(messageStructure)
+	publishInput = publishInput.SetTargetArn(endpoint)
 
 	out := new(PublishInput)
-	out.PublishInput = pubIn
+	out.PublishInput = publishInput
 
 	return out, nil
 
