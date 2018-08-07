@@ -10,9 +10,10 @@ import (
 )
 
 const (
-	queueName = "some_queue_name"
-	val1      = "some_val1"
-	val2      = "some_val2"
+	encodeBase64 = true
+	queueName    = "some_queue_name"
+	val1         = "some_val1"
+	val2         = "some_val2"
 )
 
 type TestSQSUtilType struct {
@@ -36,7 +37,7 @@ func TestSQS_CreateQueue(t *testing.T) {
 
 func TestSQS_SendMessage(t *testing.T) {
 
-	queueUrl := testdata.MockConfiguration(t).SQS.QueueUrl
+	queueName := testdata.MockConfiguration(t).SQS.QueueName
 
 	svc := mockSQSSvc(t)
 
@@ -51,7 +52,8 @@ func TestSQS_SendMessage(t *testing.T) {
 
 	err := svc.SendMessage(
 		in,
-		queueUrl,
+		queueName,
+		encodeBase64,
 	)
 
 	assert.NoError(t, err)
@@ -59,13 +61,15 @@ func TestSQS_SendMessage(t *testing.T) {
 	shouldBeEmptyParameterErr := svc.SendMessage(
 		in,
 		"",
+		encodeBase64,
 	)
 
 	assert.Equal(t, ErrEmptyParameter, shouldBeEmptyParameterErr.Error())
 
 	shouldBeNoPointerParameterErr := svc.SendMessage(
 		&in,
-		queueUrl,
+		queueName,
+		encodeBase64,
 	)
 
 	assert.Equal(t, ErrNoPointerParameterAllowed, shouldBeNoPointerParameterErr.Error())
@@ -104,7 +108,7 @@ func mockSQSSvc(t *testing.T) *SQS {
 	assert.NoError(t, awsSvcErr)
 	assert.NotEmpty(t, awsSvc)
 
-	svc, svcErr := New(awsSvc)
+	svc, svcErr := New(awsSvc, cfg.SQS.Endpoint)
 
 	assert.NoError(t, svcErr)
 	assert.NotEmpty(t, svc)

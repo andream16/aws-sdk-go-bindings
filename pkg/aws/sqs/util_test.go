@@ -5,14 +5,14 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/andream16/aws-sdk-go-bindings/testdata"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewCreateQueueInput(t *testing.T) {
 
 	cfg := testdata.MockConfiguration(t)
-	
+
 	out, err := NewCreateQueueInput(cfg.SQS.QueueName)
 
 	assert.NoError(t, err)
@@ -49,30 +49,49 @@ func TestNewSendMessageInput(t *testing.T) {
 		SomeParam2: val2,
 	}
 
+	base64Out, base64Err := NewSendMessageInput(
+		s,
+		queueUrl,
+		true,
+	)
+
+	assert.NoError(t, base64Err)
+	assert.Equal(t, queueUrl, *base64Out.SendMessageInput.QueueUrl)
+
+	b, bErr := base64.StdEncoding.DecodeString(*base64Out.SendMessageInput.MessageBody)
+
+	assert.NoError(t, bErr)
+	assert.NotEmpty(t, b)
+
+	var m1 TestSQSUtilType
+
+	unmarshalBase64OutErr := json.Unmarshal([]byte(b), &m1)
+
+	assert.NoError(t, unmarshalBase64OutErr)
+	assert.Equal(t, val1, m1.SomeParam1)
+	assert.Equal(t, val2, m1.SomeParam2)
+
 	out, err := NewSendMessageInput(
 		s,
 		queueUrl,
+		false,
 	)
 
 	assert.NoError(t, err)
 	assert.Equal(t, queueUrl, *out.SendMessageInput.QueueUrl)
 
-	b, bErr := base64.StdEncoding.DecodeString(*out.SendMessageInput.MessageBody)
+	var m2 TestSQSUtilType
 
-	assert.NoError(t, bErr)
-	assert.NotEmpty(t, b, val1, val2)
+	unmarshalOutErr := json.Unmarshal([]byte(b), &m2)
 
-	var m TestSQSUtilType
-
-	unmarshalErr := json.Unmarshal([]byte(b), &m)
-
-	assert.NoError(t, unmarshalErr)
-	assert.Equal(t, val1, m.SomeParam1)
-	assert.Equal(t, val2, m.SomeParam2)
+	assert.NoError(t, unmarshalOutErr)
+	assert.Equal(t, val1, m2.SomeParam1)
+	assert.Equal(t, val2, m2.SomeParam2)
 
 	_, shouldBeErrEmptyParameter := NewSendMessageInput(
 		s,
 		"",
+		true,
 	)
 
 	assert.Error(t, shouldBeErrEmptyParameter)
@@ -81,6 +100,7 @@ func TestNewSendMessageInput(t *testing.T) {
 	_, shouldBeErrNoPointerParameterAllowed := NewSendMessageInput(
 		&s,
 		queueUrl,
+		true,
 	)
 
 	assert.Error(t, shouldBeErrNoPointerParameterAllowed)

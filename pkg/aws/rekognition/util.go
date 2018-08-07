@@ -3,7 +3,6 @@ package rekognition
 import (
 	"errors"
 
-	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/rekognition"
 )
 
@@ -27,13 +26,13 @@ func NewCompareFacesInput(source, target []byte, similarity float64) (*CompareFa
 		return nil, newTargetInputImgErr
 	}
 
-	out := new(CompareFacesInput)
+	compareFacesInput := new(rekognition.CompareFacesInput)
+	compareFacesInput = compareFacesInput.SetSimilarityThreshold(similarity)
+	compareFacesInput = compareFacesInput.SetSourceImage(newSourceInputImg)
+	compareFacesInput = compareFacesInput.SetTargetImage(newTargetInputImg)
 
-	out.CompareFacesInput = &rekognition.CompareFacesInput{
-		SimilarityThreshold: aws.Float64(similarity),
-		SourceImage:         newSourceInputImg,
-		TargetImage:         newTargetInputImg,
-	}
+	out := new(CompareFacesInput)
+	out.CompareFacesInput = compareFacesInput
 
 	return out, nil
 
@@ -51,11 +50,11 @@ func NewDetectFacesInput(source []byte) (*DetectFacesInput, error) {
 		return nil, newInputImgErr
 	}
 
-	out := new(DetectFacesInput)
+	detectFacesInput := new(rekognition.DetectFacesInput)
+	detectFacesInput = detectFacesInput.SetImage(newInputImg)
 
-	out.DetectFacesInput = &rekognition.DetectFacesInput{
-		Image: newInputImg,
-	}
+	out := new(DetectFacesInput)
+	out.DetectFacesInput = detectFacesInput
 
 	return out, nil
 
@@ -73,11 +72,11 @@ func NewDetectTextInput(source []byte) (*DetectTextInput, error) {
 		return nil, newInputImgErr
 	}
 
-	out := new(DetectTextInput)
+	detectTextInput := new(rekognition.DetectTextInput)
+	detectTextInput = detectTextInput.SetImage(newInputImg)
 
-	out.DetectTextInput = &rekognition.DetectTextInput{
-		Image: newInputImg,
-	}
+	out := new(DetectTextInput)
+	out.DetectTextInput = detectTextInput
 
 	return out, nil
 

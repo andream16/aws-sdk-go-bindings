@@ -17,9 +17,9 @@ func TestNew(t *testing.T) {
 
 	assert.NoError(t, svcErr)
 
-	snsSvc, snsSvcErr := New(svc, "")
+	dynamoSvc, dynamoSvcErr := New(svc, cfg.DynamoDB.Endpoint)
 
-	assert.NoError(t, snsSvcErr)
-	assert.NotEmpty(t, snsSvc)
+	assert.NoError(t, dynamoSvcErr)
+	assert.NotEmpty(t, dynamoSvc)
 
 }

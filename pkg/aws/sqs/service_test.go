@@ -12,8 +12,8 @@ import (
 )
 
 const (
-	val1      = "some_val1"
-	val2      = "some_val2"
+	val1 = "some_val1"
+	val2 = "some_val2"
 )
 
 type TestSQSUtilType struct {
@@ -79,6 +79,15 @@ func TestSQS_SQSSendMessage(t *testing.T) {
 
 	createSQSQueue(t, svc, cfg.SQS.QueueName)
 
+	getQueueUrlIn, getQueueUrlInErr := NewGetQueueUrlInput(cfg.SQS.QueueName)
+
+	assert.NoError(t, getQueueUrlInErr)
+
+	url, urlErr := svc.SQSGetQueueUrl(getQueueUrlIn)
+
+	assert.NoError(t, urlErr)
+	assert.NotEmpty(t, url)
+
 	m := TestSQSUtilType{
 		SomeParam1: val1,
 		SomeParam2: val2,
@@ -86,7 +95,8 @@ func TestSQS_SQSSendMessage(t *testing.T) {
 
 	sendMsgIn, sendMsgInErr := NewSendMessageInput(
 		m,
-		cfg.SQS.QueueName,
+		url,
+		true,
 	)
 
 	assert.NoError(t, sendMsgInErr)

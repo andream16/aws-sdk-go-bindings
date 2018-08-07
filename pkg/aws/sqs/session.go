@@ -1,9 +1,9 @@
 package sqs
 
 import (
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sqs"
-	"github.com/aws/aws-sdk-go/aws"
 
 	pkgAws "github.com/andream16/aws-sdk-go-bindings/pkg/aws"
 )

@@ -17,7 +17,7 @@ func TestNew(t *testing.T) {
 
 	assert.NoError(t, svcErr)
 
-	snsSvc, snsSvcErr := New(svc)
+	snsSvc, snsSvcErr := New(svc, cfg.SQS.Endpoint)
 
 	assert.NoError(t, snsSvcErr)
 	assert.NotEmpty(t, snsSvc)

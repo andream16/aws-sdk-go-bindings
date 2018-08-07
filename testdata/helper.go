@@ -2,9 +2,11 @@ package testdata
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/stretchr/testify/assert"
+
 )
 
 func CreateTableIfNotExists(t *testing.T, dynamo dynamodb.DynamoDB, tableName string, attributes []*dynamodb.AttributeDefinition, keys []*dynamodb.KeySchemaElement) {
@@ -62,4 +64,3 @@ func createTable(t *testing.T, dynamo dynamodb.DynamoDB, tableName string, attri
 	assert.NoError(t, err)
 
 }
-

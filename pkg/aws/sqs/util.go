@@ -17,7 +17,6 @@ func NewCreateQueueInput(queueName string) (*CreateQueueInput, error) {
 	}
 
 	createQueueIn := new(sqs.CreateQueueInput)
-
 	createQueueIn = createQueueIn.SetQueueName(queueName)
 
 	out := new(CreateQueueInput)
@@ -44,8 +43,9 @@ func NewGetQueueAttributesInput(queueUrl string) (*GetQueueAttributesInput, erro
 
 }
 
-// NewSendMessageInput returns a new *SendMessageInput initialized with queueUrl and messageBody encoded in base64
-func NewSendMessageInput(input interface{}, queueUrl string) (*SendMessageInput, error) {
+// NewSendMessageInput returns a new *SendMessageInput initialized with queueUrl and messageBody.
+// If base64Encode = true then the messageBody will be encoded in base64
+func NewSendMessageInput(input interface{}, queueUrl string, base64Encode bool) (*SendMessageInput, error) {
 
 	if reflect.DeepEqual(reflect.TypeOf(input).Kind(), reflect.Ptr) {
 		return nil, errors.New(ErrNoPointerParameterAllowed)
@@ -62,12 +62,16 @@ func NewSendMessageInput(input interface{}, queueUrl string) (*SendMessageInput,
 		return nil, err
 	}
 
-	b64MsgBody := base64.StdEncoding.EncodeToString(msgBody)
+	msgStringBody := string(msgBody)
 
-	sendMsgInput = sendMsgInput.SetMessageBody(b64MsgBody).SetQueueUrl(queueUrl)
+	if base64Encode {
+		msgStringBody = base64.StdEncoding.EncodeToString(msgBody)
+	}
+
+	sendMsgInput = sendMsgInput.SetMessageBody(msgStringBody)
+	sendMsgInput = sendMsgInput.SetQueueUrl(queueUrl)
 
 	out := new(SendMessageInput)
-
 	out.SendMessageInput = sendMsgInput
 
 	return out, nil

@@ -23,7 +23,7 @@ func TestDynamoDB_Methods(t *testing.T) {
 
 }
 
-func testDynamoDBPutItem(t *testing.T, cfg configuration.Configuration) {
+func testDynamoDBPutItem(t *testing.T, cfg *configuration.Configuration) {
 
 	t.Helper()
 
@@ -58,7 +58,7 @@ func testDynamoDBPutItem(t *testing.T, cfg configuration.Configuration) {
 
 }
 
-func testDynamoDBGetItem(t *testing.T, cfg configuration.Configuration) {
+func testDynamoDBGetItem(t *testing.T, cfg *configuration.Configuration) {
 
 	t.Helper()
 

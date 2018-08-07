@@ -10,10 +10,10 @@ type S3 struct {
 	*s3.S3
 }
 
-// New returns a *S3 given a *aws.Session
-func New(svc *aws.Session) (*S3, error) {
+// New returns a *S3 given a *aws.Session and an optional endpoint
+func New(svc *aws.Session, endpoint string) (*S3, error) {
 
-	s3Svc, err := s3.New(svc.Session)
+	s3Svc, err := s3.New(svc.Session, endpoint)
 	if err != nil {
 		return nil, err
 	}

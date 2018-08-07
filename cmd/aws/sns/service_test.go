@@ -22,7 +22,7 @@ func TestSns_Publish(t *testing.T) {
 	assert.NoError(t, awsSvcErr)
 	assert.NotEmpty(t, awsSvc)
 
-	svc, svcErr := New(awsSvc)
+	svc, svcErr := New(awsSvc, cfg.SNS.Endpoint)
 
 	assert.NoError(t, svcErr)
 	assert.NotEmpty(t, svc)

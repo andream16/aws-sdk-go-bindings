@@ -17,7 +17,7 @@ func TestNew(t *testing.T) {
 
 	assert.NoError(t, svcErr)
 
-	s3Svc, s3SvcErr := New(svc)
+	s3Svc, s3SvcErr := New(svc, cfg.S3.Endpoint)
 
 	assert.NoError(t, s3SvcErr)
 	assert.NotEmpty(t, s3Svc)

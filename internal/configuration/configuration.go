@@ -1,9 +1,9 @@
 package configuration
 
 import (
-	"runtime"
 	"path"
 	"path/filepath"
+	"runtime"
 
 	"github.com/tkanos/gonfig"
 )
@@ -36,6 +36,7 @@ type SNS struct {
 
 // S3 contains test parameters for S3
 type S3 struct {
+	Endpoint    string `json:"endpoint"`
 	Bucket      string `json:"bucket"`
 	SourceImage string `json:"source_image"`
 }
@@ -58,8 +59,8 @@ type Rekognition struct {
 
 // SQS embeds sqs information
 type SQS struct {
-	Endpoint string `json:"endpoint"`
-	QueueUrl string `json:"queue_url"`
+	Endpoint  string `json:"endpoint"`
+	QueueUrl  string `json:"queue_url"`
 	QueueName string `json:"queue_name"`
 }
 
