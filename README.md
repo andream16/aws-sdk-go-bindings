@@ -38,4 +38,4 @@ You can import code from both `cmd` and `pkg` root package. `cmd` contains high 
 ## Development
 
 Install [dep](https://github.com/golang/dep) and run `dep ensure` inside the project's folder to get project's vendors.
-If you want to fork it or just use it in local, edit `internal/configuration/configuration.json` as you wish. The default `internal/configuration/configuration.json` contains endpoints to run the tests on [localstack](https://github.com/localstack/localstack). To run `Rekognition` test you need to have an AWS account and use a region where the latter is available.
+If you want to fork it or just use it in local, edit `internal/configuration/configuration.json` as you wish. The default configuration contains endpoints to run the tests on [localstack](https://github.com/localstack/localstack). To run `Rekognition` test you need to have an AWS account and use a region where the latter is available.
