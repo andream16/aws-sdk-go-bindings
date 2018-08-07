@@ -21,9 +21,9 @@ func TestRekognition_Methods(t *testing.T) {
 	uploadImages(cfg, s3Svc, t)
 
 	funcs := []func(*configuration.Configuration, *s3.S3, *Rekognition, *testing.T){
-		testRekognition_CompareFaces,
-		testRekognition_DetectFaces,
-		testRekognition_DetectText,
+		testRekognitionCompareFaces,
+		testRekognitionDetectFaces,
+		testRekognitionDetectText,
 	}
 
 	for i := 0; i < len(funcs); i++ {
@@ -34,7 +34,7 @@ func TestRekognition_Methods(t *testing.T) {
 
 }
 
-func testRekognition_CompareFaces(cfg *configuration.Configuration, s3Svc *s3.S3, rekSvc *Rekognition, t *testing.T) {
+func testRekognitionCompareFaces(cfg *configuration.Configuration, s3Svc *s3.S3, rekSvc *Rekognition, t *testing.T) {
 
 	t.Helper()
 
@@ -89,7 +89,7 @@ func testRekognition_CompareFaces(cfg *configuration.Configuration, s3Svc *s3.S3
 
 }
 
-func testRekognition_DetectFaces(cfg *configuration.Configuration, s3Svc *s3.S3, rekSvc *Rekognition, t *testing.T) {
+func testRekognitionDetectFaces(cfg *configuration.Configuration, s3Svc *s3.S3, rekSvc *Rekognition, t *testing.T) {
 
 	t.Helper()
 
@@ -113,7 +113,7 @@ func testRekognition_DetectFaces(cfg *configuration.Configuration, s3Svc *s3.S3,
 
 }
 
-func testRekognition_DetectText(cfg *configuration.Configuration, s3Svc *s3.S3, rekSvc *Rekognition, t *testing.T) {
+func testRekognitionDetectText(cfg *configuration.Configuration, s3Svc *s3.S3, rekSvc *Rekognition, t *testing.T) {
 
 	t.Helper()
 

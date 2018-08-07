@@ -23,13 +23,13 @@ func (img *ReadImageOutput) SetBody(body []byte) *ReadImageOutput {
 	return img
 }
 
-// SetBody sets ReadImageOutput.ContentType to the passed contentType
+// SetContentType sets ReadImageOutput.ContentType to the passed contentType
 func (img *ReadImageOutput) SetContentType(contentType string) *ReadImageOutput {
 	img.ContentType = contentType
 	return img
 }
 
-// SetBody sets ReadImageOutput.ContentSize to the passed contentSize
+// SetContentSize sets ReadImageOutput.ContentSize to the passed contentSize
 func (img *ReadImageOutput) SetContentSize(contentSize int64) *ReadImageOutput {
 	img.ContentSize = contentSize
 	return img
