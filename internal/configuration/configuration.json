@@ -1,33 +1,37 @@
 {
-  "region" : "eu-central-1",
+  "region" : "eu-west-1",
   "SNS" : {
-    "target_arn" : "arn:aws:sns:eu-central-1:${your_aws_account_id}:${your_resource_name}"
+    "endpoint" : "http://localhost:4575",
+    "target_arn" : "some-target-arn"
   },
   "DynamoDB" : {
-    "endpoint" : "your_local_dynamo_endpoint",
+    "endpoint" : "http://localhost:4569",
     "pkg_table_name" : "some_table_1",
     "cmd_table_name" : "some_table_2",
     "primary_key" : "some_param"
   },
   "S3" : {
+    "endpoint" : "http://localhost:4572",
     "bucket" : "your_bucket",
-    "source_image" : "path_to_a_test_image"
+    "source_image" : "test/compare_faces_test-source.jpg"
   },
   "Rekognition" : {
-    "region" : "rekognition_region",
+    "region" : "eu-west-1",
     "compare_faces" : {
-      "source_image" : "path_to_a_test_image",
-      "target_image" : "path_to_a_test_image",
+      "source_image" : "test/compare_faces_test-source.jpg",
+      "target_image" : "test/compare_faces_test-target.jpg",
       "similarity" : 70.0
     },
     "detect_faces" : {
-      "source_image" : "path_to_a_test_image"
+      "source_image" : "test/detect_faces_test-source.jpg"
     },
     "detect_text" : {
-      "source_image" : "path_to_a_test_image"
+      "source_image" : "test/detect_text_test-source.jpg"
     }
   },
   "SQS" : {
-      "queue_url" : "some_queue_url"
+    "endpoint" : "http://localhost:4576",
+    "queue_name" : "some_queue_name",
+    "queue_url" : "http://localhost:4576/queue/some_queue_name"
   }
 }
