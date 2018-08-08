@@ -7,7 +7,4 @@ const (
 
 	// ErrEmptyParameter is used when a required parameter is empty
 	ErrEmptyParameter = "EmptyParameter"
-
-	// ErrEmptyMap is used when a required map parameter is empty
-	ErrEmptyMap = "EmptyMap"
 )
