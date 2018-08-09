@@ -1,8 +1,6 @@
 package sqs
 
 import (
-	"encoding/base64"
-	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -39,33 +37,18 @@ func TestSQS_SQSGetQueueAttributes(t *testing.T) {
 
 	createSQSQueue(t, svc, cfg.SQS.QueueName)
 
-	getQueueUrlIn, err := NewGetQueueUrlInput(cfg.SQS.QueueName)
-
-	assert.NoError(t, err)
-
-	url, urlErr := svc.SQSGetQueueUrl(getQueueUrlIn)
+	url, urlErr := svc.SQSGetQueueUrl(cfg.SQS.QueueName)
 
 	assert.NoError(t, urlErr)
 	assert.NotEmpty(t, url)
 
-	getQueueAttrsIn, getQueueAttrsInErr := NewGetQueueAttributesInput(url)
-
-	assert.NoError(t, getQueueAttrsInErr)
-	assert.Equal(t, cfg.SQS.QueueUrl, *getQueueAttrsIn.GetQueueAttributesInput.QueueUrl)
-
-	_, getQueueAttrsErr := svc.SQSGetQueueAttributes(
-		getQueueAttrsIn,
-	)
+	_, getQueueAttrsErr := svc.SQSGetQueueAttributes(url)
 
 	assert.NoError(t, getQueueAttrsErr)
 
 	badQueueUrl := `badURL`
 
-	badGetQueueAttrsIn, _ := NewGetQueueAttributesInput(badQueueUrl)
-
-	_, shouldBeErr := svc.SQSGetQueueAttributes(
-		badGetQueueAttrsIn,
-	)
+	_, shouldBeErr := svc.SQSGetQueueAttributes(badQueueUrl)
 
 	assert.Error(t, shouldBeErr)
 
@@ -79,43 +62,39 @@ func TestSQS_SQSSendMessage(t *testing.T) {
 
 	createSQSQueue(t, svc, cfg.SQS.QueueName)
 
-	getQueueUrlIn, getQueueUrlInErr := NewGetQueueUrlInput(cfg.SQS.QueueName)
-
-	assert.NoError(t, getQueueUrlInErr)
-
-	url, urlErr := svc.SQSGetQueueUrl(getQueueUrlIn)
-
-	assert.NoError(t, urlErr)
-	assert.NotEmpty(t, url)
-
 	m := TestSQSUtilType{
 		SomeParam1: val1,
 		SomeParam2: val2,
 	}
 
-	sendMsgIn, sendMsgInErr := NewSendMessageInput(
+	err := svc.SQSSendMessage(
 		m,
-		url,
+		cfg.SQS.QueueName,
 		true,
 	)
 
-	assert.NoError(t, sendMsgInErr)
-
-	b, bErr := base64.StdEncoding.DecodeString(*sendMsgIn.MessageBody)
-
-	assert.NoError(t, bErr)
-
-	var o TestSQSUtilType
-
-	marshalErr := json.Unmarshal([]byte(b), &o)
-
-	assert.NoError(t, marshalErr)
-	assert.Equal(t, o.SomeParam1, val1)
-	assert.Equal(t, o.SomeParam2, val2)
-
-	err := svc.SQSSendMessage(sendMsgIn)
-
 	assert.NoError(t, err)
+
+}
+
+func TestSQS_SQSGetQueueUrl(t *testing.T) {
+
+	cfg := testdata.MockConfiguration(t)
+
+	svc := newSQSSvc(t)
+
+	createSQSQueue(t, svc, cfg.SQS.QueueName)
+
+	url, urlErr := svc.SQSGetQueueUrl(cfg.SQS.QueueName)
+
+	assert.NoError(t, urlErr)
+	assert.NotEmpty(t, url)
+	assert.Equal(t, cfg.SQS.QueueUrl, url)
+
+	_, shouldBeEmptyErr := svc.SQSGetQueueUrl("")
+
+	assert.Error(t, shouldBeEmptyErr)
+	assert.Contains(t, shouldBeEmptyErr.Error(), ErrEmptyParameter)
 
 }
 
@@ -123,15 +102,14 @@ func createSQSQueue(t *testing.T, svc *SQS, queueName string) {
 
 	t.Helper()
 
-	createQueueIn, createQueueInErr := NewCreateQueueInput(queueName)
-
-	assert.NoError(t, createQueueInErr)
-
-	assert.Equal(t, queueName, *createQueueIn.CreateQueueInput.QueueName)
-
-	err := svc.SQSCreateQueue(createQueueIn)
+	err := svc.SQSCreateQueue(queueName)
 
 	assert.NoError(t, err)
+
+	shouldBeEmptyParamErr := svc.SQSCreateQueue("")
+
+	assert.Error(t, shouldBeEmptyParamErr)
+	assert.Contains(t, shouldBeEmptyParamErr.Error(), ErrEmptyParameter)
 
 }
 

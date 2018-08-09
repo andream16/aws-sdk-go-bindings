@@ -4,35 +4,20 @@ import (
 	"github.com/aws/aws-sdk-go/service/sqs"
 )
 
-// CreateQueueInput embeds *sqs.CreateQueueInput
-type CreateQueueInput struct {
-	*sqs.CreateQueueInput
-}
-
-// GetQueueAttributesInput embeds *sqs.GetQueueAttributesInput
-type GetQueueAttributesInput struct {
-	*sqs.GetQueueAttributesInput
-}
-
-// GetQueueAttributesOutput embeds *sqs.GetQueueAttributesOutput
-type GetQueueAttributesOutput struct {
-	*sqs.GetQueueAttributesOutput
-}
-
-// SendMessageInput embeds *sqs.SendMessageInput
-type SendMessageInput struct {
-	*sqs.SendMessageInput
-}
-
 // GetQueueUrlInput embeds *sqs.GetQueueUrlInput
 type GetQueueUrlInput struct {
 	*sqs.GetQueueUrlInput
 }
 
-// SQSCreateQueue creates an sns queue given a *CreateQueueInput
-func (svc *SQS) SQSCreateQueue(input *CreateQueueInput) error {
+// SQSCreateQueue creates an sns queue given a queue name
+func (svc *SQS) SQSCreateQueue(queue string) error {
 
-	if _, err := svc.CreateQueue(input.CreateQueueInput); err != nil {
+	input, inputErr := NewCreateQueueInput(queue)
+	if inputErr != nil {
+		return inputErr
+	}
+
+	if _, err := svc.CreateQueue(input); err != nil {
 		return err
 	}
 
@@ -40,25 +25,41 @@ func (svc *SQS) SQSCreateQueue(input *CreateQueueInput) error {
 
 }
 
-// SQSGetQueueAttributes returns error if queue does not exist, nil otherwise
-func (svc *SQS) SQSGetQueueAttributes(input *GetQueueAttributesInput) (*GetQueueAttributesOutput, error) {
+// SQSGetQueueAttributes returns error if queue does not exist, get queue attributes otherwise
+func (svc *SQS) SQSGetQueueAttributes(queueUrl string) (*sqs.GetQueueAttributesOutput, error) {
 
-	attrs, err := svc.GetQueueAttributes(input.GetQueueAttributesInput)
+	input, inputErr := NewGetQueueAttributesInput(queueUrl)
+	if inputErr != nil {
+		return nil, inputErr
+	}
+
+	out, err := svc.GetQueueAttributes(input)
 	if err != nil {
 		return nil, err
 	}
-
-	out := new(GetQueueAttributesOutput)
-	out.GetQueueAttributesOutput = attrs
 
 	return out, nil
 
 }
 
 // SQSSendMessage sends a message on SQS
-func (svc *SQS) SQSSendMessage(input *SendMessageInput) error {
+func (svc *SQS) SQSSendMessage(input interface{}, queueName string, base64Encode bool) error {
 
-	if _, err := svc.SendMessage(input.SendMessageInput); err != nil {
+	queueUrl, queueUrlErr := svc.SQSGetQueueUrl(queueName)
+	if queueUrlErr != nil {
+		return queueUrlErr
+	}
+
+	sendMsgInput, sendMsgInputErr := NewSendMessageInput(
+		input,
+		queueUrl,
+		base64Encode,
+	)
+	if sendMsgInputErr != nil {
+		return sendMsgInputErr
+	}
+
+	if _, err := svc.SendMessage(sendMsgInput); err != nil {
 		return err
 	}
 
@@ -67,9 +68,14 @@ func (svc *SQS) SQSSendMessage(input *SendMessageInput) error {
 }
 
 // SQSGetQueueUrl gets a queue's url given its name
-func (svc *SQS) SQSGetQueueUrl(input *GetQueueUrlInput) (string, error) {
+func (svc *SQS) SQSGetQueueUrl(queueUrl string) (string, error) {
 
-	out, err := svc.GetQueueUrl(input.GetQueueUrlInput)
+	input, inputErr := NewGetQueueUrlInput(queueUrl)
+	if inputErr != nil {
+		return "", inputErr
+	}
+
+	out, err := svc.GetQueueUrl(input)
 	if err != nil {
 		return "", nil
 	}

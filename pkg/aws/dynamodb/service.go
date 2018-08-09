@@ -1,7 +1,7 @@
 package dynamodb
 
 // GetItemOutput embeds *dynamodb.GetItemOutput
-type GetItemOutput interface {}
+type GetItemOutput interface{}
 
 // DynamoPutItem puts a given input in a dynamodb table
 func (svc *DynamoDB) DynamoPutItem(input interface{}, table string) error {

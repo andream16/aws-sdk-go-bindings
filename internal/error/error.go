@@ -1,9 +1,9 @@
 package error
 
 import (
+	"errors"
 	"fmt"
 	"strings"
-	"errors"
 )
 
 // FormatError returns a new formatted error given an error string and an input

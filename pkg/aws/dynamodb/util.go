@@ -4,19 +4,19 @@ import (
 	"encoding/json"
 	"reflect"
 
+	intError "github.com/andream16/aws-sdk-go-bindings/internal/error"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-	intError "github.com/andream16/aws-sdk-go-bindings/internal/error"
 )
 
 const (
-	Input = "input"
-	Output = "output"
-	Table = "table"
+	Input    = "input"
+	Output   = "output"
+	Table    = "table"
 	NewImage = "input.Change.NewImage"
-	KeyName = "keyName"
+	KeyName  = "keyName"
 	KeyValue = "keyValue"
 )
 
