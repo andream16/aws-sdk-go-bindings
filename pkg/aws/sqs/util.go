@@ -18,11 +18,8 @@ func NewCreateQueueInput(queueName string) (*sqs.CreateQueueInput, error) {
 		return nil, intError.Format(QueueName, ErrEmptyParameter)
 	}
 
-	createQueueIn := new(sqs.CreateQueueInput)
-	createQueueIn = createQueueIn.SetQueueName(queueName)
-
 	out := new(sqs.CreateQueueInput)
-	out = createQueueIn
+	out = out.SetQueueName(queueName)
 
 	return out, nil
 
