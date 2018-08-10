@@ -28,7 +28,7 @@ func TestNewPutItemInput(t *testing.T) {
 	_, errEmptyParamater := NewPutItemInput(in, "")
 
 	assert.Error(t, errEmptyParamater)
-	assert.Equal(t, ErrEmptyParameter, errEmptyParamater.Error())
+	assert.Contains(t, errEmptyParamater.Error(), ErrEmptyParameter)
 
 }
 
@@ -52,37 +52,48 @@ func TestNewGetItemInput(t *testing.T) {
 
 func TestUnmarshalStreamImage(t *testing.T) {
 
-	input := []byte(`
-        { "M": 
-            {
-                "some_param": { "S": "Joe" }
-            }
-        }`)
+	var in events.DynamoDBAttributeValue
 
-	var av events.DynamoDBAttributeValue
+	someVal := "some_val"
 
-	err := json.Unmarshal(input, &av)
+	mock := []byte(`
+		{ 
+      		"M": {
+				"some_param" : {
+					"S" : "some_val"
+				}
+ 			}
+		}
+	`)
+
+	err := json.Unmarshal(mock, &in)
 	assert.NoError(t, err)
 
-	mock := new(TestUnmarshalStreamImageType)
+	m := in.Map()
 
-	m := av.Map()
+	event := events.DynamoDBEventRecord{
+		Change: events.DynamoDBStreamRecord{
+			NewImage: m,
+		},
+	}
 
-	unmarshalErr := UnmarshalStreamImage(m, &mock)
+	var out TestUnmarshalStreamImageType
+
+	unmarshalErr := UnmarshalStreamImage(event, &out)
 	assert.NoError(t, unmarshalErr)
 
-	assert.NotEmpty(t, mock)
-	assert.Equal(t, "Joe", mock.SomeParam)
+	assert.NotEmpty(t, out)
+	assert.Equal(t, someVal, out.SomeParam)
 
-	errNoPointerParameter := UnmarshalStreamImage(m, TestUnmarshalStreamImageType{})
+	errNoPointerParameter := UnmarshalStreamImage(event, TestUnmarshalStreamImageType{})
 
 	assert.Error(t, errNoPointerParameter)
-	assert.Equal(t, ErrNoPointerParameter, errNoPointerParameter.Error())
+	assert.Contains(t, errNoPointerParameter.Error(), ErrNoPointerParameter)
 
-	errEmptyMap := UnmarshalStreamImage(map[string]events.DynamoDBAttributeValue{}, &mock)
+	errEmptyMap := UnmarshalStreamImage(events.DynamoDBEventRecord{}, &mock)
 
 	assert.Error(t, errEmptyMap)
-	assert.Equal(t, ErrEmptyMap, errEmptyMap.Error())
+	assert.Contains(t, errEmptyMap.Error(), ErrEmptyParameter)
 
 }
 
@@ -100,17 +111,14 @@ func TestUnmarshalGetItemOutput(t *testing.T) {
 		},
 	}
 
-	in := new(GetItemOutput)
-	in.GetItemOutput = getItemIn
-
-	err := UnmarshalGetItemOutput(in, &out)
+	err := UnmarshalGetItemOutput(getItemIn, &out)
 
 	assert.NoError(t, err)
 	assert.Equal(t, s, out.SomeParam)
 
-	errNoPointerParameter := UnmarshalGetItemOutput(in, TestUnmarshalStreamImageType{})
+	errNoPointerParameter := UnmarshalGetItemOutput(getItemIn, TestUnmarshalStreamImageType{})
 
 	assert.Error(t, errNoPointerParameter)
-	assert.Equal(t, ErrNoPointerParameter, errNoPointerParameter.Error())
+	assert.Contains(t, errNoPointerParameter.Error(), ErrNoPointerParameter)
 
 }

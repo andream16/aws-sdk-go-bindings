@@ -16,12 +16,12 @@ func TestNewCreateQueueInput(t *testing.T) {
 	out, err := NewCreateQueueInput(cfg.SQS.QueueName)
 
 	assert.NoError(t, err)
-	assert.Equal(t, cfg.SQS.QueueName, *out.CreateQueueInput.QueueName)
+	assert.Equal(t, cfg.SQS.QueueName, *out.QueueName)
 
 	_, shouldBeErrEmptyParameter := NewCreateQueueInput("")
 
 	assert.Error(t, shouldBeErrEmptyParameter)
-	assert.Equal(t, ErrEmptyParameter, shouldBeErrEmptyParameter.Error())
+	assert.Contains(t, shouldBeErrEmptyParameter.Error(), ErrEmptyParameter)
 
 }
 
@@ -29,15 +29,15 @@ func TestNewGetQueueAttributesInput(t *testing.T) {
 
 	cfg := testdata.MockConfiguration(t)
 
-	out, err := NewGetQueueAttributesInput(cfg.SQS.QueueName)
+	out, err := NewGetQueueAttributesInput(cfg.SQS.QueueUrl)
 
 	assert.NoError(t, err)
-	assert.Equal(t, cfg.SQS.QueueName, *out.GetQueueAttributesInput.QueueUrl)
+	assert.Equal(t, cfg.SQS.QueueUrl, *out.QueueUrl)
 
 	_, shouldBeEmptyErr := NewGetQueueAttributesInput("")
 
 	assert.Error(t, shouldBeEmptyErr)
-	assert.Equal(t, ErrEmptyParameter, shouldBeEmptyErr.Error())
+	assert.Contains(t, shouldBeEmptyErr.Error(), ErrEmptyParameter)
 
 }
 
@@ -49,23 +49,23 @@ func TestNewSendMessageInput(t *testing.T) {
 		SomeParam2: val2,
 	}
 
-	base64Out, base64Err := NewSendMessageInput(
+	out, outErr := NewSendMessageInput(
 		s,
 		queueUrl,
 		true,
 	)
 
-	assert.NoError(t, base64Err)
-	assert.Equal(t, queueUrl, *base64Out.SendMessageInput.QueueUrl)
+	assert.NoError(t, outErr)
+	assert.Equal(t, queueUrl, *out.QueueUrl)
 
-	b, bErr := base64.StdEncoding.DecodeString(*base64Out.SendMessageInput.MessageBody)
+	stringBody, stringBodyErr := base64.StdEncoding.DecodeString(*out.MessageBody)
 
-	assert.NoError(t, bErr)
-	assert.NotEmpty(t, b)
+	assert.NoError(t, stringBodyErr)
+	assert.NotEmpty(t, stringBody)
 
 	var m1 TestSQSUtilType
 
-	unmarshalBase64OutErr := json.Unmarshal([]byte(b), &m1)
+	unmarshalBase64OutErr := json.Unmarshal([]byte(stringBody), &m1)
 
 	assert.NoError(t, unmarshalBase64OutErr)
 	assert.Equal(t, val1, m1.SomeParam1)
@@ -78,11 +78,11 @@ func TestNewSendMessageInput(t *testing.T) {
 	)
 
 	assert.NoError(t, err)
-	assert.Equal(t, queueUrl, *out.SendMessageInput.QueueUrl)
+	assert.Equal(t, queueUrl, *out.QueueUrl)
 
 	var m2 TestSQSUtilType
 
-	unmarshalOutErr := json.Unmarshal([]byte(b), &m2)
+	unmarshalOutErr := json.Unmarshal([]byte(stringBody), &m2)
 
 	assert.NoError(t, unmarshalOutErr)
 	assert.Equal(t, val1, m2.SomeParam1)
@@ -95,7 +95,7 @@ func TestNewSendMessageInput(t *testing.T) {
 	)
 
 	assert.Error(t, shouldBeErrEmptyParameter)
-	assert.Equal(t, ErrEmptyParameter, shouldBeErrEmptyParameter.Error())
+	assert.Contains(t, shouldBeErrEmptyParameter.Error(), ErrEmptyParameter)
 
 	_, shouldBeErrNoPointerParameterAllowed := NewSendMessageInput(
 		&s,
@@ -104,7 +104,7 @@ func TestNewSendMessageInput(t *testing.T) {
 	)
 
 	assert.Error(t, shouldBeErrNoPointerParameterAllowed)
-	assert.Equal(t, ErrNoPointerParameterAllowed, shouldBeErrNoPointerParameterAllowed.Error())
+	assert.Contains(t, shouldBeErrNoPointerParameterAllowed.Error(), ErrNoPointerParameterAllowed)
 
 }
 

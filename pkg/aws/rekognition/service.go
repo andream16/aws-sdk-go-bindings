@@ -1,78 +1,96 @@
 package rekognition
 
-import "github.com/aws/aws-sdk-go/service/rekognition"
-
-// CompareFacesInput embeds *rekognition.CompareFacesInput
-type CompareFacesInput struct {
-	*rekognition.CompareFacesInput
-}
-
-// CompareFacesOutput embeds *rekognition.CompareFacesOutput
-type CompareFacesOutput struct {
-	*rekognition.CompareFacesOutput
-}
-
-// DetectFacesInput embeds *rekognition.DetectFacesInput
-type DetectFacesInput struct {
-	*rekognition.DetectFacesInput
-}
-
-// DetectFacesOutput embeds *rekognition.DetectFacesOutput
-type DetectFacesOutput struct {
-	*rekognition.DetectFacesOutput
-}
-
-// DetectTextInput embeds *rekognition.DetectTextInput
-type DetectTextInput struct {
-	*rekognition.DetectTextInput
-}
-
-// DetectTextOutput embeds *rekognition.DetectTextOutput
-type DetectTextOutput struct {
-	*rekognition.DetectTextOutput
-}
-
 // RekognitionCompareFaces compares two faces returning their similarity
-func (svc *Rekognition) RekognitionCompareFaces(input *CompareFacesInput) (*CompareFacesOutput, error) {
+func (svc *Rekognition) RekognitionCompareFaces(sourceImage, targetImage []byte, similarity float64) (*CompareFacesOutput, error) {
 
-	compareFacesOut, err := svc.CompareFaces(input.CompareFacesInput)
+	input, inputErr := NewCompareFacesInput(
+		sourceImage,
+		targetImage,
+		similarity,
+	)
+	if inputErr != nil {
+		return nil, inputErr
+	}
+
+	valid := input.Validate()
+	if valid != nil {
+		return nil, valid
+	}
+
+	compareFacesOut, err := svc.CompareFaces(input)
 	if err != nil {
 		return nil, err
 	}
 
-	out := new(CompareFacesOutput)
-	out.CompareFacesOutput = compareFacesOut
+	var out CompareFacesOutput
 
-	return out, nil
+	unmarshalErr := UnmarshalCompareFacesOutput(compareFacesOut, &out)
+	if unmarshalErr != nil {
+		return nil, unmarshalErr
+	}
+
+	return &out, nil
 
 }
 
 // RekognitionDetectFaces detects faces in an image
-func (svc *Rekognition) RekognitionDetectFaces(input *DetectFacesInput) (*DetectFacesOutput, error) {
+func (svc *Rekognition) RekognitionDetectFaces(sourceImage []byte) (*DetectFacesOutput, error) {
 
-	detectFacesOut, err := svc.DetectFaces(input.DetectFacesInput)
+	input, inputErr := NewDetectFacesInput(
+		sourceImage,
+	)
+	if inputErr != nil {
+		return nil, inputErr
+	}
+
+	valid := input.Validate()
+	if valid != nil {
+		return nil, valid
+	}
+
+	detectFacesOut, err := svc.DetectFaces(input)
 	if err != nil {
 		return nil, err
 	}
 
-	out := new(DetectFacesOutput)
-	out.DetectFacesOutput = detectFacesOut
+	var out DetectFacesOutput
 
-	return out, nil
+	unmarshalErr := UnmarshalDetectFacesOutput(detectFacesOut, &out)
+	if unmarshalErr != nil {
+		return nil, unmarshalErr
+	}
+
+	return &out, nil
 
 }
 
 // RekognitionDetectText extracts text from an image
-func (svc *Rekognition) RekognitionDetectText(input *DetectTextInput) (*DetectTextOutput, error) {
+func (svc *Rekognition) RekognitionDetectText(sourceImage []byte) (*DetectTextOutput, error) {
 
-	detectTextOut, err := svc.DetectText(input.DetectTextInput)
+	input, inputErr := NewDetectTextInput(
+		sourceImage,
+	)
+	if inputErr != nil {
+		return nil, inputErr
+	}
+
+	valid := input.Validate()
+	if valid != nil {
+		return nil, valid
+	}
+
+	detectTextOut, err := svc.DetectText(input)
 	if err != nil {
 		return nil, err
 	}
 
-	out := new(DetectTextOutput)
-	out.DetectTextOutput = detectTextOut
+	var out DetectTextOutput
 
-	return out, nil
+	unmarshalErr := UnmarshalDetectTextOutput(detectTextOut, &out)
+	if unmarshalErr != nil {
+		return nil, unmarshalErr
+	}
+
+	return &out, nil
 
 }

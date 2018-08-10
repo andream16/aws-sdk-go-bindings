@@ -2,48 +2,55 @@ package dynamodb
 
 import (
 	"encoding/json"
-	"errors"
 	"reflect"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+
+	intError "github.com/andream16/aws-sdk-go-bindings/internal/error"
 )
 
-// NewPutItemInput returns a new *PutItemInput
-func NewPutItemInput(in interface{}, tableName string) (*PutItemInput, error) {
+// NewPutItemInput returns a new *dynamodb.PutItemInput
+func NewPutItemInput(input interface{}, table string) (*dynamodb.PutItemInput, error) {
 
-	if len(tableName) == 0 {
-		return nil, errors.New(ErrEmptyParameter)
+	if reflect.DeepEqual(input, reflect.Zero(reflect.TypeOf(input)).Interface()) {
+		return nil, intError.Format(ErrEmptyParameter, Input)
+	}
+	if len(table) == 0 {
+		return nil, intError.Format(ErrEmptyParameter, Table)
 	}
 
-	dynamoInput, dynamoInputErr := dynamodbattribute.MarshalMap(in)
+	dynamoInput, dynamoInputErr := dynamodbattribute.MarshalMap(input)
 	if dynamoInputErr != nil {
 		return nil, dynamoInputErr
 	}
 
-	putItemInput := new(dynamodb.PutItemInput)
-	putItemInput = putItemInput.SetItem(dynamoInput)
-	putItemInput = putItemInput.SetTableName(tableName)
-
-	out := new(PutItemInput)
-	out.PutItemInput = putItemInput
+	out := new(dynamodb.PutItemInput)
+	out = out.SetItem(dynamoInput)
+	out = out.SetTableName(table)
 
 	return out, nil
 
 }
 
 // NewGetItemInput returns a new *GetItemInput
-func NewGetItemInput(tableName, keyName, keyValue string) (*GetItemInput, error) {
+func NewGetItemInput(table, keyName, keyValue string) (*dynamodb.GetItemInput, error) {
 
-	if len(tableName) == 0 || len(keyName) == 0 || len(keyValue) == 0 {
-		return nil, errors.New(ErrEmptyParameter)
+	if len(table) == 0 {
+		return nil, intError.Format(ErrEmptyParameter, Table)
+	}
+	if len(keyName) == 0 {
+		return nil, intError.Format(ErrEmptyParameter, KeyName)
+	}
+	if len(keyValue) == 0 {
+		return nil, intError.Format(ErrEmptyParameter, KeyValue)
 	}
 
-	getItemInput := new(dynamodb.GetItemInput)
-	getItemInput = getItemInput.SetTableName(tableName)
-	getItemInput = getItemInput.SetKey(
+	out := new(dynamodb.GetItemInput)
+	out = out.SetTableName(table)
+	out = out.SetKey(
 		map[string]*dynamodb.AttributeValue{
 			keyName: {
 				S: aws.String(keyValue),
@@ -51,27 +58,30 @@ func NewGetItemInput(tableName, keyName, keyValue string) (*GetItemInput, error)
 		},
 	)
 
-	out := new(GetItemInput)
-	out.GetItemInput = getItemInput
-
 	return out, nil
 
 }
 
-// UnmarshalStreamImage unmarshals a dynamo stream image in a pointer to an interface
-func UnmarshalStreamImage(in map[string]events.DynamoDBAttributeValue, out interface{}) error {
+// UnmarshalStreamImage unmarshals a events.DynamoDBEventRecord in a pointer to an interface
+func UnmarshalStreamImage(input events.DynamoDBEventRecord, output interface{}) error {
 
-	if reflect.ValueOf(out).Kind() != reflect.Ptr {
-		return errors.New(ErrNoPointerParameter)
+	img := input.Change.NewImage
+
+	if reflect.DeepEqual(input, reflect.Zero(reflect.TypeOf(input)).Interface()) {
+		return intError.Format(ErrEmptyParameter, Input)
 	}
 
-	if len(in) == 0 {
-		return errors.New(ErrEmptyMap)
+	if reflect.ValueOf(output).Kind() != reflect.Ptr {
+		return intError.Format(ErrNoPointerParameter, Output)
+	}
+
+	if len(img) == 0 {
+		return intError.Format(ErrNoPointerParameter, NewImage)
 	}
 
 	dbAttrMap := make(map[string]*dynamodb.AttributeValue)
 
-	for k, v := range in {
+	for k, v := range img {
 
 		bytes, marshalErr := v.MarshalJSON()
 		if marshalErr != nil {
@@ -85,18 +95,18 @@ func UnmarshalStreamImage(in map[string]events.DynamoDBAttributeValue, out inter
 
 	}
 
-	return dynamodbattribute.UnmarshalMap(dbAttrMap, out)
+	return dynamodbattribute.UnmarshalMap(dbAttrMap, output)
 
 }
 
-// UnmarshalGetItemOutput unmarshals a *GetItemOutput into a passed interface reference
-func UnmarshalGetItemOutput(in *GetItemOutput, out interface{}) error {
+// UnmarshalGetItemOutput unmarshals a *dynamodb.GetItemOutput into a passed interface reference
+func UnmarshalGetItemOutput(input *dynamodb.GetItemOutput, out interface{}) error {
 
 	if reflect.ValueOf(out).Kind() != reflect.Ptr {
-		return errors.New(ErrNoPointerParameter)
+		return intError.Format(ErrNoPointerParameter, Input)
 	}
 
-	unmarshalError := dynamodbattribute.UnmarshalMap(in.GetItemOutput.Item, out)
+	unmarshalError := dynamodbattribute.UnmarshalMap(input.Item, out)
 	if unmarshalError != nil {
 		return unmarshalError
 	}

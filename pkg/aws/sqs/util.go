@@ -7,55 +7,54 @@ import (
 	"reflect"
 
 	"github.com/aws/aws-sdk-go/service/sqs"
+
+	intError "github.com/andream16/aws-sdk-go-bindings/internal/error"
 )
 
 // NewCreateQueueInput creates a new queue given its name
-func NewCreateQueueInput(queueName string) (*CreateQueueInput, error) {
+func NewCreateQueueInput(queueName string) (*sqs.CreateQueueInput, error) {
 
 	if len(queueName) == 0 {
-		return nil, errors.New(ErrEmptyParameter)
+		return nil, intError.Format(QueueName, ErrEmptyParameter)
 	}
 
 	createQueueIn := new(sqs.CreateQueueInput)
 	createQueueIn = createQueueIn.SetQueueName(queueName)
 
-	out := new(CreateQueueInput)
-	out.CreateQueueInput = createQueueIn
+	out := new(sqs.CreateQueueInput)
+	out = createQueueIn
 
 	return out, nil
 
 }
 
-// NewGetQueueAttributesInput returns a new *GetQueueAttributesInput given a queueUrl
-func NewGetQueueAttributesInput(queueUrl string) (*GetQueueAttributesInput, error) {
+// NewGetQueueAttributesInput returns a new *sqs.GetQueueAttributesInput given a queueUrl
+func NewGetQueueAttributesInput(queueUrl string) (*sqs.GetQueueAttributesInput, error) {
 
 	if len(queueUrl) == 0 {
-		return nil, errors.New(ErrEmptyParameter)
+		return nil, intError.Format(QueueUrl, ErrEmptyParameter)
 	}
 
-	getQueueAttrsIn := new(sqs.GetQueueAttributesInput)
-	getQueueAttrsIn = getQueueAttrsIn.SetQueueUrl(queueUrl)
-
-	out := new(GetQueueAttributesInput)
-	out.GetQueueAttributesInput = getQueueAttrsIn
+	out := new(sqs.GetQueueAttributesInput)
+	out = out.SetQueueUrl(queueUrl)
 
 	return out, nil
 
 }
 
-// NewSendMessageInput returns a new *SendMessageInput initialized with queueUrl and messageBody.
+// NewSendMessageInput returns a new *sqs.SendMessageInput initialized with queueUrl and messageBody.
 // If base64Encode = true then the messageBody will be encoded in base64
-func NewSendMessageInput(input interface{}, queueUrl string, base64Encode bool) (*SendMessageInput, error) {
+func NewSendMessageInput(input interface{}, queueUrl string, base64Encode bool) (*sqs.SendMessageInput, error) {
 
 	if reflect.DeepEqual(reflect.TypeOf(input).Kind(), reflect.Ptr) {
-		return nil, errors.New(ErrNoPointerParameterAllowed)
+		return nil, intError.Format(Input, ErrNoPointerParameterAllowed)
 	}
 
 	if len(queueUrl) == 0 {
-		return nil, errors.New(ErrEmptyParameter)
+		return nil, intError.Format(QueueUrl, ErrEmptyParameter)
 	}
 
-	sendMsgInput := new(sqs.SendMessageInput)
+	out := new(sqs.SendMessageInput)
 
 	msgBody, err := marshalStructToJson(input)
 	if err != nil {
@@ -68,28 +67,22 @@ func NewSendMessageInput(input interface{}, queueUrl string, base64Encode bool) 
 		msgStringBody = base64.StdEncoding.EncodeToString(msgBody)
 	}
 
-	sendMsgInput = sendMsgInput.SetMessageBody(msgStringBody)
-	sendMsgInput = sendMsgInput.SetQueueUrl(queueUrl)
-
-	out := new(SendMessageInput)
-	out.SendMessageInput = sendMsgInput
+	out = out.SetMessageBody(msgStringBody)
+	out = out.SetQueueUrl(queueUrl)
 
 	return out, nil
 
 }
 
-// NewGetQueueUrlInput returns a new GetQueueUrlInput given a queue name
-func NewGetQueueUrlInput(queueName string) (*GetQueueUrlInput, error) {
+// NewGetQueueUrlInput returns a new *sqs.GetQueueUrlInput given a queue name
+func NewGetQueueUrlInput(queueName string) (*sqs.GetQueueUrlInput, error) {
 
 	if len(queueName) == 0 {
-		return nil, errors.New(ErrEmptyParameter)
+		return nil, intError.Format(QueueName, ErrEmptyParameter)
 	}
 
-	getQueueUrlInput := new(sqs.GetQueueUrlInput)
-	getQueueUrlInput = getQueueUrlInput.SetQueueName(queueName)
-
-	out := new(GetQueueUrlInput)
-	out.GetQueueUrlInput = getQueueUrlInput
+	out := new(sqs.GetQueueUrlInput)
+	out = out.SetQueueName(queueName)
 
 	return out, nil
 

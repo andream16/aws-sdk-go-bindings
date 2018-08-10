@@ -33,14 +33,10 @@ func testDynamoDBDynamoPutItem(t *testing.T, cfg *configuration.Configuration) {
 	var input TestDynamoDBDynamoPutItemType
 	input.SomeParam = cfg.DynamoDB.PrimaryKey
 
-	putItemIn, putItemInErr := NewPutItemInput(input, tableName)
-
-	assert.NoError(t, putItemInErr)
-
 	dynamoNewSvc := new(DynamoDB)
 	dynamoNewSvc.DynamoDB = dynamoSvc
 
-	err := dynamoNewSvc.DynamoPutItem(putItemIn)
+	err := dynamoNewSvc.DynamoPutItem(input, tableName)
 
 	assert.NoError(t, err)
 
@@ -59,22 +55,14 @@ func testDynamoDBDynamoGetItem(t *testing.T, cfg *configuration.Configuration) {
 	var input TestDynamoDBDynamoPutItemType
 	input.SomeParam = cfg.DynamoDB.PrimaryKey
 
-	putItemIn, putItemInErr := NewPutItemInput(input, tableName)
-
-	assert.NoError(t, putItemInErr)
-
 	dynamoNewSvc := new(DynamoDB)
 	dynamoNewSvc.DynamoDB = dynamoSvc
 
-	err := dynamoNewSvc.DynamoPutItem(putItemIn)
+	err := dynamoNewSvc.DynamoPutItem(input, tableName)
 
 	assert.NoError(t, err)
 
-	getItemInput, getItemInputErr := NewGetItemInput(tableName, primaryKey, keyValue)
-
-	assert.NoError(t, getItemInputErr)
-
-	getItemOut, err := dynamoNewSvc.DynamoGetItem(getItemInput)
+	getItemOut, err := dynamoNewSvc.DynamoGetItem(tableName, primaryKey, keyValue)
 
 	assert.NoError(t, err)
 	assert.NotEmpty(t, getItemOut)
