@@ -33,7 +33,7 @@ At the moment it covers SNS, SQS, DynamoDB, Rekognition and S3.
 
 ## Utilization
 
-You can import code from both `cmd` and `pkg` root package. `cmd` contains high level methods that interact with `pkg` ones while `pkg` directly interacts with aws-sdk-go.
+You can simply import code from `pkg` package. Almost all the methods are exported so you can access them easily.
 
 ## Development
 
