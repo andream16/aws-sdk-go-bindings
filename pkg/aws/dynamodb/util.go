@@ -4,30 +4,22 @@ import (
 	"encoding/json"
 	"reflect"
 
-	intError "github.com/andream16/aws-sdk-go-bindings/internal/error"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-)
 
-const (
-	Input    = "input"
-	Output   = "output"
-	Table    = "table"
-	NewImage = "input.Change.NewImage"
-	KeyName  = "keyName"
-	KeyValue = "keyValue"
+	intError "github.com/andream16/aws-sdk-go-bindings/internal/error"
 )
 
 // NewPutItemInput returns a new *dynamodb.PutItemInput
 func NewPutItemInput(input interface{}, table string) (*dynamodb.PutItemInput, error) {
 
 	if reflect.DeepEqual(input, reflect.Zero(reflect.TypeOf(input)).Interface()) {
-		return nil, intError.FormatError(ErrEmptyParameter, Input)
+		return nil, intError.Format(ErrEmptyParameter, Input)
 	}
 	if len(table) == 0 {
-		return nil, intError.FormatError(ErrEmptyParameter, Table)
+		return nil, intError.Format(ErrEmptyParameter, Table)
 	}
 
 	dynamoInput, dynamoInputErr := dynamodbattribute.MarshalMap(input)
@@ -47,13 +39,13 @@ func NewPutItemInput(input interface{}, table string) (*dynamodb.PutItemInput, e
 func NewGetItemInput(table, keyName, keyValue string) (*dynamodb.GetItemInput, error) {
 
 	if len(table) == 0 {
-		return nil, intError.FormatError(ErrEmptyParameter, Table)
+		return nil, intError.Format(ErrEmptyParameter, Table)
 	}
 	if len(keyName) == 0 {
-		return nil, intError.FormatError(ErrEmptyParameter, KeyName)
+		return nil, intError.Format(ErrEmptyParameter, KeyName)
 	}
 	if len(keyValue) == 0 {
-		return nil, intError.FormatError(ErrEmptyParameter, KeyValue)
+		return nil, intError.Format(ErrEmptyParameter, KeyValue)
 	}
 
 	out := new(dynamodb.GetItemInput)
@@ -76,15 +68,15 @@ func UnmarshalStreamImage(input events.DynamoDBEventRecord, output interface{}) 
 	img := input.Change.NewImage
 
 	if reflect.DeepEqual(input, reflect.Zero(reflect.TypeOf(input)).Interface()) {
-		return intError.FormatError(ErrEmptyParameter, Input)
+		return intError.Format(ErrEmptyParameter, Input)
 	}
 
 	if reflect.ValueOf(output).Kind() != reflect.Ptr {
-		return intError.FormatError(ErrNoPointerParameter, Output)
+		return intError.Format(ErrNoPointerParameter, Output)
 	}
 
 	if len(img) == 0 {
-		return intError.FormatError(ErrNoPointerParameter, NewImage)
+		return intError.Format(ErrNoPointerParameter, NewImage)
 	}
 
 	dbAttrMap := make(map[string]*dynamodb.AttributeValue)
@@ -111,7 +103,7 @@ func UnmarshalStreamImage(input events.DynamoDBEventRecord, output interface{}) 
 func UnmarshalGetItemOutput(input *dynamodb.GetItemOutput, out interface{}) error {
 
 	if reflect.ValueOf(out).Kind() != reflect.Ptr {
-		return intError.FormatError(ErrNoPointerParameter, Input)
+		return intError.Format(ErrNoPointerParameter, Input)
 	}
 
 	unmarshalError := dynamodbattribute.UnmarshalMap(input.Item, out)

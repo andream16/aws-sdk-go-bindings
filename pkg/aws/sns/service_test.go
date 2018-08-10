@@ -3,8 +3,6 @@ package sns
 import (
 	"testing"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/sns"
 	"github.com/stretchr/testify/assert"
 
 	pkgAws "github.com/andream16/aws-sdk-go-bindings/pkg/aws"
@@ -12,6 +10,8 @@ import (
 )
 
 func TestSession_SnsPublish(t *testing.T) {
+
+	body := `{"default":"{\"par1\":\"pr1\",\"par2\":\"pr2\"}"}`
 
 	cfg := testdata.MockConfiguration(t)
 
@@ -28,16 +28,27 @@ func TestSession_SnsPublish(t *testing.T) {
 	assert.NoError(t, snsSvcErr)
 	assert.NotEmpty(t, snsSvc)
 
-	in := &PublishInput{
-		PublishInput: &sns.PublishInput{
-			Message:          aws.String(`{"default":"{\"par1\":\"pr1\",\"par2\":\"pr2\"}"}`),
-			TargetArn:        aws.String(cfg.SNS.TargetArn),
-			MessageStructure: aws.String(`json`),
-		},
-	}
-
-	err := snsSvc.SnsPublish(in)
+	err := snsSvc.SnsPublish(
+		body,
+		cfg.SNS.TargetArn,
+	)
 
 	assert.NoError(t, err)
+
+	shouldBeEmptyParameterErr := snsSvc.SnsPublish(
+		body,
+		"",
+	)
+
+	assert.Error(t, shouldBeEmptyParameterErr)
+	assert.Contains(t, shouldBeEmptyParameterErr.Error(), ErrEmptyParameter)
+
+	shouldBeNoPointerParameterAllowedErr := snsSvc.SnsPublish(
+		&body,
+		cfg.SNS.TargetArn,
+	)
+
+	assert.Error(t, shouldBeNoPointerParameterAllowedErr)
+	assert.Contains(t, shouldBeNoPointerParameterAllowedErr.Error(), ErrPointerParameterNotAllowed)
 
 }

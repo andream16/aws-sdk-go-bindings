@@ -2,13 +2,13 @@ package sns
 
 import (
 	"encoding/json"
-	"errors"
+	"reflect"
 	"strings"
 
 	"github.com/aws/aws-sdk-go/service/sns"
-)
 
-const messageStructure = "json"
+	intErr "github.com/andream16/aws-sdk-go-bindings/internal/error"
+)
 
 // Body is used to initialize a valid SNS message
 type Body struct {
@@ -16,13 +16,17 @@ type Body struct {
 }
 
 // NewPublishInput returns a new *PublishInput given a body and an endpoint
-func NewPublishInput(body interface{}, endpoint string) (*PublishInput, error) {
+func NewPublishInput(input interface{}, endpoint string) (*sns.PublishInput, error) {
 
-	if endpoint == "" {
-		return nil, errors.New(ErrEmptyParameter)
+	if len(endpoint) == 0 {
+		return nil, intErr.Format(Endpoint, ErrEmptyParameter)
 	}
 
-	inBytes, inErr := json.Marshal(body)
+	if reflect.ValueOf(input).Kind() == reflect.Ptr {
+		return nil, intErr.Format(Input, ErrPointerParameterNotAllowed)
+	}
+
+	inBytes, inErr := json.Marshal(input)
 	if inErr != nil {
 		return nil, inErr
 	}
@@ -46,14 +50,39 @@ func NewPublishInput(body interface{}, endpoint string) (*PublishInput, error) {
 		return nil, msgErr
 	}
 
-	publishInput := new(sns.PublishInput)
-	publishInput = publishInput.SetMessage(string(msgBytes))
-	publishInput = publishInput.SetMessageStructure(messageStructure)
-	publishInput = publishInput.SetTargetArn(endpoint)
-
-	out := new(PublishInput)
-	out.PublishInput = publishInput
+	out := new(sns.PublishInput)
+	out = out.SetMessage(string(msgBytes))
+	out = out.SetMessageStructure(MessageStructure)
+	out = out.SetTargetArn(endpoint)
 
 	return out, nil
 
+}
+
+// UnmarshalMessage unmarshal an SNS Message to a given interface
+func UnmarshalMessage(message string, input interface{}) error {
+
+	if len(message) == 0 {
+		return intErr.Format(Message, ErrEmptyParameter)
+	}
+
+	if reflect.ValueOf(input).Kind() != reflect.Ptr {
+		return intErr.Format(Input, ErrNoPointerParameter)
+	}
+
+	uS := unescapeMessageString(message)
+
+	unmarshalErr := json.Unmarshal([]byte(uS), input)
+	if unmarshalErr != nil {
+		return unmarshalErr
+	}
+
+	return nil
+
+}
+
+// unescapeMessageString takes a SNS message string like
+// `"{\"stuff\" : \"somevalue\"}"` and outputs `"{"stuff" : "somevalue"}"`
+func unescapeMessageString(in string) string {
+	return strings.Replace(in, `\"`, `"`, -1)
 }

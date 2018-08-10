@@ -1,16 +1,21 @@
 package sns
 
-import "github.com/aws/aws-sdk-go/service/sns"
+// SnsPublish publishes an input on a given SNS targetArn
+func (svc *SNS) SnsPublish(input interface{}, targetArn string) (err error) {
 
-// PublishInput embeds sns.PublishInput to be used to call SnsPublish
-type PublishInput struct {
-	*sns.PublishInput
-}
+	in, inErr := NewPublishInput(
+		input,
+		targetArn,
+	)
+	if inErr != nil {
+		return inErr
+	}
 
-// SnsPublish publishes a *PublishInput on SNS
-func (svc *SNS) SnsPublish(in *PublishInput) (err error) {
+	_, err = svc.SNS.Publish(in)
+	if err != nil {
+		return err
+	}
 
-	_, err = svc.SNS.Publish(in.PublishInput)
-	return
+	return nil
 
 }

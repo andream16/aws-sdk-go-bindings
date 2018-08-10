@@ -6,12 +6,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestFormatError(t *testing.T) {
+func TestFormat(t *testing.T) {
 
 	err := "SomeError"
 	val := "SomeParameterName"
 
-	s := FormatError(val, err)
+	s := Format(val, err)
 
 	assert.Contains(t, s.Error(), err, val)
 

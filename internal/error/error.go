@@ -6,8 +6,8 @@ import (
 	"strings"
 )
 
-// FormatError returns a new formatted error given an error string and an input
-func FormatError(input interface{}, err string) error {
+// Format returns a new formatted error given an error string and an input
+func Format(input interface{}, err string) error {
 
 	s := []string{
 		err,

@@ -11,17 +11,11 @@ import (
 	intError "github.com/andream16/aws-sdk-go-bindings/internal/error"
 )
 
-const (
-	QueueName = "queueName"
-	QueueUrl  = "queueUrl"
-	Input     = "input"
-)
-
 // NewCreateQueueInput creates a new queue given its name
 func NewCreateQueueInput(queueName string) (*sqs.CreateQueueInput, error) {
 
 	if len(queueName) == 0 {
-		return nil, intError.FormatError(QueueName, ErrEmptyParameter)
+		return nil, intError.Format(QueueName, ErrEmptyParameter)
 	}
 
 	createQueueIn := new(sqs.CreateQueueInput)
@@ -38,7 +32,7 @@ func NewCreateQueueInput(queueName string) (*sqs.CreateQueueInput, error) {
 func NewGetQueueAttributesInput(queueUrl string) (*sqs.GetQueueAttributesInput, error) {
 
 	if len(queueUrl) == 0 {
-		return nil, intError.FormatError(QueueUrl, ErrEmptyParameter)
+		return nil, intError.Format(QueueUrl, ErrEmptyParameter)
 	}
 
 	out := new(sqs.GetQueueAttributesInput)
@@ -53,11 +47,11 @@ func NewGetQueueAttributesInput(queueUrl string) (*sqs.GetQueueAttributesInput, 
 func NewSendMessageInput(input interface{}, queueUrl string, base64Encode bool) (*sqs.SendMessageInput, error) {
 
 	if reflect.DeepEqual(reflect.TypeOf(input).Kind(), reflect.Ptr) {
-		return nil, intError.FormatError(Input, ErrNoPointerParameterAllowed)
+		return nil, intError.Format(Input, ErrNoPointerParameterAllowed)
 	}
 
 	if len(queueUrl) == 0 {
-		return nil, intError.FormatError(QueueUrl, ErrEmptyParameter)
+		return nil, intError.Format(QueueUrl, ErrEmptyParameter)
 	}
 
 	out := new(sqs.SendMessageInput)
@@ -84,7 +78,7 @@ func NewSendMessageInput(input interface{}, queueUrl string, base64Encode bool) 
 func NewGetQueueUrlInput(queueName string) (*sqs.GetQueueUrlInput, error) {
 
 	if len(queueName) == 0 {
-		return nil, intError.FormatError(QueueName, ErrEmptyParameter)
+		return nil, intError.Format(QueueName, ErrEmptyParameter)
 	}
 
 	out := new(sqs.GetQueueUrlInput)
