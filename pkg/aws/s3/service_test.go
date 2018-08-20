@@ -23,7 +23,7 @@ func TestS3_S3GetObject(t *testing.T) {
 	s3Svc, cfg := newS3Svc(t)
 
 	createBucket(cfg, s3Svc, t)
-	putObject(t)
+	putObject(cfg, s3Svc, t)
 
 	out, err := s3Svc.S3GetObject(
 		cfg.S3.Bucket,
@@ -37,13 +37,28 @@ func TestS3_S3GetObject(t *testing.T) {
 
 func TestS3_S3PutObject(t *testing.T) {
 
-	putObject(t)
+	s3Svc, cfg := newS3Svc(t)
+
+	createBucket(cfg, s3Svc, t)
+	putObject(cfg, s3Svc, t)
 
 }
 
 func createBucket(cfg *configuration.Configuration, svc *S3, t *testing.T) {
 
 	svc.S3CreateBucket(cfg.S3.Bucket)
+
+}
+
+func putObject(cfg *configuration.Configuration, svc *S3, t *testing.T) {
+
+	err := svc.S3PutObject(
+		cfg.S3.Bucket,
+		cfg.S3.SourceImage,
+		"../../../assets/compare_faces_test-source.jpg",
+	)
+
+	assert.NoError(t, err)
 
 }
 
@@ -68,21 +83,5 @@ func newS3Svc(t *testing.T) (*S3, *configuration.Configuration) {
 	assert.NotEmpty(t, s3Svc)
 
 	return s3Svc, cfg
-
-}
-
-func putObject(t *testing.T) {
-
-	s3Svc, cfg := newS3Svc(t)
-
-	createBucket(cfg, s3Svc, t)
-
-	err := s3Svc.S3PutObject(
-		cfg.S3.Bucket,
-		cfg.S3.SourceImage,
-		"../../../assets/compare_faces_test-source.jpg",
-	)
-
-	assert.NoError(t, err)
 
 }

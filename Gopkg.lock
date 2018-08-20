@@ -2,15 +2,12 @@
 
 
 [[projects]]
-  digest = "1:a9e42e2ab1a8af3964accfe0efdadb774a33294fb03129017cd3868ddbdb2d3c"
   name = "github.com/aws/aws-lambda-go"
   packages = ["events"]
-  pruneopts = "UT"
   revision = "e630af386f8aad6ec9fc899b951cf62d37cfe56f"
   version = "v1.4.0"
 
 [[projects]]
-  digest = "1:92aa4d948858b6d6ff44deeff6c259674040310e74336dc9997f3bd929a0d35a"
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
@@ -50,83 +47,55 @@
     "service/s3",
     "service/sns",
     "service/sqs",
-    "service/sts",
+    "service/sts"
   ]
-  pruneopts = "UT"
   revision = "859b69a01f8cb52b639bd8c868b116144bddc74a"
   version = "v1.15.9"
 
 [[projects]]
-  digest = "1:a2c1d0e43bd3baaa071d1b9ed72c27d78169b2b269f71c105ac4ba34b1be4a39"
   name = "github.com/davecgh/go-spew"
   packages = ["spew"]
-  pruneopts = "UT"
   revision = "346938d642f2ec3594ed81d874461961cd0faa76"
   version = "v1.1.0"
 
 [[projects]]
-  digest = "1:ca82a3b99694824c627573c2a76d0e49719b4a9c02d1d85a2ac91f1c1f52ab9b"
   name = "github.com/fatih/structs"
   packages = ["."]
-  pruneopts = "UT"
   revision = "a720dfa8df582c51dee1b36feabb906bde1588bd"
   version = "v1.0"
 
 [[projects]]
-  digest = "1:fe8a03a8222d5b913f256972933d26d24ad7c8286692a42943bc01633cc8fce3"
   name = "github.com/go-ini/ini"
   packages = ["."]
-  pruneopts = "UT"
   revision = "358ee7663966325963d4e8b2e1fbd570c5195153"
   version = "v1.38.1"
 
 [[projects]]
-  digest = "1:e22af8c7518e1eab6f2eab2b7d7558927f816262586cd6ed9f349c97a6c285c4"
   name = "github.com/jmespath/go-jmespath"
   packages = ["."]
-  pruneopts = "UT"
   revision = "0b12d6b5"
 
 [[projects]]
-  digest = "1:0028cb19b2e4c3112225cd871870f2d9cf49b9b4276531f03438a88e94be86fe"
   name = "github.com/pmezard/go-difflib"
   packages = ["difflib"]
-  pruneopts = "UT"
   revision = "792786c7400a136282c1664665ae0a8db921c6c2"
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:18752d0b95816a1b777505a97f71c7467a8445b8ffb55631a7bf779f6ba4fa83"
   name = "github.com/stretchr/testify"
   packages = ["assert"]
-  pruneopts = "UT"
   revision = "f35b8ab0b5a2cef36673838d662e249dd9c94686"
   version = "v1.2.2"
 
 [[projects]]
-  digest = "1:dc48dff981a895912c33cf272b1d869c216d058bd4025736cb481d3ceeed6872"
   name = "github.com/tkanos/gonfig"
   packages = ["."]
-  pruneopts = "UT"
   revision = "e83209aed2d171bab5ffb312a1e630110481cb99"
   version = "1.0"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  input-imports = [
-    "github.com/aws/aws-lambda-go/events",
-    "github.com/aws/aws-sdk-go/aws",
-    "github.com/aws/aws-sdk-go/aws/session",
-    "github.com/aws/aws-sdk-go/service/dynamodb",
-    "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute",
-    "github.com/aws/aws-sdk-go/service/rekognition",
-    "github.com/aws/aws-sdk-go/service/s3",
-    "github.com/aws/aws-sdk-go/service/sns",
-    "github.com/aws/aws-sdk-go/service/sqs",
-    "github.com/fatih/structs",
-    "github.com/stretchr/testify/assert",
-    "github.com/tkanos/gonfig",
-  ]
+  inputs-digest = "94d4fd51df49a19e9c3c5884b43a7d781e52a6f8b2ab51f44bcd7ed5db3ea44e"
   solver-name = "gps-cdcl"
   solver-version = 1
