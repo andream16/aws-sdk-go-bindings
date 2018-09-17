@@ -77,7 +77,7 @@ func (svc *SQS) SQSGetQueueUrl(queueUrl string) (string, error) {
 
 	out, err := svc.GetQueueUrl(input)
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 
 	return *out.QueueUrl, nil
