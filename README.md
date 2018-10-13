@@ -2,7 +2,7 @@
 [![BCH compliance](https://bettercodehub.com/edge/badge/AndreaM16/aws-sdk-go-bindings?branch=master)](https://bettercodehub.com/)
 
 # aws-sdk-go-bindings
-Helper to easily access some [aws-sdk-go](https://github.com/aws/aws-sdk-go)'s methods. It also contains multiple methods to cover tricky problems like preparing and sns default message and unmarshal an image coming out from a stream like:
+Helper to easily access some [aws-sdk-go](https://github.com/aws/aws-sdk-go)'s methods. It also contains multiple methods to cover tricky problems like preparing an sns default message and unmarshal an image coming out from a stream like:
 
 ```
 // UnmarshalStreamImage unmarshals a dynamo stream image in a pointer to an interface
