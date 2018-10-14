@@ -159,18 +159,6 @@ func TestUnmarshalDetectTextOutput(t *testing.T) {
 
 }
 
-func TestUnmarshalRekognitionOut(t *testing.T) {
-
-	var out CompareFacesOutput
-
-	outErr := unmarshalRekognitionOut(compareFacesOutputMock, &out)
-
-	assert.NoError(t, outErr)
-
-	assert.NotEmpty(t, out)
-
-}
-
 func TestNewCompareFacesInput(t *testing.T) {
 
 	target := []byte("someTarget")
@@ -220,17 +208,5 @@ func TestNewDetectTextInput(t *testing.T) {
 
 	assert.NotEmpty(t, in)
 	assert.Equal(t, source, in.Image.Bytes)
-
-}
-
-func TestNewInputImage(t *testing.T) {
-
-	source := []byte("someSource")
-
-	img, imgErr := newInputImage(source)
-
-	assert.NoError(t, imgErr)
-	assert.NotEmpty(t, img)
-	assert.Equal(t, source, img.Bytes)
 
 }

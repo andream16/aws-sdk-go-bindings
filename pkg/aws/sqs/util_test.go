@@ -119,31 +119,3 @@ func TestNewGetQueueUrlInput(t *testing.T) {
 	assert.NotEmpty(t, out.QueueName)
 
 }
-
-func TestMarshalStructToJsonString(t *testing.T) {
-
-	s := TestSQSUtilType{
-		SomeParam1: val1,
-		SomeParam2: val2,
-	}
-
-	res, err := marshalStructToJson(s)
-
-	assert.NoError(t, err)
-	assert.NotEmpty(t, res)
-	assert.Contains(t, string(res), val1, val2)
-
-	var out TestSQSUtilType
-
-	unmarshalErr := json.Unmarshal([]byte(res), &out)
-
-	assert.NoError(t, unmarshalErr)
-	assert.Equal(t, val1, out.SomeParam1)
-	assert.Equal(t, val2, out.SomeParam2)
-
-	_, shouldBeErrNoPointerParameterAllowed := marshalStructToJson(&s)
-
-	assert.Error(t, shouldBeErrNoPointerParameterAllowed)
-	assert.Equal(t, ErrNoPointerParameterAllowed, shouldBeErrNoPointerParameterAllowed.Error())
-
-}

@@ -68,13 +68,3 @@ func TestUnmarshalMessage(t *testing.T) {
 	assert.Contains(t, shouldBeErr2.Error(), ErrNoPointerParameter)
 
 }
-
-func TestUnescapeMessageString(t *testing.T) {
-
-	str := `{\"some_param\":\"some_value\"}`
-
-	s := unescapeMessageString(str)
-
-	assert.Equal(t, `{"some_param":"some_value"}`, s)
-
-}
