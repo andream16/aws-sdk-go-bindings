@@ -16,7 +16,7 @@ type S3 struct {
 // New returns a new *S3 embedding *s3.S3
 func New(svc *pkgAws.Session, endpoint string) (*S3, error) {
 
-	if len(endpoint) > 0 {
+	if endpoint != "" {
 		svc.Config.Endpoint = aws.String(endpoint)
 	}
 

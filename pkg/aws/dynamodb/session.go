@@ -16,7 +16,7 @@ type DynamoDB struct {
 // New returns a new *DynamoDB
 func New(svc *pkgAws.Session, endpoint string) (*DynamoDB, error) {
 
-	if len(endpoint) > 0 {
+	if endpoint != "" {
 		svc.Config.Endpoint = aws.String(endpoint)
 	}
 

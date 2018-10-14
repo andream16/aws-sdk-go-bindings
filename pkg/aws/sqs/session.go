@@ -16,7 +16,7 @@ type SQS struct {
 // New returns a new *SQS
 func New(svc *pkgAws.Session, endpoint string) (*SQS, error) {
 
-	if len(endpoint) > 0 {
+	if endpoint != "" {
 		svc.Config.Endpoint = aws.String(endpoint)
 	}
 
