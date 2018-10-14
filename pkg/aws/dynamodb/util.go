@@ -75,7 +75,7 @@ func UnmarshalStreamImage(input events.DynamoDBEventRecord, output interface{}) 
 		return intError.Format(ErrNoPointerParameter, Output)
 	}
 
-	if img == "" {
+	if len(img) == 0 {
 		return intError.Format(ErrNoPointerParameter, NewImage)
 	}
 
