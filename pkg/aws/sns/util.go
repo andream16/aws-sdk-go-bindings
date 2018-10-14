@@ -18,7 +18,7 @@ type Body struct {
 // NewPublishInput returns a new *PublishInput given a body and an endpoint
 func NewPublishInput(input interface{}, endpoint string) (*sns.PublishInput, error) {
 
-	if len(endpoint) == 0 {
+	if endpoint == "" {
 		return nil, intErr.Format(Endpoint, ErrEmptyParameter)
 	}
 
@@ -62,7 +62,7 @@ func NewPublishInput(input interface{}, endpoint string) (*sns.PublishInput, err
 // UnmarshalMessage unmarshal an SNS Message to a given interface
 func UnmarshalMessage(message string, input interface{}) error {
 
-	if len(message) == 0 {
+	if message == "" {
 		return intErr.Format(Message, ErrEmptyParameter)
 	}
 

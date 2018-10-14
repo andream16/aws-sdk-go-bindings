@@ -15,7 +15,7 @@ type Session struct {
 // New returns a new *Session embedding *session.Session
 func New(input *SessionInput) (*Session, error) {
 
-	if len(input.region) == 0 {
+	if input.region == "" {
 		return nil, errors.New(ErrNoRegionProvided)
 	}
 
