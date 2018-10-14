@@ -14,7 +14,7 @@ import (
 // NewCreateQueueInput creates a new queue given its name
 func NewCreateQueueInput(queueName string) (*sqs.CreateQueueInput, error) {
 
-	if len(queueName) == 0 {
+	if queueName == "" {
 		return nil, intError.Format(QueueName, ErrEmptyParameter)
 	}
 
@@ -28,7 +28,7 @@ func NewCreateQueueInput(queueName string) (*sqs.CreateQueueInput, error) {
 // NewGetQueueAttributesInput returns a new *sqs.GetQueueAttributesInput given a queueUrl
 func NewGetQueueAttributesInput(queueUrl string) (*sqs.GetQueueAttributesInput, error) {
 
-	if len(queueUrl) == 0 {
+	if queueUrl == "" {
 		return nil, intError.Format(QueueUrl, ErrEmptyParameter)
 	}
 
@@ -47,7 +47,7 @@ func NewSendMessageInput(input interface{}, queueUrl string, base64Encode bool) 
 		return nil, intError.Format(Input, ErrNoPointerParameterAllowed)
 	}
 
-	if len(queueUrl) == 0 {
+	if queueUrl == "" {
 		return nil, intError.Format(QueueUrl, ErrEmptyParameter)
 	}
 
@@ -74,7 +74,7 @@ func NewSendMessageInput(input interface{}, queueUrl string, base64Encode bool) 
 // NewGetQueueUrlInput returns a new *sqs.GetQueueUrlInput given a queue name
 func NewGetQueueUrlInput(queueName string) (*sqs.GetQueueUrlInput, error) {
 
-	if len(queueName) == 0 {
+	if queueName == "" {
 		return nil, intError.Format(QueueName, ErrEmptyParameter)
 	}
 

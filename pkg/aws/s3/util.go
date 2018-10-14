@@ -69,7 +69,7 @@ func UnmarshalGetObjectOutput(input *s3.GetObjectOutput) ([]byte, error) {
 // ReadImage reads an image given its path and returns a *ReadImageOutput containing its body and metadata
 func ReadImage(path string) (*ReadImageOutput, error) {
 
-	if len(path) == 0 {
+	if path == "" {
 		return nil, intErr.Format(Path, ErrEmptyParameter)
 	}
 
@@ -103,7 +103,7 @@ func ReadImage(path string) (*ReadImageOutput, error) {
 // NewCreateBucketInput returns a new *s3.CreateBucketInput
 func NewCreateBucketInput(bucketName string) (*s3.CreateBucketInput, error) {
 
-	if len(bucketName) == 0 {
+	if bucketName == "" {
 		return nil, intErr.Format(BucketName, ErrEmptyParameter)
 	}
 
@@ -117,10 +117,10 @@ func NewCreateBucketInput(bucketName string) (*s3.CreateBucketInput, error) {
 // NewGetObjectInput returns a new *s3.GetObjectInput given a bucket and a source image
 func NewGetObjectInput(bucketName, source string) (*s3.GetObjectInput, error) {
 
-	if len(bucketName) == 0 {
+	if bucketName == "" {
 		return nil, intErr.Format(BucketName, ErrEmptyParameter)
 	}
-	if len(source) == 0 {
+	if source == "" {
 		return nil, intErr.Format(Source, ErrEmptyParameter)
 	}
 
@@ -135,13 +135,13 @@ func NewGetObjectInput(bucketName, source string) (*s3.GetObjectInput, error) {
 // NewPutObjectInput returns a new *s3.PutObjectInput
 func NewPutObjectInput(bucketName, fileName, contentType string, image []byte, size int64) (*s3.PutObjectInput, error) {
 
-	if len(bucketName) == 0 {
+	if bucketName == "" {
 		return nil, intErr.Format(BucketName, ErrEmptyParameter)
 	}
-	if len(fileName) == 0 {
+	if fileName == "" {
 		return nil, intErr.Format(FileName, ErrEmptyParameter)
 	}
-	if len(contentType) == 0 {
+	if contentType == "" {
 		return nil, intErr.Format(ContentType, ErrEmptyParameter)
 	}
 	if len(image) == 0 {

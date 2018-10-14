@@ -10,7 +10,7 @@ type SessionInput struct {
 // NewSessionInput returns a new *SessionInput
 func NewSessionInput(region string) (*SessionInput, error) {
 
-	if len(region) == 0 {
+	if region == "" {
 		return nil, errors.New(ErrNoRegionProvided)
 	}
 

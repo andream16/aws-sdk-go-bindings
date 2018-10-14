@@ -18,7 +18,7 @@ func NewPutItemInput(input interface{}, table string) (*dynamodb.PutItemInput, e
 	if reflect.DeepEqual(input, reflect.Zero(reflect.TypeOf(input)).Interface()) {
 		return nil, intError.Format(ErrEmptyParameter, Input)
 	}
-	if len(table) == 0 {
+	if table == "" {
 		return nil, intError.Format(ErrEmptyParameter, Table)
 	}
 
@@ -38,13 +38,13 @@ func NewPutItemInput(input interface{}, table string) (*dynamodb.PutItemInput, e
 // NewGetItemInput returns a new *GetItemInput
 func NewGetItemInput(table, keyName, keyValue string) (*dynamodb.GetItemInput, error) {
 
-	if len(table) == 0 {
+	if table == "" {
 		return nil, intError.Format(ErrEmptyParameter, Table)
 	}
-	if len(keyName) == 0 {
+	if keyName == "" {
 		return nil, intError.Format(ErrEmptyParameter, KeyName)
 	}
-	if len(keyValue) == 0 {
+	if keyValue == "" {
 		return nil, intError.Format(ErrEmptyParameter, KeyValue)
 	}
 
