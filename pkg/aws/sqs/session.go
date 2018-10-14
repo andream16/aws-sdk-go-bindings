@@ -25,8 +25,9 @@ func New(svc *pkgAws.Session, endpoint string) (*SQS, error) {
 		return nil, newSvcErr
 	}
 
-	sqsSvc := new(SQS)
-	sqsSvc.SQS = sqs.New(newSvc)
+	sqsSvc := &SQS{
+		SQS: sqs.New(newSvc),
+	}
 
 	return sqsSvc, nil
 

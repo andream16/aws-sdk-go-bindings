@@ -33,8 +33,9 @@ func testDynamoDBDynamoPutItem(t *testing.T, cfg *configuration.Configuration) {
 	var input TestDynamoDBDynamoPutItemType
 	input.SomeParam = cfg.DynamoDB.PrimaryKey
 
-	dynamoNewSvc := new(DynamoDB)
-	dynamoNewSvc.DynamoDB = dynamoSvc
+	dynamoNewSvc := &DynamoDB{
+		DynamoDB: dynamoSvc,
+	}
 
 	err := dynamoNewSvc.DynamoPutItem(input, tableName)
 
@@ -55,8 +56,9 @@ func testDynamoDBDynamoGetItem(t *testing.T, cfg *configuration.Configuration) {
 	var input TestDynamoDBDynamoPutItemType
 	input.SomeParam = cfg.DynamoDB.PrimaryKey
 
-	dynamoNewSvc := new(DynamoDB)
-	dynamoNewSvc.DynamoDB = dynamoSvc
+	dynamoNewSvc := &DynamoDB{
+		DynamoDB: dynamoSvc,
+	}
 
 	err := dynamoNewSvc.DynamoPutItem(input, tableName)
 

@@ -19,15 +19,16 @@ func New(input *SessionInput) (*Session, error) {
 		return nil, errors.New(ErrNoRegionProvided)
 	}
 
-	cfg := new(aws.Config)
-	cfg.Region = aws.String(input.region)
+	cfg := &aws.Config{
+		Region: aws.String(input.region),
+	}
 
 	awsSession, awsSessionErr := session.NewSession(cfg)
 	if awsSessionErr != nil {
 		return nil, awsSessionErr
 	}
 
-	svc := new(Session)
+	svc := &Session{}
 
 	svc.Session = awsSession
 
