@@ -91,10 +91,11 @@ func ReadImage(path string) (*ReadImageOutput, error) {
 	file.Read(buffer)
 	contentType := http.DetectContentType(buffer)
 
-	out := new(ReadImageOutput)
-	out = out.SetBody(buffer)
-	out = out.SetContentType(contentType)
-	out = out.SetContentSize(contentSize)
+	out := &ReadImageOutput{
+		Body: buffer,
+		ContentType: contentType,
+		ContentSize: contentSize
+	}
 
 	return out, nil
 
@@ -107,8 +108,9 @@ func NewCreateBucketInput(bucketName string) (*s3.CreateBucketInput, error) {
 		return nil, intErr.Format(BucketName, ErrEmptyParameter)
 	}
 
-	out := new(s3.CreateBucketInput)
-	out = out.SetBucket(bucketName)
+	out := &s3.CreateBucketInput{
+		Bucket: bucketName
+	}
 
 	return out, nil
 
@@ -124,9 +126,10 @@ func NewGetObjectInput(bucketName, source string) (*s3.GetObjectInput, error) {
 		return nil, intErr.Format(Source, ErrEmptyParameter)
 	}
 
-	out := new(s3.GetObjectInput)
-	out = out.SetBucket(bucketName)
-	out = out.SetKey(source)
+	out := &s3.GetObjectInput{
+		Bucket: bucketName,
+		Key: source
+	}
 
 	return out, nil
 
@@ -148,12 +151,13 @@ func NewPutObjectInput(bucketName, fileName, contentType string, image []byte, s
 		return nil, intErr.Format(Image, ErrEmptyParameter)
 	}
 
-	out := new(s3.PutObjectInput)
-	out = out.SetBucket(bucketName)
-	out = out.SetKey(fileName)
-	out = out.SetContentType(contentType)
-	out = out.SetBody(bytes.NewReader(image))
-	out = out.SetContentLength(size)
+	out := &s3.PutObjectInput{
+		Bucket: bucketName,
+		Key: fileName,
+		ContentType: contentType,
+		Body: bytes.NewReader(image),
+		ContentLength: size
+	}
 
 	return out, nil
 

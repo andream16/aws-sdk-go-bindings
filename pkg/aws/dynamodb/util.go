@@ -27,9 +27,10 @@ func NewPutItemInput(input interface{}, table string) (*dynamodb.PutItemInput, e
 		return nil, dynamoInputErr
 	}
 
-	out := new(dynamodb.PutItemInput)
-	out = out.SetItem(dynamoInput)
-	out = out.SetTableName(table)
+	out := &dynamodb.PutItemInput{
+		Item: dynamoInput,
+		TableName: table
+	}
 
 	return out, nil
 
@@ -48,15 +49,14 @@ func NewGetItemInput(table, keyName, keyValue string) (*dynamodb.GetItemInput, e
 		return nil, intError.Format(ErrEmptyParameter, KeyValue)
 	}
 
-	out := new(dynamodb.GetItemInput)
-	out = out.SetTableName(table)
-	out = out.SetKey(
-		map[string]*dynamodb.AttributeValue{
+	out := &dynamodb.GetItemInput{
+		TableName: table,
+		Key: map[string]*dynamodb.AttributeValue{
 			keyName: {
 				S: aws.String(keyValue),
 			},
 		},
-	)
+	}
 
 	return out, nil
 

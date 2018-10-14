@@ -214,10 +214,11 @@ func NewCompareFacesInput(source, target []byte, similarity float64) (*rekogniti
 		return nil, newTargetInputImgErr
 	}
 
-	out := new(rekognition.CompareFacesInput)
-	out = out.SetSimilarityThreshold(similarity)
-	out = out.SetSourceImage(newSourceInputImg)
-	out = out.SetTargetImage(newTargetInputImg)
+	out := &rekognition.CompareFacesInput{
+		SimilarityThreshold: similarity,
+		SourceImage: newSourceInputImg,
+		TargetImage: newTargetInputImg
+	}
 
 	return out, nil
 
@@ -235,8 +236,9 @@ func NewDetectFacesInput(source []byte) (*rekognition.DetectFacesInput, error) {
 		return nil, newInputImgErr
 	}
 
-	out := new(rekognition.DetectFacesInput)
-	out = out.SetImage(newInputImg)
+	out := &rekognition.DetectFacesInput{
+		Image: newInputImg
+	}
 
 	return out, nil
 
@@ -254,8 +256,9 @@ func NewDetectTextInput(source []byte) (*rekognition.DetectTextInput, error) {
 		return nil, newInputImgErr
 	}
 
-	out := new(rekognition.DetectTextInput)
-	out = out.SetImage(newInputImg)
+	out := &rekognition.DetectTextInput{
+		Image: newInputImg
+	}
 
 	return out, nil
 
