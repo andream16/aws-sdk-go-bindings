@@ -51,7 +51,7 @@ func UnmarshalGetObjectOutput(input *s3.GetObjectOutput) ([]byte, error) {
 	if bytesErr != nil {
 		return nil, bytesErr
 	}
-	if body == "" {
+	if len(body) == 0 {
 		return nil, intErr.Format(Body, ErrEmptyBody)
 	}
 
@@ -144,7 +144,7 @@ func NewPutObjectInput(bucketName, fileName, contentType string, image []byte, s
 	if contentType == "" {
 		return nil, intErr.Format(ContentType, ErrEmptyParameter)
 	}
-	if image == "" {
+	if len(image) == 0 {
 		return nil, intErr.Format(Image, ErrEmptyParameter)
 	}
 

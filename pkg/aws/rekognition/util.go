@@ -172,7 +172,7 @@ func unmarshalRekognitionOut(input, output interface{}) error {
 
 	m := structs.Map(input)
 
-	if m == "" {
+	if len(m) == 0 {
 		return intErr.Format(Map, ErrEmptyMap)
 	}
 
@@ -193,11 +193,11 @@ func unmarshalRekognitionOut(input, output interface{}) error {
 // NewCompareFacesInput builds a *rekognition.CompareFacesInput starting from the two images, their bucket and a similarity threshold
 func NewCompareFacesInput(source, target []byte, similarity float64) (*rekognition.CompareFacesInput, error) {
 
-	if source == "" {
+	if len(source) == 0 {
 		return nil, intErr.Format(Source, ErrEmptyParameter)
 	}
 
-	if target == "" {
+	if len(target) == 0 {
 		return nil, intErr.Format(Target, ErrEmptyParameter)
 	}
 
@@ -226,7 +226,7 @@ func NewCompareFacesInput(source, target []byte, similarity float64) (*rekogniti
 // NewDetectFacesInput builds a *rekognition.DetectFacesInput starting from the image
 func NewDetectFacesInput(source []byte) (*rekognition.DetectFacesInput, error) {
 
-	if source == "" {
+	if len(source) == 0 {
 		return nil, intErr.Format(Source, ErrEmptyParameter)
 	}
 
@@ -245,7 +245,7 @@ func NewDetectFacesInput(source []byte) (*rekognition.DetectFacesInput, error) {
 // NewDetectTextInput builds a *rekognition.DetectTextInput starting from the image
 func NewDetectTextInput(source []byte) (*rekognition.DetectTextInput, error) {
 
-	if source == "" {
+	if len(source) == 0 {
 		return nil, intErr.Format(Source, ErrEmptyParameter)
 	}
 
@@ -264,7 +264,7 @@ func NewDetectTextInput(source []byte) (*rekognition.DetectTextInput, error) {
 // newInputImage returns a *rekognition.Image given an S3 image []byte encoded
 func newInputImage(image []byte) (*rekognition.Image, error) {
 
-	if image == "" {
+	if len(image) == 0 {
 		return nil, intErr.Format(Image, ErrEmptyParameter)
 	}
 
