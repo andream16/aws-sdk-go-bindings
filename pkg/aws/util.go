@@ -14,7 +14,7 @@ func NewSessionInput(region string) (*SessionInput, error) {
 		return nil, errors.New(ErrNoRegionProvided)
 	}
 
-	svc := new(SessionInput)
+	svc := &SessionInput{}
 
 	svc.region = region
 

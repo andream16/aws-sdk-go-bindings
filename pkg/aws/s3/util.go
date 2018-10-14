@@ -91,7 +91,7 @@ func ReadImage(path string) (*ReadImageOutput, error) {
 	file.Read(buffer)
 	contentType := http.DetectContentType(buffer)
 
-	out := new(ReadImageOutput)
+	out := &ReadImageOutput{}
 	out = out.SetBody(buffer)
 	out = out.SetContentType(contentType)
 	out = out.SetContentSize(contentSize)
@@ -107,7 +107,7 @@ func NewCreateBucketInput(bucketName string) (*s3.CreateBucketInput, error) {
 		return nil, intErr.Format(BucketName, ErrEmptyParameter)
 	}
 
-	out := new(s3.CreateBucketInput)
+	out := &s3.CreateBucketInput{}
 	out = out.SetBucket(bucketName)
 
 	return out, nil
@@ -124,7 +124,7 @@ func NewGetObjectInput(bucketName, source string) (*s3.GetObjectInput, error) {
 		return nil, intErr.Format(Source, ErrEmptyParameter)
 	}
 
-	out := new(s3.GetObjectInput)
+	out := &s3.GetObjectInput{}
 	out = out.SetBucket(bucketName)
 	out = out.SetKey(source)
 
@@ -148,7 +148,7 @@ func NewPutObjectInput(bucketName, fileName, contentType string, image []byte, s
 		return nil, intErr.Format(Image, ErrEmptyParameter)
 	}
 
-	out := new(s3.PutObjectInput)
+	out := &s3.PutObjectInput{}
 	out = out.SetBucket(bucketName)
 	out = out.SetKey(fileName)
 	out = out.SetContentType(contentType)
@@ -162,7 +162,7 @@ func NewPutObjectInput(bucketName, fileName, contentType string, image []byte, s
 // UnmarshalIOReadCloser extracts []byte from input.Body
 func UnmarshalIOReadCloser(input io.ReadCloser) ([]byte, error) {
 
-	buf := new(bytes.Buffer)
+	buf := &bytes.Buffer{}
 	_, err := buf.ReadFrom(input)
 	if err != nil {
 		return nil, err

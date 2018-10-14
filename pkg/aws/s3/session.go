@@ -25,7 +25,7 @@ func New(svc *pkgAws.Session, endpoint string) (*S3, error) {
 		return nil, newSvcErr
 	}
 
-	s3Svc := new(S3)
+	s3Svc := &S3{}
 	s3Svc.S3 = s3.New(newSvc)
 
 	return s3Svc, nil

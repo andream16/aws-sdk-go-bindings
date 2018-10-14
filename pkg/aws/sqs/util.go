@@ -18,7 +18,7 @@ func NewCreateQueueInput(queueName string) (*sqs.CreateQueueInput, error) {
 		return nil, intError.Format(QueueName, ErrEmptyParameter)
 	}
 
-	out := new(sqs.CreateQueueInput)
+	out := &sqs.CreateQueueInput{}
 	out = out.SetQueueName(queueName)
 
 	return out, nil
@@ -32,7 +32,7 @@ func NewGetQueueAttributesInput(queueUrl string) (*sqs.GetQueueAttributesInput, 
 		return nil, intError.Format(QueueUrl, ErrEmptyParameter)
 	}
 
-	out := new(sqs.GetQueueAttributesInput)
+	out := &sqs.GetQueueAttributesInput{}
 	out = out.SetQueueUrl(queueUrl)
 
 	return out, nil
@@ -51,7 +51,7 @@ func NewSendMessageInput(input interface{}, queueUrl string, base64Encode bool) 
 		return nil, intError.Format(QueueUrl, ErrEmptyParameter)
 	}
 
-	out := new(sqs.SendMessageInput)
+	out := &sqs.SendMessageInput{}
 
 	msgBody, err := marshalStructToJson(input)
 	if err != nil {
@@ -78,7 +78,7 @@ func NewGetQueueUrlInput(queueName string) (*sqs.GetQueueUrlInput, error) {
 		return nil, intError.Format(QueueName, ErrEmptyParameter)
 	}
 
-	out := new(sqs.GetQueueUrlInput)
+	out := &sqs.GetQueueUrlInput{}
 	out = out.SetQueueName(queueName)
 
 	return out, nil

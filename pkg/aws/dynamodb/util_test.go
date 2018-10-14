@@ -17,7 +17,7 @@ type TestUnmarshalStreamImageType struct {
 func TestNewPutItemInput(t *testing.T) {
 
 	tableName := "some_name"
-	in := new(TestUnmarshalStreamImageType)
+	in := &TestUnmarshalStreamImageType{}
 	in.SomeParam = "some_val"
 
 	out, err := NewPutItemInput(in, tableName)

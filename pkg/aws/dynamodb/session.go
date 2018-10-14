@@ -25,7 +25,7 @@ func New(svc *pkgAws.Session, endpoint string) (*DynamoDB, error) {
 		return nil, newSvcErr
 	}
 
-	dynamoSvc := new(DynamoDB)
+	dynamoSvc := &DynamoDB{}
 	dynamoSvc.DynamoDB = dynamodb.New(newSvc)
 
 	return dynamoSvc, nil

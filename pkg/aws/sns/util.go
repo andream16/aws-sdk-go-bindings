@@ -50,7 +50,7 @@ func NewPublishInput(input interface{}, endpoint string) (*sns.PublishInput, err
 		return nil, msgErr
 	}
 
-	out := new(sns.PublishInput)
+	out := &sns.PublishInput{}
 	out = out.SetMessage(string(msgBytes))
 	out = out.SetMessageStructure(MessageStructure)
 	out = out.SetTargetArn(endpoint)

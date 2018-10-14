@@ -25,7 +25,7 @@ func New(svc *pkgAws.Session, region string) (*Rekognition, error) {
 		return nil, newSvcErr
 	}
 
-	rekognitionSvc := new(Rekognition)
+	rekognitionSvc := &Rekognition{}
 	rekognitionSvc.Rekognition = rekognition.New(newSvc)
 
 	return rekognitionSvc, nil
