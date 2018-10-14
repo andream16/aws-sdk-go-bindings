@@ -25,8 +25,9 @@ func New(svc *pkgAws.Session, endpoint string) (*SNS, error) {
 		return nil, newSvcErr
 	}
 
-	snsSvc := &SNS{}
-	snsSvc.SNS = sns.New(newSvc)
+	snsSvc := &SNS{
+		SNS: sns.New(newSvc),
+	}
 
 	return snsSvc, nil
 

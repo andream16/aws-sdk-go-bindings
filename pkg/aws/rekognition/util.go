@@ -268,9 +268,9 @@ func newInputImage(image []byte) (*rekognition.Image, error) {
 		return nil, intErr.Format(Image, ErrEmptyParameter)
 	}
 
-	out := &rekognition.Image{}
-
-	out.Bytes = image
+	out := &rekognition.Image{
+		Bytes: image,
+	}
 
 	return out, nil
 

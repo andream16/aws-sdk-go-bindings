@@ -19,8 +19,9 @@ func New(input *SessionInput) (*Session, error) {
 		return nil, errors.New(ErrNoRegionProvided)
 	}
 
-	cfg := &aws.Config{}
-	cfg.Region = aws.String(input.region)
+	cfg := &aws.Config{
+		Region: aws.String(input.region),
+	}
 
 	awsSession, awsSessionErr := session.NewSession(cfg)
 	if awsSessionErr != nil {
