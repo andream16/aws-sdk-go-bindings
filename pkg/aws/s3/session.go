@@ -20,9 +20,9 @@ func New(svc *pkgAws.Session, endpoint string) (*S3, error) {
 		svc.Config.Endpoint = aws.String(endpoint)
 	}
 
-	newSvc, newSvcErr := session.NewSession(svc.Config)
-	if newSvcErr != nil {
-		return nil, newSvcErr
+	newSvc, err := session.NewSession(svc.Config)
+	if err != nil {
+		return nil, err
 	}
 
 	s3Svc := &S3{

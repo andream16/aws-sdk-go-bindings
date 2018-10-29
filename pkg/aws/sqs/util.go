@@ -92,9 +92,9 @@ func marshalStructToJson(input interface{}) ([]byte, error) {
 		return nil, errors.New(ErrNoPointerParameterAllowed)
 	}
 
-	b, marshalErr := json.Marshal(input)
-	if marshalErr != nil {
-		return nil, marshalErr
+	b, err := json.Marshal(input)
+	if err != nil {
+		return nil, err
 	}
 
 	return b, nil

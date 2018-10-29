@@ -15,40 +15,40 @@ func TestSession_SnsPublish(t *testing.T) {
 
 	cfg := testdata.MockConfiguration(t)
 
-	svcIn, svcInErr := pkgAws.NewSessionInput(cfg.Region)
+	svcIn, err := pkgAws.NewSessionInput(cfg.Region)
 
-	assert.NoError(t, svcInErr)
-	awsSvc, awsSvcErr := pkgAws.New(svcIn)
+	assert.NoError(t, err)
+	awsSvc, err := pkgAws.New(svcIn)
 
-	assert.NoError(t, awsSvcErr)
+	assert.NoError(t, err)
 	assert.NotEmpty(t, awsSvc)
 
-	snsSvc, snsSvcErr := New(awsSvc, cfg.SNS.Endpoint)
+	snsSvc, err := New(awsSvc, cfg.SNS.Endpoint)
 
-	assert.NoError(t, snsSvcErr)
+	assert.NoError(t, err)
 	assert.NotEmpty(t, snsSvc)
 
-	err := snsSvc.SnsPublish(
+	err = snsSvc.SnsPublish(
 		body,
 		cfg.SNS.TargetArn,
 	)
 
 	assert.NoError(t, err)
 
-	shouldBeEmptyParameterErr := snsSvc.SnsPublish(
+	err = snsSvc.SnsPublish(
 		body,
 		"",
 	)
 
-	assert.Error(t, shouldBeEmptyParameterErr)
-	assert.Contains(t, shouldBeEmptyParameterErr.Error(), ErrEmptyParameter)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), ErrEmptyParameter)
 
-	shouldBeNoPointerParameterAllowedErr := snsSvc.SnsPublish(
+	err = snsSvc.SnsPublish(
 		&body,
 		cfg.SNS.TargetArn,
 	)
 
-	assert.Error(t, shouldBeNoPointerParameterAllowedErr)
-	assert.Contains(t, shouldBeNoPointerParameterAllowedErr.Error(), ErrPointerParameterNotAllowed)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), ErrPointerParameterNotAllowed)
 
 }

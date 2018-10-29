@@ -6,12 +6,12 @@ type GetItemOutput interface{}
 // DynamoPutItem puts a given input in a dynamodb table
 func (svc *DynamoDB) DynamoPutItem(input interface{}, table string) error {
 
-	newPutItemIn, newPutItemInErr := NewPutItemInput(input, table)
-	if newPutItemInErr != nil {
-		return newPutItemInErr
+	newPutItemIn, err := NewPutItemInput(input, table)
+	if err != nil {
+		return err
 	}
 
-	_, err := svc.PutItem(newPutItemIn)
+	_, err = svc.PutItem(newPutItemIn)
 	if err != nil {
 		return err
 	}
@@ -24,13 +24,13 @@ func (svc *DynamoDB) DynamoPutItem(input interface{}, table string) error {
 // A *GetItemOutput will be returned
 func (svc *DynamoDB) DynamoGetItem(table, keyName, keyValue string) (*GetItemOutput, error) {
 
-	in, inErr := NewGetItemInput(
+	in, err := NewGetItemInput(
 		table,
 		keyName,
 		keyValue,
 	)
-	if inErr != nil {
-		return nil, inErr
+	if err != nil {
+		return nil, err
 	}
 
 	item, err := svc.GetItem(in)
@@ -40,9 +40,9 @@ func (svc *DynamoDB) DynamoGetItem(table, keyName, keyValue string) (*GetItemOut
 
 	out := new(GetItemOutput)
 
-	itemErr := UnmarshalGetItemOutput(item, &out)
-	if itemErr != nil {
-		return nil, itemErr
+	err = UnmarshalGetItemOutput(item, &out)
+	if err != nil {
+		return nil, err
 	}
 
 	return out, nil

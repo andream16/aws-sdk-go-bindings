@@ -12,9 +12,9 @@ type GetQueueUrlInput struct {
 // SQSCreateQueue creates an sns queue given a queue name
 func (svc *SQS) SQSCreateQueue(queue string) error {
 
-	input, inputErr := NewCreateQueueInput(queue)
-	if inputErr != nil {
-		return inputErr
+	input, err := NewCreateQueueInput(queue)
+	if err != nil {
+		return err
 	}
 
 	if _, err := svc.CreateQueue(input); err != nil {
@@ -28,9 +28,9 @@ func (svc *SQS) SQSCreateQueue(queue string) error {
 // SQSGetQueueAttributes returns error if queue does not exist, get queue attributes otherwise
 func (svc *SQS) SQSGetQueueAttributes(queueUrl string) (*sqs.GetQueueAttributesOutput, error) {
 
-	input, inputErr := NewGetQueueAttributesInput(queueUrl)
-	if inputErr != nil {
-		return nil, inputErr
+	input, err := NewGetQueueAttributesInput(queueUrl)
+	if err != nil {
+		return nil, err
 	}
 
 	out, err := svc.GetQueueAttributes(input)
@@ -45,18 +45,18 @@ func (svc *SQS) SQSGetQueueAttributes(queueUrl string) (*sqs.GetQueueAttributesO
 // SQSSendMessage sends a message on SQS
 func (svc *SQS) SQSSendMessage(input interface{}, queueName string, base64Encode bool) error {
 
-	queueUrl, queueUrlErr := svc.SQSGetQueueUrl(queueName)
-	if queueUrlErr != nil {
-		return queueUrlErr
+	queueUrl, err := svc.SQSGetQueueUrl(queueName)
+	if err != nil {
+		return err
 	}
 
-	sendMsgInput, sendMsgInputErr := NewSendMessageInput(
+	sendMsgInput, err := NewSendMessageInput(
 		input,
 		queueUrl,
 		base64Encode,
 	)
-	if sendMsgInputErr != nil {
-		return sendMsgInputErr
+	if err != nil {
+		return err
 	}
 
 	if _, err := svc.SendMessage(sendMsgInput); err != nil {
@@ -70,9 +70,9 @@ func (svc *SQS) SQSSendMessage(input interface{}, queueName string, base64Encode
 // SQSGetQueueUrl gets a queue's url given its name
 func (svc *SQS) SQSGetQueueUrl(queueUrl string) (string, error) {
 
-	input, inputErr := NewGetQueueUrlInput(queueUrl)
-	if inputErr != nil {
-		return "", inputErr
+	input, err := NewGetQueueUrlInput(queueUrl)
+	if err != nil {
+		return "", err
 	}
 
 	out, err := svc.GetQueueUrl(input)

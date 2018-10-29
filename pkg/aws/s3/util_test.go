@@ -60,25 +60,25 @@ func TestUnmarshalGetObjectOutput(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotEmpty(t, out)
 
-	_, errEmptyContentLength := UnmarshalGetObjectOutput(
+	_, err = UnmarshalGetObjectOutput(
 		&s3.GetObjectOutput{
 			Body:          ioutil.NopCloser(bytes.NewReader(body)),
 			ContentLength: aws.Int64(0),
 		},
 	)
 
-	assert.Error(t, errEmptyContentLength)
-	assert.Contains(t, errEmptyContentLength.Error(), ErrEmptyContentLength)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), ErrEmptyContentLength)
 
-	_, errEmptyBody := UnmarshalGetObjectOutput(
+	_, err = UnmarshalGetObjectOutput(
 		&s3.GetObjectOutput{
 			Body:          ioutil.NopCloser(bytes.NewReader([]byte{})),
 			ContentLength: aws.Int64(40),
 		},
 	)
 
-	assert.Error(t, errEmptyBody)
-	assert.Contains(t, errEmptyBody.Error(), ErrEmptyBody)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), ErrEmptyBody)
 
 }
 
@@ -102,10 +102,10 @@ func TestNewCreateBucketInput(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotEmpty(t, out)
 
-	_, shouldBeEmptyErr := NewCreateBucketInput("")
+	_, err = NewCreateBucketInput("")
 
-	assert.Error(t, shouldBeEmptyErr)
-	assert.Contains(t, shouldBeEmptyErr.Error(), ErrEmptyParameter)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), ErrEmptyParameter)
 
 }
 
@@ -119,10 +119,10 @@ func TestNewGetObjectInput(t *testing.T) {
 	assert.Equal(t, cfg.S3.Bucket, *out.Bucket)
 	assert.Equal(t, cfg.S3.SourceImage, *out.Key)
 
-	_, shouldBeEmptyErr1 := NewGetObjectInput("", cfg.S3.SourceImage)
-	assert.Contains(t, shouldBeEmptyErr1.Error(), ErrEmptyParameter)
-	_, shouldBeEmptyErr2 := NewGetObjectInput(cfg.S3.Bucket, "")
-	assert.Contains(t, shouldBeEmptyErr2.Error(), ErrEmptyParameter)
+	_, err = NewGetObjectInput("", cfg.S3.SourceImage)
+	assert.Contains(t, err.Error(), ErrEmptyParameter)
+	_, err = NewGetObjectInput(cfg.S3.Bucket, "")
+	assert.Contains(t, err.Error(), ErrEmptyParameter)
 
 }
 
@@ -133,7 +133,7 @@ func TestNewPutObjectInput(t *testing.T) {
 
 	cfg := testdata.MockConfiguration(t)
 
-	putObjectInput, putObjectInputErr := NewPutObjectInput(
+	putObjectInput, err := NewPutObjectInput(
 		cfg.S3.Bucket,
 		cfg.S3.SourceImage,
 		contentType,
@@ -141,17 +141,17 @@ func TestNewPutObjectInput(t *testing.T) {
 		16,
 	)
 
-	assert.NoError(t, putObjectInputErr)
+	assert.NoError(t, err)
 	assert.NotEmpty(t, putObjectInput)
 
-	_, shouldBeEmptyErr1 := NewPutObjectInput("", cfg.S3.SourceImage, contentType, []byte(cfg.S3.SourceImage), contentSize)
-	assert.Contains(t, shouldBeEmptyErr1.Error(), ErrEmptyParameter)
-	_, shouldBeEmptyErr2 := NewPutObjectInput(cfg.S3.Bucket, "", contentType, []byte(cfg.S3.SourceImage), contentSize)
-	assert.Contains(t, shouldBeEmptyErr2.Error(), ErrEmptyParameter)
-	_, shouldBeEmptyErr3 := NewPutObjectInput(cfg.S3.Bucket, cfg.S3.SourceImage, "", []byte(cfg.S3.SourceImage), contentSize)
-	assert.Contains(t, shouldBeEmptyErr3.Error(), ErrEmptyParameter)
-	_, shouldBeEmptyErr4 := NewPutObjectInput(cfg.S3.Bucket, cfg.S3.SourceImage, contentType, []byte(""), contentSize)
-	assert.Contains(t, shouldBeEmptyErr4.Error(), ErrEmptyParameter)
+	_, err = NewPutObjectInput("", cfg.S3.SourceImage, contentType, []byte(cfg.S3.SourceImage), contentSize)
+	assert.Contains(t, err.Error(), ErrEmptyParameter)
+	_, err = NewPutObjectInput(cfg.S3.Bucket, "", contentType, []byte(cfg.S3.SourceImage), contentSize)
+	assert.Contains(t, err.Error(), ErrEmptyParameter)
+	_, err = NewPutObjectInput(cfg.S3.Bucket, cfg.S3.SourceImage, "", []byte(cfg.S3.SourceImage), contentSize)
+	assert.Contains(t, err.Error(), ErrEmptyParameter)
+	_, err = NewPutObjectInput(cfg.S3.Bucket, cfg.S3.SourceImage, contentType, []byte(""), contentSize)
+	assert.Contains(t, err.Error(), ErrEmptyParameter)
 
 }
 

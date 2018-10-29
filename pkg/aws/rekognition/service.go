@@ -3,13 +3,13 @@ package rekognition
 // RekognitionCompareFaces compares two faces returning their similarity
 func (svc *Rekognition) RekognitionCompareFaces(sourceImage, targetImage []byte, similarity float64) (*CompareFacesOutput, error) {
 
-	input, inputErr := NewCompareFacesInput(
+	input, err := NewCompareFacesInput(
 		sourceImage,
 		targetImage,
 		similarity,
 	)
-	if inputErr != nil {
-		return nil, inputErr
+	if err != nil {
+		return nil, err
 	}
 
 	valid := input.Validate()
@@ -24,9 +24,9 @@ func (svc *Rekognition) RekognitionCompareFaces(sourceImage, targetImage []byte,
 
 	var out CompareFacesOutput
 
-	unmarshalErr := UnmarshalCompareFacesOutput(compareFacesOut, &out)
-	if unmarshalErr != nil {
-		return nil, unmarshalErr
+	err = UnmarshalCompareFacesOutput(compareFacesOut, &out)
+	if err != nil {
+		return nil, err
 	}
 
 	return &out, nil
@@ -36,11 +36,11 @@ func (svc *Rekognition) RekognitionCompareFaces(sourceImage, targetImage []byte,
 // RekognitionDetectFaces detects faces in an image
 func (svc *Rekognition) RekognitionDetectFaces(sourceImage []byte) (*DetectFacesOutput, error) {
 
-	input, inputErr := NewDetectFacesInput(
+	input, err := NewDetectFacesInput(
 		sourceImage,
 	)
-	if inputErr != nil {
-		return nil, inputErr
+	if err != nil {
+		return nil, err
 	}
 
 	valid := input.Validate()
@@ -55,9 +55,9 @@ func (svc *Rekognition) RekognitionDetectFaces(sourceImage []byte) (*DetectFaces
 
 	var out DetectFacesOutput
 
-	unmarshalErr := UnmarshalDetectFacesOutput(detectFacesOut, &out)
-	if unmarshalErr != nil {
-		return nil, unmarshalErr
+	err = UnmarshalDetectFacesOutput(detectFacesOut, &out)
+	if err != nil {
+		return nil, err
 	}
 
 	return &out, nil
@@ -67,11 +67,11 @@ func (svc *Rekognition) RekognitionDetectFaces(sourceImage []byte) (*DetectFaces
 // RekognitionDetectText extracts text from an image
 func (svc *Rekognition) RekognitionDetectText(sourceImage []byte) (*DetectTextOutput, error) {
 
-	input, inputErr := NewDetectTextInput(
+	input, err := NewDetectTextInput(
 		sourceImage,
 	)
-	if inputErr != nil {
-		return nil, inputErr
+	if err != nil {
+		return nil, err
 	}
 
 	valid := input.Validate()
@@ -86,9 +86,9 @@ func (svc *Rekognition) RekognitionDetectText(sourceImage []byte) (*DetectTextOu
 
 	var out DetectTextOutput
 
-	unmarshalErr := UnmarshalDetectTextOutput(detectTextOut, &out)
-	if unmarshalErr != nil {
-		return nil, unmarshalErr
+	err = UnmarshalDetectTextOutput(detectTextOut, &out)
+	if err != nil {
+		return nil, err
 	}
 
 	return &out, nil

@@ -13,18 +13,18 @@ func TestNew(t *testing.T) {
 
 	cfg := testdata.MockConfiguration(t)
 
-	in, inErr := aws.NewSessionInput(cfg.Region)
+	in, err := aws.NewSessionInput(cfg.Region)
 
-	assert.NoError(t, inErr)
+	assert.NoError(t, err)
 
-	awsSvc, awsSvcErr := aws.New(in)
+	awsSvc, err := aws.New(in)
 
-	assert.NoError(t, awsSvcErr)
+	assert.NoError(t, err)
 	assert.NotEmpty(t, awsSvc)
 
-	snsSvc, snsSvcErr := New(awsSvc, cfg.SNS.Endpoint)
+	snsSvc, err := New(awsSvc, cfg.SNS.Endpoint)
 
-	assert.NoError(t, snsSvcErr)
+	assert.NoError(t, err)
 	assert.NotEmpty(t, snsSvc)
 
 }

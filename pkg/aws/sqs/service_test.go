@@ -37,20 +37,20 @@ func TestSQS_SQSGetQueueAttributes(t *testing.T) {
 
 	createSQSQueue(t, svc, cfg.SQS.QueueName)
 
-	url, urlErr := svc.SQSGetQueueUrl(cfg.SQS.QueueName)
+	url, err := svc.SQSGetQueueUrl(cfg.SQS.QueueName)
 
-	assert.NoError(t, urlErr)
+	assert.NoError(t, err)
 	assert.NotEmpty(t, url)
 
-	_, getQueueAttrsErr := svc.SQSGetQueueAttributes(url)
+	_, err = svc.SQSGetQueueAttributes(url)
 
-	assert.NoError(t, getQueueAttrsErr)
+	assert.NoError(t, err)
 
 	badQueueUrl := `badURL`
 
-	_, shouldBeErr := svc.SQSGetQueueAttributes(badQueueUrl)
+	_, err = svc.SQSGetQueueAttributes(badQueueUrl)
 
-	assert.Error(t, shouldBeErr)
+	assert.Error(t, err)
 
 }
 
@@ -85,16 +85,16 @@ func TestSQS_SQSGetQueueUrl(t *testing.T) {
 
 	createSQSQueue(t, svc, cfg.SQS.QueueName)
 
-	url, urlErr := svc.SQSGetQueueUrl(cfg.SQS.QueueName)
+	url, err := svc.SQSGetQueueUrl(cfg.SQS.QueueName)
 
-	assert.NoError(t, urlErr)
+	assert.NoError(t, err)
 	assert.NotEmpty(t, url)
 	assert.Equal(t, cfg.SQS.QueueUrl, url)
 
-	_, shouldBeEmptyErr := svc.SQSGetQueueUrl("")
+	_, err = svc.SQSGetQueueUrl("")
 
-	assert.Error(t, shouldBeEmptyErr)
-	assert.Contains(t, shouldBeEmptyErr.Error(), ErrEmptyParameter)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), ErrEmptyParameter)
 
 }
 
@@ -106,10 +106,10 @@ func createSQSQueue(t *testing.T, svc *SQS, queueName string) {
 
 	assert.NoError(t, err)
 
-	shouldBeEmptyParamErr := svc.SQSCreateQueue("")
+	err = svc.SQSCreateQueue("")
 
-	assert.Error(t, shouldBeEmptyParamErr)
-	assert.Contains(t, shouldBeEmptyParamErr.Error(), ErrEmptyParameter)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), ErrEmptyParameter)
 
 }
 
@@ -119,18 +119,18 @@ func newSQSSvc(t *testing.T) *SQS {
 
 	cfg := testdata.MockConfiguration(t)
 
-	svcIn, svcInErr := pkgAws.NewSessionInput(cfg.Region)
+	svcIn, err := pkgAws.NewSessionInput(cfg.Region)
 
-	assert.NoError(t, svcInErr)
+	assert.NoError(t, err)
 
-	awsSvc, awsSvcErr := pkgAws.New(svcIn)
+	awsSvc, err := pkgAws.New(svcIn)
 
-	assert.NoError(t, awsSvcErr)
+	assert.NoError(t, err)
 	assert.NotEmpty(t, awsSvc)
 
-	sqsSvc, sqsSvcErr := New(awsSvc, cfg.SQS.Endpoint)
+	sqsSvc, err := New(awsSvc, cfg.SQS.Endpoint)
 
-	assert.NoError(t, sqsSvcErr)
+	assert.NoError(t, err)
 	assert.NotEmpty(t, sqsSvc)
 
 	return sqsSvc

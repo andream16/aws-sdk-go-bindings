@@ -20,9 +20,9 @@ func New(svc *pkgAws.Session, region string) (*Rekognition, error) {
 		svc.Config.Region = aws.String(region)
 	}
 
-	newSvc, newSvcErr := session.NewSession(svc.Config)
-	if newSvcErr != nil {
-		return nil, newSvcErr
+	newSvc, err := session.NewSession(svc.Config)
+	if err != nil {
+		return nil, err
 	}
 
 	rekognitionSvc := &Rekognition{

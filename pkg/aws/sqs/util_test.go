@@ -18,10 +18,10 @@ func TestNewCreateQueueInput(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, cfg.SQS.QueueName, *out.QueueName)
 
-	_, shouldBeErrEmptyParameter := NewCreateQueueInput("")
+	_, err = NewCreateQueueInput("")
 
-	assert.Error(t, shouldBeErrEmptyParameter)
-	assert.Contains(t, shouldBeErrEmptyParameter.Error(), ErrEmptyParameter)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), ErrEmptyParameter)
 
 }
 
@@ -34,10 +34,10 @@ func TestNewGetQueueAttributesInput(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, cfg.SQS.QueueUrl, *out.QueueUrl)
 
-	_, shouldBeEmptyErr := NewGetQueueAttributesInput("")
+	_, err = NewGetQueueAttributesInput("")
 
-	assert.Error(t, shouldBeEmptyErr)
-	assert.Contains(t, shouldBeEmptyErr.Error(), ErrEmptyParameter)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), ErrEmptyParameter)
 
 }
 
@@ -49,29 +49,29 @@ func TestNewSendMessageInput(t *testing.T) {
 		SomeParam2: val2,
 	}
 
-	out, outErr := NewSendMessageInput(
+	out, err := NewSendMessageInput(
 		s,
 		queueUrl,
 		true,
 	)
 
-	assert.NoError(t, outErr)
+	assert.NoError(t, err)
 	assert.Equal(t, queueUrl, *out.QueueUrl)
 
-	stringBody, stringBodyErr := base64.StdEncoding.DecodeString(*out.MessageBody)
+	stringBody, err := base64.StdEncoding.DecodeString(*out.MessageBody)
 
-	assert.NoError(t, stringBodyErr)
+	assert.NoError(t, err)
 	assert.NotEmpty(t, stringBody)
 
 	var m1 TestSQSUtilType
 
-	unmarshalBase64OutErr := json.Unmarshal([]byte(stringBody), &m1)
+	err = json.Unmarshal([]byte(stringBody), &m1)
 
-	assert.NoError(t, unmarshalBase64OutErr)
+	assert.NoError(t, err)
 	assert.Equal(t, val1, m1.SomeParam1)
 	assert.Equal(t, val2, m1.SomeParam2)
 
-	out, err := NewSendMessageInput(
+	out, err = NewSendMessageInput(
 		s,
 		queueUrl,
 		false,
@@ -82,29 +82,29 @@ func TestNewSendMessageInput(t *testing.T) {
 
 	var m2 TestSQSUtilType
 
-	unmarshalOutErr := json.Unmarshal([]byte(stringBody), &m2)
+	err = json.Unmarshal([]byte(stringBody), &m2)
 
-	assert.NoError(t, unmarshalOutErr)
+	assert.NoError(t, err)
 	assert.Equal(t, val1, m2.SomeParam1)
 	assert.Equal(t, val2, m2.SomeParam2)
 
-	_, shouldBeErrEmptyParameter := NewSendMessageInput(
+	_, err = NewSendMessageInput(
 		s,
 		"",
 		true,
 	)
 
-	assert.Error(t, shouldBeErrEmptyParameter)
-	assert.Contains(t, shouldBeErrEmptyParameter.Error(), ErrEmptyParameter)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), ErrEmptyParameter)
 
-	_, shouldBeErrNoPointerParameterAllowed := NewSendMessageInput(
+	_, err = NewSendMessageInput(
 		&s,
 		queueUrl,
 		true,
 	)
 
-	assert.Error(t, shouldBeErrNoPointerParameterAllowed)
-	assert.Contains(t, shouldBeErrNoPointerParameterAllowed.Error(), ErrNoPointerParameterAllowed)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), ErrNoPointerParameterAllowed)
 
 }
 
