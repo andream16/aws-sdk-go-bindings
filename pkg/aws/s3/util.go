@@ -47,9 +47,9 @@ func UnmarshalGetObjectOutput(input *s3.GetObjectOutput) ([]byte, error) {
 		return nil, intErr.Format(InputContentLength, ErrEmptyContentLength)
 	}
 
-	body, bytesErr := ioutil.ReadAll(input.Body)
-	if bytesErr != nil {
-		return nil, bytesErr
+	body, err := ioutil.ReadAll(input.Body)
+	if err != nil {
+		return nil, err
 	}
 	if len(body) == 0 {
 		return nil, intErr.Format(Body, ErrEmptyBody)
@@ -73,16 +73,16 @@ func ReadImage(path string) (*ReadImageOutput, error) {
 		return nil, intErr.Format(Path, ErrEmptyParameter)
 	}
 
-	file, fileErr := os.Open(path)
-	if fileErr != nil {
-		return nil, fileErr
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
 	}
 
 	defer file.Close()
 
-	fileInfo, fileInfoErr := file.Stat()
-	if fileInfoErr != nil {
-		return nil, fileInfoErr
+	fileInfo, err := file.Stat()
+	if err != nil {
+		return nil, err
 	}
 
 	contentSize := fileInfo.Size()

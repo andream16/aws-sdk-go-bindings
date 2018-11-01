@@ -68,18 +68,18 @@ func newS3Svc(t *testing.T) (*S3, *configuration.Configuration) {
 
 	cfg := testdata.MockConfiguration(t)
 
-	svcIn, svcInErr := aws.NewSessionInput(cfg.Region)
+	svcIn, err := aws.NewSessionInput(cfg.Region)
 
-	assert.NoError(t, svcInErr)
+	assert.NoError(t, err)
 
-	awsSvc, awsSvcErr := aws.New(svcIn)
+	awsSvc, err := aws.New(svcIn)
 
-	assert.NoError(t, awsSvcErr)
+	assert.NoError(t, err)
 	assert.NotEmpty(t, awsSvc)
 
-	s3Svc, s3SvcErr := New(awsSvc, cfg.S3.Endpoint)
+	s3Svc, err := New(awsSvc, cfg.S3.Endpoint)
 
-	assert.NoError(t, s3SvcErr)
+	assert.NoError(t, err)
 	assert.NotEmpty(t, s3Svc)
 
 	return s3Svc, cfg

@@ -22,9 +22,9 @@ func NewPutItemInput(input interface{}, table string) (*dynamodb.PutItemInput, e
 		return nil, intError.Format(ErrEmptyParameter, Table)
 	}
 
-	dynamoInput, dynamoInputErr := dynamodbattribute.MarshalMap(input)
-	if dynamoInputErr != nil {
-		return nil, dynamoInputErr
+	dynamoInput, err := dynamodbattribute.MarshalMap(input)
+	if err != nil {
+		return nil, err
 	}
 
 	out := &dynamodb.PutItemInput{}
@@ -83,9 +83,9 @@ func UnmarshalStreamImage(input events.DynamoDBEventRecord, output interface{}) 
 
 	for k, v := range img {
 
-		bytes, marshalErr := v.MarshalJSON()
-		if marshalErr != nil {
-			return marshalErr
+		bytes, err := v.MarshalJSON()
+		if err != nil {
+			return err
 		}
 
 		var dbAttr dynamodb.AttributeValue

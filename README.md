@@ -12,9 +12,9 @@ func UnmarshalStreamImage(in map[string]events.DynamoDBAttributeValue, out inter
 
 	for k, v := range in {
 
-		bytes, marshalErr := v.MarshalJSON()
-		if marshalErr != nil {
-			return marshalErr
+		bytes, err := v.MarshalJSON()
+		if err != nil {
+			return err
 		}
 
 		var dbAttr dynamodb.AttributeValue

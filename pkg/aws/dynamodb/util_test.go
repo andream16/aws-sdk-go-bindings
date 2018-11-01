@@ -26,10 +26,10 @@ func TestNewPutItemInput(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, tableName, *out.TableName)
 
-	_, errEmptyParamater := NewPutItemInput(in, "")
+	_, err = NewPutItemInput(in, "")
 
-	assert.Error(t, errEmptyParamater)
-	assert.Contains(t, errEmptyParamater.Error(), ErrEmptyParameter)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), ErrEmptyParameter)
 
 }
 
@@ -39,13 +39,13 @@ func TestNewGetItemInput(t *testing.T) {
 	keyName := "some_key"
 	keyValue := "some_key_value"
 
-	out, outErr := NewGetItemInput(
+	out, err := NewGetItemInput(
 		tableName,
 		keyName,
 		keyValue,
 	)
 
-	assert.NoError(t, outErr)
+	assert.NoError(t, err)
 	assert.Equal(t, tableName, *out.TableName)
 	assert.Equal(t, keyValue, *out.Key[keyName].S)
 
@@ -80,21 +80,21 @@ func TestUnmarshalStreamImage(t *testing.T) {
 
 	var out TestUnmarshalStreamImageType
 
-	unmarshalErr := UnmarshalStreamImage(event, &out)
-	assert.NoError(t, unmarshalErr)
+	err = UnmarshalStreamImage(event, &out)
+	assert.NoError(t, err)
 
 	assert.NotEmpty(t, out)
 	assert.Equal(t, someVal, out.SomeParam)
 
-	errNoPointerParameter := UnmarshalStreamImage(event, TestUnmarshalStreamImageType{})
+	err = UnmarshalStreamImage(event, TestUnmarshalStreamImageType{})
 
-	assert.Error(t, errNoPointerParameter)
-	assert.Contains(t, errNoPointerParameter.Error(), ErrNoPointerParameter)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), ErrNoPointerParameter)
 
-	errEmptyMap := UnmarshalStreamImage(events.DynamoDBEventRecord{}, &mock)
+	err = UnmarshalStreamImage(events.DynamoDBEventRecord{}, &mock)
 
-	assert.Error(t, errEmptyMap)
-	assert.Contains(t, errEmptyMap.Error(), ErrEmptyParameter)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), ErrEmptyParameter)
 
 }
 
@@ -117,9 +117,9 @@ func TestUnmarshalGetItemOutput(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, s, out.SomeParam)
 
-	errNoPointerParameter := UnmarshalGetItemOutput(getItemIn, TestUnmarshalStreamImageType{})
+	err = UnmarshalGetItemOutput(getItemIn, TestUnmarshalStreamImageType{})
 
-	assert.Error(t, errNoPointerParameter)
-	assert.Contains(t, errNoPointerParameter.Error(), ErrNoPointerParameter)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), ErrNoPointerParameter)
 
 }

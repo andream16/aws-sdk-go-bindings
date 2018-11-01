@@ -15,8 +15,8 @@ func TestNewSessionInput(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, region, out.region)
 
-	_, shouldBeNoRegionProvidedErr := NewSessionInput("")
+	_, err = NewSessionInput("")
 
-	assert.Equal(t, ErrNoRegionProvided, shouldBeNoRegionProvidedErr.Error())
+	assert.Equal(t, ErrNoRegionProvided, err.Error())
 
 }
