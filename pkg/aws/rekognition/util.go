@@ -45,8 +45,8 @@ type DetectTextOutput struct {
 
 // FaceMatches contains CompareFaces Face Matches
 type FaceMatches struct {
-	Face       Face `json:"Face,omitempty"`
-	Similarity int  `json:"Similarity,omitempty"`
+	Face       Face    `json:"Face,omitempty"`
+	Similarity float64 `json:"Similarity,omitempty"`
 }
 
 // FaceDetails contains Face Details
