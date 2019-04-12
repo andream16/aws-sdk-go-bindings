@@ -1,7 +1,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/AndreaM16/aws-sdk-go-bindings)](https://goreportcard.com/report/github.com/AndreaM16/aws-sdk-go-bindings) [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/andream16/aws-sdk-go-bindings/blob/master/LICENSE.txt)
 [![BCH compliance](https://bettercodehub.com/edge/badge/AndreaM16/aws-sdk-go-bindings?branch=master)](https://bettercodehub.com/)
 
-# aws-sdk-go-bindings
+# aws-sdk-go-bindings - unmaintained
 Helper to easily access some [aws-sdk-go](https://github.com/aws/aws-sdk-go)'s methods. It also contains multiple methods to cover tricky problems like preparing an sns default message and unmarshal an image coming out from a stream like:
 
 ```
