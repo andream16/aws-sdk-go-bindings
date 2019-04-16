@@ -4,6 +4,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/pkg/errors"
+
+	"github.com/andream16/aws-sdk-go-bindings/internal/format"
 )
 
 // Session is the alias for aws session.
@@ -16,9 +18,15 @@ type Config aws.Config
 type Option func(cfg *Config)
 
 // New returns a new Session.
-func New(options ...Option) (*Session, error) {
+func New(region string, options ...func(cfg *Config)) (*Session, error) {
 
-	cfg := &Config{}
+	if region == "" {
+		return nil, errors.New("required parameter region cannot be empty")
+	}
+
+	cfg := &Config{
+		Region: format.StrToPtr(region),
+	}
 
 	for _, option := range options {
 		option(cfg)
