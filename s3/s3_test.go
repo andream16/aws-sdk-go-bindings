@@ -5,11 +5,11 @@ import (
 	"io/ioutil"
 	"testing"
 
+	bindings "github.com/andream16/aws-sdk-go-bindings"
+
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 	"github.com/pkg/errors"
-
-	bindings "github.com/andream16/aws-sdk-go-bindings"
 )
 
 type mockS3Client struct {

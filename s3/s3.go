@@ -6,14 +6,14 @@ import (
 	"net/http"
 	"os"
 
+	bindings "github.com/andream16/aws-sdk-go-bindings"
+	"github.com/andream16/aws-sdk-go-bindings/internal/format"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 	"github.com/pkg/errors"
-
-	bindings "github.com/andream16/aws-sdk-go-bindings"
-	"github.com/andream16/aws-sdk-go-bindings/internal/format"
 )
 
 // S3er describes s3 API.

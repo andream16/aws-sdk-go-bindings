@@ -16,7 +16,7 @@ import (
 
 // SNSer describes sns API.
 type SNSer interface {
-	SnsPublish(payload []byte, target string, messageStructure string) error
+	Publish(payload []byte, target string, messageStructure string) error
 }
 
 // SNS is the alias for SNS.
@@ -54,9 +54,9 @@ func New(region string, options ...bindings.Option) (*SNS, error) {
 
 }
 
-// SnsPublish publishes a payload in a given target arn.
+// Publish publishes a payload in a given target arn.
 // If messageStructure is not passed, a default `json` structure will be used.
-func (s SNS) SnsPublish(payload []byte, target string, messageStructure string) error {
+func (s SNS) Publish(payload []byte, target string, messageStructure string) error {
 
 	if target == "" {
 		return errors.Wrap(bindings.ErrInvalidParameter, "target")
