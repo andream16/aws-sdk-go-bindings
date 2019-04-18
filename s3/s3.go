@@ -1,7 +1,10 @@
 package s3
 
 import (
+	"bytes"
 	"io/ioutil"
+	"net/http"
+	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -17,12 +20,18 @@ import (
 type S3er interface {
 	CreateBucket(string) error
 	GetObject(bucket, path string) ([]byte, error)
-	PutObject(bucket, objectName, objectPath string)
+	PutObject(bucket, objectName, objectPath string) error
 }
 
 // S3 is the alias for s3.
 type S3 struct {
 	s3 s3iface.S3API
+}
+
+type file struct {
+	body          []byte
+	contentType   string
+	contentLength int64
 }
 
 // New returns a new S3.
@@ -92,5 +101,72 @@ func (s S3) GetObject(bucket, path string) ([]byte, error) {
 	}
 
 	return ioutil.ReadAll(out.Body)
+
+}
+
+// PutObject uploads an object to a bucket.
+func (s S3) PutObject(bucket, objectName, objectPath string) error {
+
+	if bucket == "" {
+		return errors.Wrap(bindings.ErrInvalidParameter, "bucket")
+	}
+	if objectName == "" {
+		return errors.Wrap(bindings.ErrInvalidParameter, "object name")
+	}
+	if objectPath == "" {
+		return errors.Wrap(bindings.ErrInvalidParameter, "object path")
+	}
+
+	file, err := readFile(objectPath)
+	if err != nil {
+		return errors.Wrapf(err, "coudln't read local file from path %s", objectPath)
+	}
+
+	in := &s3.PutObjectInput{
+		Bucket:        format.StrToPtr(bucket),
+		Key:           format.StrToPtr(objectName),
+		ContentType:   format.StrToPtr(file.contentType),
+		Body:          bytes.NewReader(file.body),
+		ContentLength: format.Int64ToPtr(file.contentLength),
+	}
+
+	_, err = s.s3.PutObject(in)
+	if err != nil {
+		return errors.Wrapf(err, "unable to put object %s", objectName)
+	}
+
+	return nil
+
+}
+
+func readFile(path string) (*file, error) {
+
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+
+	defer f.Close()
+
+	fileInfo, err := f.Stat()
+	if err != nil {
+		return nil, err
+	}
+
+	contentLength := fileInfo.Size()
+	buffer := make([]byte, contentLength)
+
+	_, err = f.Read(buffer)
+	if err != nil {
+		return nil, err
+	}
+
+	contentType := http.DetectContentType(buffer)
+
+	return &file{
+		body:          buffer,
+		contentType:   contentType,
+		contentLength: contentLength,
+	}, nil
 
 }
