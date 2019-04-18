@@ -1,6 +1,8 @@
 package s3
 
 import (
+	"bytes"
+	"io/ioutil"
 	"testing"
 
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -14,8 +16,15 @@ type mockS3Client struct {
 	s3iface.S3API
 }
 
-func (m *mockS3Client) CreateBucket(in *s3.CreateBucketInput) (*s3.CreateBucketOutput, error) {
+func (m *mockS3Client) CreateBucket(*s3.CreateBucketInput) (*s3.CreateBucketOutput, error) {
 	return nil, nil
+}
+
+func (m *mockS3Client) GetObject(*s3.GetObjectInput) (*s3.GetObjectOutput, error) {
+	r := bytes.NewReader([]byte{10, 21, 121})
+	return &s3.GetObjectOutput{
+		Body: ioutil.NopCloser(r),
+	}, nil
 }
 
 type mockFailingS3Client struct {
@@ -23,6 +32,10 @@ type mockFailingS3Client struct {
 }
 
 func (m *mockFailingS3Client) CreateBucket(in *s3.CreateBucketInput) (*s3.CreateBucketOutput, error) {
+	return nil, errors.New("some error")
+}
+
+func (m *mockFailingS3Client) GetObject(*s3.GetObjectInput) (*s3.GetObjectOutput, error) {
 	return nil, errors.New("some error")
 }
 
@@ -78,6 +91,70 @@ func TestCreateBucket(t *testing.T) {
 		}
 
 		err := s.CreateBucket("some bucket")
+		if err != nil {
+			t.Fatalf("unexpected error %s", err)
+		}
+
+	})
+
+}
+
+func TestGetObject(t *testing.T) {
+
+	t.Run("should return an error because the bucket is empty", func(t *testing.T) {
+
+		s, err := New("eu-central-1")
+
+		if err != nil {
+			t.Fatalf("unexpected error %s", err)
+		}
+
+		_, err = s.GetObject("", "")
+		if bindings.ErrInvalidParameter != errors.Cause(err) {
+			t.Fatalf("expected error %s, got %s", bindings.ErrInvalidParameter, err)
+		}
+
+	})
+
+	t.Run("should return an error because path is empty", func(t *testing.T) {
+
+		s, err := New("eu-central-1")
+
+		if err != nil {
+			t.Fatalf("unexpected error %s", err)
+		}
+
+		_, err = s.GetObject("someBucket", "")
+		if bindings.ErrInvalidParameter != errors.Cause(err) {
+			t.Fatalf("expected error %s, got %s", bindings.ErrInvalidParameter, err)
+		}
+
+	})
+
+	t.Run("should return an error because there was an error getting the object", func(t *testing.T) {
+
+		mockSvc := &mockFailingS3Client{}
+
+		s := S3{
+			s3: mockSvc,
+		}
+
+		_, err := s.GetObject("someBucket", "somePath")
+		if err == nil {
+			t.Fatal("expected get object error, got nil")
+		}
+
+	})
+
+	t.Run("should successfully get an object", func(t *testing.T) {
+
+		mockSvc := &mockS3Client{}
+
+		s := S3{
+			s3: mockSvc,
+		}
+
+		_, err := s.GetObject("someBucket", "somePath")
 		if err != nil {
 			t.Fatalf("unexpected error %s", err)
 		}

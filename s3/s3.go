@@ -1,6 +1,8 @@
 package s3
 
 import (
+	"io/ioutil"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -66,5 +68,29 @@ func (s S3) CreateBucket(bucket string) error {
 	}
 
 	return nil
+
+}
+
+// GetObject fetches an object from a given path.
+func (s S3) GetObject(bucket, path string) ([]byte, error) {
+
+	if bucket == "" {
+		return nil, errors.Wrap(bindings.ErrInvalidParameter, "bucket")
+	}
+	if path == "" {
+		return nil, errors.Wrap(bindings.ErrInvalidParameter, "path")
+	}
+
+	in := &s3.GetObjectInput{
+		Bucket: format.StrToPtr(bucket),
+		Key:    format.StrToPtr(path),
+	}
+
+	out, err := s.s3.GetObject(in)
+	if err != nil {
+		return nil, errors.Wrapf(err, "unable to get object bucket %s", bucket+"/"+path)
+	}
+
+	return ioutil.ReadAll(out.Body)
 
 }
