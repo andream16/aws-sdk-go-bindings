@@ -15,7 +15,7 @@ import (
 
 // SNSer describes sns API.
 type SNSer interface {
-	Publish(payload []byte, target string, messageStructure string) error
+	Publish(payload []byte, target string, msgStr string) error
 }
 
 // SNS is the alias for SNS.
@@ -42,14 +42,17 @@ func New(config *aws.Config) (*SNS, error) {
 }
 
 // Publish publishes a payload in a given target arn.
-// If messageStructure is not passed, a default `json` structure will be used.
-func (s SNS) Publish(payload []byte, target string, messageStructure string) error {
+// If msgStr is not passed, a default `json` structure will be used.
+func (s SNS) Publish(payload []byte, target string, msgStr string) error {
 
+	if len(payload) == 0 {
+		return errors.Wrap(bindings.ErrInvalidParameter, "payload")
+	}
 	if target == "" {
 		return errors.Wrap(bindings.ErrInvalidParameter, "target")
 	}
 
-	in, err := newPublishInput(payload, target, messageStructure)
+	in, err := newPublishInput(payload, target, msgStr)
 	if err != nil {
 		return errors.Wrap(err, "unable to build valid publish input")
 	}
@@ -63,12 +66,12 @@ func (s SNS) Publish(payload []byte, target string, messageStructure string) err
 
 }
 
-func newPublishInput(payload []byte, target, messageStructure string) (*sns.PublishInput, error) {
+func newPublishInput(payload []byte, target, msgStr string) (*sns.PublishInput, error) {
 
-	if messageStructure != "" && messageStructure != "json" {
+	if msgStr != "" && msgStr != "json" {
 		return &sns.PublishInput{
 			Message:          aws.String(string(payload)),
-			MessageStructure: aws.String(messageStructure),
+			MessageStructure: aws.String(msgStr),
 			TargetArn:        aws.String(target),
 		}, nil
 	}
@@ -94,7 +97,7 @@ func newPublishInput(payload []byte, target, messageStructure string) (*sns.Publ
 
 	return &sns.PublishInput{
 		Message:          aws.String(string(b)),
-		MessageStructure: aws.String(messageStructure),
+		MessageStructure: aws.String("json"),
 		TargetArn:        aws.String(target),
 	}, nil
 

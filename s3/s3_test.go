@@ -16,18 +16,18 @@ type mockS3Client struct {
 	s3iface.S3API
 }
 
-func (m *mockS3Client) CreateBucket(*s3.CreateBucketInput) (*s3.CreateBucketOutput, error) {
+func (*mockS3Client) CreateBucket(*s3.CreateBucketInput) (*s3.CreateBucketOutput, error) {
 	return nil, nil
 }
 
-func (m *mockS3Client) GetObject(*s3.GetObjectInput) (*s3.GetObjectOutput, error) {
+func (*mockS3Client) GetObject(*s3.GetObjectInput) (*s3.GetObjectOutput, error) {
 	r := bytes.NewReader([]byte{10, 21, 121})
 	return &s3.GetObjectOutput{
 		Body: ioutil.NopCloser(r),
 	}, nil
 }
 
-func (m *mockS3Client) PutObject(*s3.PutObjectInput) (*s3.PutObjectOutput, error) {
+func (*mockS3Client) PutObject(*s3.PutObjectInput) (*s3.PutObjectOutput, error) {
 	return nil, nil
 }
 
@@ -35,19 +35,19 @@ type mockFailingS3Client struct {
 	s3iface.S3API
 }
 
-func (m *mockFailingS3Client) CreateBucket(in *s3.CreateBucketInput) (*s3.CreateBucketOutput, error) {
+func (*mockFailingS3Client) CreateBucket(in *s3.CreateBucketInput) (*s3.CreateBucketOutput, error) {
 	return nil, errors.New("some error")
 }
 
-func (m *mockFailingS3Client) GetObject(*s3.GetObjectInput) (*s3.GetObjectOutput, error) {
+func (*mockFailingS3Client) GetObject(*s3.GetObjectInput) (*s3.GetObjectOutput, error) {
 	return nil, errors.New("some error")
 }
 
-func (m *mockFailingS3Client) PutObject(*s3.PutObjectInput) (*s3.PutObjectOutput, error) {
+func (*mockFailingS3Client) PutObject(*s3.PutObjectInput) (*s3.PutObjectOutput, error) {
 	return nil, errors.New("some error")
 }
 
-func TestCreateBucket(t *testing.T) {
+func TestS3_CreateBucket(t *testing.T) {
 
 	t.Run("should return an error because bucket is empty", func(t *testing.T) {
 
@@ -92,7 +92,7 @@ func TestCreateBucket(t *testing.T) {
 
 }
 
-func TestGetObject(t *testing.T) {
+func TestS3_GetObject(t *testing.T) {
 
 	t.Run("should return an error because bucket is empty", func(t *testing.T) {
 
@@ -148,7 +148,7 @@ func TestGetObject(t *testing.T) {
 
 }
 
-func TestPutObject(t *testing.T) {
+func TestS3_PutObject(t *testing.T) {
 
 	t.Run("should return an error because bucket is empty", func(t *testing.T) {
 
