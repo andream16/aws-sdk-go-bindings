@@ -69,7 +69,6 @@ func (s SNS) Publish(payload []byte, target string, messageStructure string) err
 	_, err = s.sns.Publish(in)
 	if err != nil {
 		return errors.Wrapf(err, "unable to publish payload on target %s", target)
-
 	}
 
 	return nil
