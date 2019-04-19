@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	bindings "github.com/andream16/aws-sdk-go-bindings"
-	"github.com/andream16/aws-sdk-go-bindings/internal/format"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -32,11 +31,11 @@ type message struct {
 func New(region string, options ...bindings.Option) (*SNS, error) {
 
 	if region == "" {
-		return nil, errors.New("required parameter region cannot be empty")
+		return nil, errors.Wrap(bindings.ErrInvalidParameter, "region cannot be empty")
 	}
 
 	cfg := &bindings.Config{
-		Region: format.StrToPtr(region),
+		Region: aws.String(region),
 	}
 
 	for _, option := range options {
@@ -104,9 +103,9 @@ func newPublishInput(payload []byte, target, messageStructure string) (*sns.Publ
 	}
 
 	return &sns.PublishInput{
-		Message:          format.StrToPtr(string(b)),
-		MessageStructure: format.StrToPtr(messageStructure),
-		TargetArn:        format.StrToPtr(target),
+		Message:          aws.String(string(b)),
+		MessageStructure: aws.String(messageStructure),
+		TargetArn:        aws.String(target),
 	}, nil
 
 }

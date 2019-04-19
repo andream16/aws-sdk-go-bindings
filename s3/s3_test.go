@@ -51,8 +51,8 @@ func TestNew(t *testing.T) {
 
 	t.Run("should return an error because region is missing", func(t *testing.T) {
 		_, err := New("")
-		if err == nil {
-			t.Fatal("expected missing required parameter region error, got nil")
+		if bindings.ErrInvalidParameter != errors.Cause(err) {
+			t.Fatalf("expected missing required parameter region error, got %s", err)
 		}
 	})
 
@@ -188,7 +188,7 @@ func TestPutObject(t *testing.T) {
 
 	})
 
-	t.Run("should return an error because object name is empty", func(t *testing.T) {
+	t.Run("should return an error because object path is empty", func(t *testing.T) {
 
 		s, err := New("eu-central-1")
 
@@ -203,7 +203,7 @@ func TestPutObject(t *testing.T) {
 
 	})
 
-	t.Run("should return an error because object path is empty", func(t *testing.T) {
+	t.Run("should return an error because object name is empty", func(t *testing.T) {
 
 		s, err := New("eu-central-1")
 
@@ -211,7 +211,7 @@ func TestPutObject(t *testing.T) {
 			t.Fatalf("unexpected error %s", err)
 		}
 
-		err = s.PutObject("someBucket", "someName", "")
+		err = s.PutObject("someBucket", "somePath", "")
 		if bindings.ErrInvalidParameter != errors.Cause(err) {
 			t.Fatalf("expected error %s, got %s", bindings.ErrInvalidParameter, err)
 		}
@@ -226,7 +226,7 @@ func TestPutObject(t *testing.T) {
 			t.Fatalf("unexpected error %s", err)
 		}
 
-		err = s.PutObject("someBucket", "someName", "somePath")
+		err = s.PutObject("someBucket", "somePath", "someName")
 		if err == nil {
 			t.Fatal("expected read file error, got nil")
 		}
@@ -241,7 +241,7 @@ func TestPutObject(t *testing.T) {
 			s3: mockSvc,
 		}
 
-		err := s.PutObject("someBucket", "someName", "testdata/putobjecttest.jpg")
+		err := s.PutObject("someBucket", "testdata/putobjecttest.jpg", "someName")
 		if err == nil {
 			t.Fatal("expected put object error, got nil")
 		}
@@ -256,7 +256,7 @@ func TestPutObject(t *testing.T) {
 			s3: mockSvc,
 		}
 
-		err := s.PutObject("someBucket", "someName", "testdata/putobjecttest.jpg")
+		err := s.PutObject("someBucket", "testdata/putobjecttest.jpg", "someName")
 		if err != nil {
 			t.Fatalf("unexpected error %s", err)
 		}

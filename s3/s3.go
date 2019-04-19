@@ -4,10 +4,8 @@ import (
 	"bytes"
 	"io/ioutil"
 	"net/http"
-	"os"
 
 	bindings "github.com/andream16/aws-sdk-go-bindings"
-	"github.com/andream16/aws-sdk-go-bindings/internal/format"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -20,7 +18,7 @@ import (
 type S3er interface {
 	CreateBucket(string) error
 	GetObject(bucket, path string) ([]byte, error)
-	PutObject(bucket, objectName, objectPath string) error
+	PutObject(bucket, path, name string) error
 }
 
 // S3 is the alias for s3.
@@ -29,7 +27,7 @@ type S3 struct {
 }
 
 type file struct {
-	body          []byte
+	content       []byte
 	contentType   string
 	contentLength int64
 }
@@ -38,11 +36,11 @@ type file struct {
 func New(region string, options ...bindings.Option) (*S3, error) {
 
 	if region == "" {
-		return nil, errors.New("required parameter region cannot be empty")
+		return nil, errors.Wrap(bindings.ErrInvalidParameter, "region cannot be empty")
 	}
 
 	cfg := &bindings.Config{
-		Region: format.StrToPtr(region),
+		Region: aws.String(region),
 	}
 
 	for _, option := range options {
@@ -68,7 +66,7 @@ func (s S3) CreateBucket(bucket string) error {
 	}
 
 	in := &s3.CreateBucketInput{
-		Bucket: format.StrToPtr(bucket),
+		Bucket: aws.String(bucket),
 	}
 
 	_, err := s.s3.CreateBucket(in)
@@ -91,13 +89,13 @@ func (s S3) GetObject(bucket, path string) ([]byte, error) {
 	}
 
 	in := &s3.GetObjectInput{
-		Bucket: format.StrToPtr(bucket),
-		Key:    format.StrToPtr(path),
+		Bucket: aws.String(bucket),
+		Key:    aws.String(path),
 	}
 
 	out, err := s.s3.GetObject(in)
 	if err != nil {
-		return nil, errors.Wrapf(err, "unable to get object bucket %s", bucket+"/"+path)
+		return nil, errors.Wrapf(err, "unable to get object bucket %s/%s", bucket, path)
 	}
 
 	return ioutil.ReadAll(out.Body)
@@ -105,34 +103,34 @@ func (s S3) GetObject(bucket, path string) ([]byte, error) {
 }
 
 // PutObject uploads an object to a bucket.
-func (s S3) PutObject(bucket, objectName, objectPath string) error {
+func (s S3) PutObject(bucket, path, name string) error {
 
 	if bucket == "" {
 		return errors.Wrap(bindings.ErrInvalidParameter, "bucket")
 	}
-	if objectName == "" {
-		return errors.Wrap(bindings.ErrInvalidParameter, "object name")
+	if path == "" {
+		return errors.Wrap(bindings.ErrInvalidParameter, "path")
 	}
-	if objectPath == "" {
-		return errors.Wrap(bindings.ErrInvalidParameter, "object path")
+	if name == "" {
+		return errors.Wrap(bindings.ErrInvalidParameter, "name")
 	}
 
-	file, err := readFile(objectPath)
+	file, err := readFile(path)
 	if err != nil {
-		return errors.Wrapf(err, "coudln't read local file from path %s", objectPath)
+		return errors.Wrapf(err, "coudln't read local file from path %s", path)
 	}
 
 	in := &s3.PutObjectInput{
-		Bucket:        format.StrToPtr(bucket),
-		Key:           format.StrToPtr(objectName),
-		ContentType:   format.StrToPtr(file.contentType),
-		Body:          bytes.NewReader(file.body),
-		ContentLength: format.Int64ToPtr(file.contentLength),
+		Bucket:        aws.String(bucket),
+		Key:           aws.String(name),
+		ContentType:   aws.String(file.contentType),
+		Body:          bytes.NewReader(file.content),
+		ContentLength: aws.Int64(file.contentLength),
 	}
 
 	_, err = s.s3.PutObject(in)
 	if err != nil {
-		return errors.Wrapf(err, "unable to put object %s", objectName)
+		return errors.Wrapf(err, "unable to put object %s", name)
 	}
 
 	return nil
@@ -141,30 +139,16 @@ func (s S3) PutObject(bucket, objectName, objectPath string) error {
 
 func readFile(path string) (*file, error) {
 
-	f, err := os.Open(path)
+	b, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
 
-	defer f.Close()
-
-	fileInfo, err := f.Stat()
-	if err != nil {
-		return nil, err
-	}
-
-	contentLength := fileInfo.Size()
-	buffer := make([]byte, contentLength)
-
-	_, err = f.Read(buffer)
-	if err != nil {
-		return nil, err
-	}
-
-	contentType := http.DetectContentType(buffer)
+	contentLength := int64(len(b))
+	contentType := http.DetectContentType(b)
 
 	return &file{
-		body:          buffer,
+		content:       b,
 		contentType:   contentType,
 		contentLength: contentLength,
 	}, nil
