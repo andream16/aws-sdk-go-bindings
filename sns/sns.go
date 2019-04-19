@@ -61,12 +61,7 @@ func (s SNS) Publish(payload []byte, target string, messageStructure string) err
 		return errors.Wrap(bindings.ErrInvalidParameter, "target")
 	}
 
-	msgStructure := "json"
-	if messageStructure != "" {
-		msgStructure = messageStructure
-	}
-
-	in, err := newPublishInput(payload, target, msgStructure)
+	in, err := newPublishInput(payload, target, messageStructure)
 	if err != nil {
 		return errors.Wrap(err, "unable to build valid publish input")
 	}
@@ -83,10 +78,18 @@ func (s SNS) Publish(payload []byte, target string, messageStructure string) err
 
 func newPublishInput(payload []byte, target, messageStructure string) (*sns.PublishInput, error) {
 
+	if messageStructure != "" && messageStructure != "json" {
+		return &sns.PublishInput{
+			Message:          aws.String(string(payload)),
+			MessageStructure: aws.String(messageStructure),
+			TargetArn:        aws.String(target),
+		}, nil
+	}
+
 	// Mandatory since SNS needs escaped `"`. So we need to escape them to `\"`
 	unquote := strings.Replace(string(payload), `"`, "\"", -1)
 
-	// Mandatory since SNS needs bodies like:
+	// Mandatory since SNS needs a payload like:
 	// {
 	// 		"default" : {
 	// 			\"par1\" : \"some value\"
