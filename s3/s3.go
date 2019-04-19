@@ -33,21 +33,9 @@ type file struct {
 }
 
 // New returns a new S3.
-func New(region string, options ...bindings.Option) (*S3, error) {
+func New(config *aws.Config) (*S3, error) {
 
-	if region == "" {
-		return nil, errors.Wrap(bindings.ErrInvalidParameter, "region cannot be empty")
-	}
-
-	cfg := &bindings.Config{
-		Region: aws.String(region),
-	}
-
-	for _, option := range options {
-		option(cfg)
-	}
-
-	sess, err := session.NewSession((*aws.Config)(cfg))
+	sess, err := session.NewSession(config)
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to initialize s3 session")
 	}

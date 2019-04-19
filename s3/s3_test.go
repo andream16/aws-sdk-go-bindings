@@ -47,28 +47,13 @@ func (m *mockFailingS3Client) PutObject(*s3.PutObjectInput) (*s3.PutObjectOutput
 	return nil, errors.New("some error")
 }
 
-func TestNew(t *testing.T) {
-
-	t.Run("should return an error because region is missing", func(t *testing.T) {
-		_, err := New("")
-		if bindings.ErrInvalidParameter != errors.Cause(err) {
-			t.Fatalf("expected missing required parameter region error, got %s", err)
-		}
-	})
-
-}
-
 func TestCreateBucket(t *testing.T) {
 
 	t.Run("should return an error because bucket is empty", func(t *testing.T) {
 
-		s, err := New("eu-central-1")
+		s := &S3{}
 
-		if err != nil {
-			t.Fatalf("unexpected error %s", err)
-		}
-
-		err = s.CreateBucket("")
+		err := s.CreateBucket("")
 		if bindings.ErrInvalidParameter != errors.Cause(err) {
 			t.Fatalf("expected error %s, got %s", bindings.ErrInvalidParameter, err)
 		}
@@ -111,13 +96,9 @@ func TestGetObject(t *testing.T) {
 
 	t.Run("should return an error because bucket is empty", func(t *testing.T) {
 
-		s, err := New("eu-central-1")
+		s := &S3{}
 
-		if err != nil {
-			t.Fatalf("unexpected error %s", err)
-		}
-
-		_, err = s.GetObject("", "")
+		_, err := s.GetObject("", "")
 		if bindings.ErrInvalidParameter != errors.Cause(err) {
 			t.Fatalf("expected error %s, got %s", bindings.ErrInvalidParameter, err)
 		}
@@ -126,13 +107,9 @@ func TestGetObject(t *testing.T) {
 
 	t.Run("should return an error because path is empty", func(t *testing.T) {
 
-		s, err := New("eu-central-1")
+		s := &S3{}
 
-		if err != nil {
-			t.Fatalf("unexpected error %s", err)
-		}
-
-		_, err = s.GetObject("someBucket", "")
+		_, err := s.GetObject("someBucket", "")
 		if bindings.ErrInvalidParameter != errors.Cause(err) {
 			t.Fatalf("expected error %s, got %s", bindings.ErrInvalidParameter, err)
 		}
@@ -175,13 +152,9 @@ func TestPutObject(t *testing.T) {
 
 	t.Run("should return an error because bucket is empty", func(t *testing.T) {
 
-		s, err := New("eu-central-1")
+		s := &S3{}
 
-		if err != nil {
-			t.Fatalf("unexpected error %s", err)
-		}
-
-		err = s.PutObject("", "", "")
+		err := s.PutObject("", "", "")
 		if bindings.ErrInvalidParameter != errors.Cause(err) {
 			t.Fatalf("expected error %s, got %s", bindings.ErrInvalidParameter, err)
 		}
@@ -190,13 +163,9 @@ func TestPutObject(t *testing.T) {
 
 	t.Run("should return an error because object path is empty", func(t *testing.T) {
 
-		s, err := New("eu-central-1")
+		s := &S3{}
 
-		if err != nil {
-			t.Fatalf("unexpected error %s", err)
-		}
-
-		err = s.PutObject("someBucket", "", "")
+		err := s.PutObject("someBucket", "", "")
 		if bindings.ErrInvalidParameter != errors.Cause(err) {
 			t.Fatalf("expected error %s, got %s", bindings.ErrInvalidParameter, err)
 		}
@@ -205,13 +174,9 @@ func TestPutObject(t *testing.T) {
 
 	t.Run("should return an error because object name is empty", func(t *testing.T) {
 
-		s, err := New("eu-central-1")
+		s := &S3{}
 
-		if err != nil {
-			t.Fatalf("unexpected error %s", err)
-		}
-
-		err = s.PutObject("someBucket", "somePath", "")
+		err := s.PutObject("someBucket", "somePath", "")
 		if bindings.ErrInvalidParameter != errors.Cause(err) {
 			t.Fatalf("expected error %s, got %s", bindings.ErrInvalidParameter, err)
 		}
@@ -220,13 +185,9 @@ func TestPutObject(t *testing.T) {
 
 	t.Run("should return an error because some error happened during read file", func(t *testing.T) {
 
-		s, err := New("eu-central-1")
+		s := &S3{}
 
-		if err != nil {
-			t.Fatalf("unexpected error %s", err)
-		}
-
-		err = s.PutObject("someBucket", "somePath", "someName")
+		err := s.PutObject("someBucket", "somePath", "someName")
 		if err == nil {
 			t.Fatal("expected read file error, got nil")
 		}
