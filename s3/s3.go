@@ -16,7 +16,7 @@ import (
 
 // S3er describes s3 API.
 type S3er interface {
-	CreateBucket(string) error
+	CreateBucket(name string) error
 	GetObject(bucket, path string) ([]byte, error)
 	PutObject(bucket, path, name string) error
 }
@@ -47,19 +47,19 @@ func New(config *aws.Config) (*S3, error) {
 }
 
 // CreateBucket creates an s3 bucket.
-func (s S3) CreateBucket(bucket string) error {
+func (s S3) CreateBucket(name string) error {
 
-	if bucket == "" {
-		return errors.Wrap(bindings.ErrInvalidParameter, "bucket")
+	if name == "" {
+		return errors.Wrap(bindings.ErrInvalidParameter, "name")
 	}
 
 	in := &s3.CreateBucketInput{
-		Bucket: aws.String(bucket),
+		Bucket: aws.String(name),
 	}
 
 	_, err := s.s3.CreateBucket(in)
 	if err != nil {
-		return errors.Wrapf(err, "unable to create bucket %s", bucket)
+		return errors.Wrapf(err, "unable to create bucket %s", name)
 	}
 
 	return nil

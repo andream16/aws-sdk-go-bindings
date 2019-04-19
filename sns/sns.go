@@ -27,7 +27,7 @@ type message struct {
 	Default string `json:"default"`
 }
 
-// New returns a new S3.
+// New returns a new SNS.
 func New(config *aws.Config) (*SNS, error) {
 
 	sess, err := session.NewSession(config)
