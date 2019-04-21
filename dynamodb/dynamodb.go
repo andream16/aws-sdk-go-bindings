@@ -14,6 +14,7 @@ import (
 // DynamoDBer describes DynamoDB API
 type DynamoDBer interface {
 	PutItem(table string, item interface{}) error
+	GetItem(table, key, value string) ([]byte, error)
 }
 
 // DynamoDB is the alias for dynamodb
@@ -51,6 +52,40 @@ func (db DynamoDB) PutItem(table string, item interface{}) error {
 		Item:      itemMap,
 	}); err != nil {
 		return errors.Wrap(err, "error putting item")
+	}
+
+	return nil
+}
+
+// GetItem reads from table the element having given primary key equal to given value
+func (db DynamoDB) GetItem(table string, key string, value string, out interface{}) error {
+
+	if table == "" {
+		return errors.Wrap(bindings.ErrInvalidParameter, "table")
+	}
+
+	if key == "" {
+		return errors.Wrap(bindings.ErrInvalidParameter, "key")
+	}
+
+	if value == "" {
+		return errors.Wrap(bindings.ErrInvalidParameter, "value")
+	}
+
+	getOut, err := db.dynamoDB.GetItem(&dynamodb.GetItemInput{
+		TableName: aws.String(table),
+		Key: map[string]*dynamodb.AttributeValue{
+			key: {
+				S: aws.String(value),
+			},
+		},
+	})
+	if err != nil {
+		return errors.Wrapf(err, "error getting item with %s=%s", key, value)
+	}
+
+	if err := dynamodbattribute.UnmarshalMap(getOut.Item, out); err != nil {
+		return errors.Wrap(err, "error unmarshaling map into struct")
 	}
 
 	return nil
