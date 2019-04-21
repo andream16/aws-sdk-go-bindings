@@ -14,7 +14,7 @@ import (
 // DynamoDBer describes DynamoDB API
 type DynamoDBer interface {
 	PutItem(table string, item interface{}) error
-	GetItem(table, key, value string) ([]byte, error)
+	GetItem(table, key, value string, out interface{}) ([]byte, error)
 }
 
 // DynamoDB is the alias for dynamodb
