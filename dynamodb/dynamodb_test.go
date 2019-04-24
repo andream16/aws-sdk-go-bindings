@@ -125,13 +125,24 @@ func TestDynamoDB_GetItem(t *testing.T) {
 
 	})
 
+	t.Run("should return an error because out is not a pointer", func(t *testing.T) {
+
+		dynamoDB := &DynamoDB{}
+
+		err := dynamoDB.GetItem("tableName", "keyName", "someValue", item{})
+		if bindings.ErrInvalidParameter != errors.Cause(err) {
+			t.Fatalf("expected error %s, got %s", bindings.ErrInvalidParameter, err)
+		}
+
+	})
+
 	t.Run("should return an error because something went wrong during get item", func(t *testing.T) {
 
 		dynamoDB := &DynamoDB{
 			dynamoDB: &mockFailingDynamoDBClient{},
 		}
 
-		err := dynamoDB.GetItem("tableName", "keyName", "someValue", nil)
+		err := dynamoDB.GetItem("tableName", "keyName", "someValue", &item{})
 		if err == nil {
 			t.Fatal("expected error, got nil")
 		}

@@ -1,6 +1,8 @@
 package dynamodb
 
 import (
+	"reflect"
+
 	bindings "github.com/andream16/aws-sdk-go-bindings"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -69,6 +71,10 @@ func (db DynamoDB) GetItem(table string, key string, value string, out interface
 
 	if value == "" {
 		return errors.Wrap(bindings.ErrInvalidParameter, "value")
+	}
+
+	if reflect.ValueOf(out).Kind() != reflect.Ptr {
+		return errors.Wrap(bindings.ErrInvalidParameter, "out")
 	}
 
 	item, err := db.dynamoDB.GetItem(&dynamodb.GetItemInput{
