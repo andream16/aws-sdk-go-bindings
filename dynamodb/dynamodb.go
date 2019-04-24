@@ -42,14 +42,14 @@ func (db DynamoDB) PutItem(table string, item interface{}) error {
 		return errors.Wrap(bindings.ErrInvalidParameter, "table")
 	}
 
-	itemMap, err := dynamodbattribute.MarshalMap(item)
+	m, err := dynamodbattribute.MarshalMap(item)
 	if err != nil {
 		return errors.Wrap(err, "error marshaling item into map")
 	}
 
 	if _, err := db.dynamoDB.PutItem(&dynamodb.PutItemInput{
 		TableName: aws.String(table),
-		Item:      itemMap,
+		Item:      m,
 	}); err != nil {
 		return errors.Wrapf(err, "uneble to insert item in table %s", table)
 	}
