@@ -42,10 +42,7 @@ func (db DynamoDB) PutItem(table string, item interface{}) error {
 		return errors.Wrap(bindings.ErrInvalidParameter, "table")
 	}
 
-	m, err := dynamodbattribute.MarshalMap(item)
-	if err != nil {
-		return errors.Wrap(err, "error marshaling item into map")
-	}
+	m, _ := dynamodbattribute.MarshalMap(item)
 
 	if _, err := db.dynamoDB.PutItem(&dynamodb.PutItemInput{
 		TableName: aws.String(table),
@@ -85,9 +82,7 @@ func (db DynamoDB) GetItem(table string, key string, value string, out interface
 		return errors.Wrapf(err, "unable to get item with %s=%s from table %s", key, value, table)
 	}
 
-	if err := dynamodbattribute.UnmarshalMap(item.Item, out); err != nil {
-		return errors.Wrap(err, "error unmarshalling map into struct")
-	}
+	dynamodbattribute.UnmarshalMap(item.Item, out)
 
 	return nil
 }
