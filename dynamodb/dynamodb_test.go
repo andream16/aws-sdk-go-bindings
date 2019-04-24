@@ -58,10 +58,7 @@ func TestDynamoDB_PutItem(t *testing.T) {
 
 	})
 
-	// This case is left untested since dynamodbattribute.MarshalMap does not return any error in aws-sdk-go v1.19.14
-	t.Run("should return an error because there was an error marshaling item into map", func(t *testing.T) {})
-
-	t.Run("should return an error because there was an error putting item", func(t *testing.T) {
+	t.Run("should return an error because something went wrong during put item", func(t *testing.T) {
 
 		dynamoDB := &DynamoDB{
 			dynamoDB: &mockFailingDynamoDBClient{},
@@ -128,7 +125,7 @@ func TestDynamoDB_GetItem(t *testing.T) {
 
 	})
 
-	t.Run("should return an error because there was an error getting the item", func(t *testing.T) {
+	t.Run("should return an error because something went wrong during get item", func(t *testing.T) {
 
 		dynamoDB := &DynamoDB{
 			dynamoDB: &mockFailingDynamoDBClient{},
@@ -140,7 +137,7 @@ func TestDynamoDB_GetItem(t *testing.T) {
 		}
 	})
 
-	t.Run("should return an error because there was an error marshaling map into struct", func(t *testing.T) {
+	t.Run("should return an error because something went wrong marshalling map into struct", func(t *testing.T) {
 
 		dynamoDB := &DynamoDB{
 			dynamoDB: &mockDynamoDBClient{},

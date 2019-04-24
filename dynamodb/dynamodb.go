@@ -35,7 +35,7 @@ func New(config *aws.Config) (*DynamoDB, error) {
 	}, nil
 }
 
-// PutItem writes an item in the given DynamoDB table
+// PutItem add an item into a table
 func (db DynamoDB) PutItem(table string, item interface{}) error {
 
 	if table == "" {
@@ -51,13 +51,14 @@ func (db DynamoDB) PutItem(table string, item interface{}) error {
 		TableName: aws.String(table),
 		Item:      itemMap,
 	}); err != nil {
-		return errors.Wrap(err, "error putting item")
+		return errors.Wrapf(err, "uneble to insert item in table %s", table)
 	}
 
 	return nil
 }
 
 // GetItem reads from table the element having given primary key equal to given value
+// out has to be an pointer
 func (db DynamoDB) GetItem(table string, key string, value string, out interface{}) error {
 
 	if table == "" {
@@ -72,7 +73,7 @@ func (db DynamoDB) GetItem(table string, key string, value string, out interface
 		return errors.Wrap(bindings.ErrInvalidParameter, "value")
 	}
 
-	getOut, err := db.dynamoDB.GetItem(&dynamodb.GetItemInput{
+	item, err := db.dynamoDB.GetItem(&dynamodb.GetItemInput{
 		TableName: aws.String(table),
 		Key: map[string]*dynamodb.AttributeValue{
 			key: {
@@ -81,11 +82,11 @@ func (db DynamoDB) GetItem(table string, key string, value string, out interface
 		},
 	})
 	if err != nil {
-		return errors.Wrapf(err, "error getting item with %s=%s", key, value)
+		return errors.Wrapf(err, "unable to get item with %s=%s from table %s", key, value, table)
 	}
 
-	if err := dynamodbattribute.UnmarshalMap(getOut.Item, out); err != nil {
-		return errors.Wrap(err, "error unmarshaling map into struct")
+	if err := dynamodbattribute.UnmarshalMap(item.Item, out); err != nil {
+		return errors.Wrap(err, "error unmarshalling map into struct")
 	}
 
 	return nil
