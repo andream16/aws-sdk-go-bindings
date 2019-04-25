@@ -3,7 +3,8 @@ module github.com/andream16/aws-sdk-go-bindings
 go 1.12
 
 require (
-	github.com/aws/aws-sdk-go v1.19.14
+	github.com/aws/aws-lambda-go v1.10.0
+	github.com/aws/aws-sdk-go v1.19.18
 	github.com/davecgh/go-spew v1.1.0 // indirect
 	github.com/pkg/errors v0.8.1
 	github.com/pmezard/go-difflib v1.0.0 // indirect
