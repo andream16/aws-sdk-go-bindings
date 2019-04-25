@@ -1,8 +1,17 @@
-# aws-sdk-go-bindings [![Go Report Card](https://goreportcard.com/badge/github.com/AndreaM16/aws-sdk-go-bindings)](https://goreportcard.com/report/github.com/AndreaM16/aws-sdk-go-bindings) [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/andream16/aws-sdk-go-bindings/blob/master/LICENSE.txt)
+package lambda
 
-Helper to easily access some [aws-sdk-go](https://github.com/aws/aws-sdk-go)'s methods and lambda utilities like preparing an sns default message and unmarshal an image coming out from a stream like:
+import (
+	"encoding/json"
+	"reflect"
 
-```
+	bindings "github.com/andream16/aws-sdk-go-bindings"
+
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	"github.com/pkg/errors"
+)
+
 // UnmarshalDynamoEvent unmarshals a events.DynamoDBEventRecord into a given target.
 // Out has to be a pointer.
 func UnmarshalDynamoEvent(event events.DynamoDBEventRecord, out interface{}) error {
@@ -42,11 +51,3 @@ func UnmarshalDynamoEvent(event events.DynamoDBEventRecord, out interface{}) err
 	return dynamodbattribute.UnmarshalMap(m, out)
 
 }
-```
-
-## Contributors
-
-Special thanks to:
-
- - [martingallagher](https://github.com/martingallagher/)
- - [ferruvich](https://github.com/ferruvich/)
