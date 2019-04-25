@@ -148,7 +148,7 @@ func TestDynamoDB_GetItem(t *testing.T) {
 		}
 	})
 
-	t.Run("should return an error because something went wrong marshalling map into struct", func(t *testing.T) {
+	t.Run("should return an error because something went wrong marshalling map into pointer", func(t *testing.T) {
 
 		dynamoDB := &DynamoDB{
 			dynamoDB: &mockDynamoDBClient{},
