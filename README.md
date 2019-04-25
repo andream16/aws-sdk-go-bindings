@@ -1,41 +1,53 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/AndreaM16/aws-sdk-go-bindings)](https://goreportcard.com/report/github.com/AndreaM16/aws-sdk-go-bindings) [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/andream16/aws-sdk-go-bindings/blob/master/LICENSE.txt)
-[![BCH compliance](https://bettercodehub.com/edge/badge/AndreaM16/aws-sdk-go-bindings?branch=master)](https://bettercodehub.com/)
 
-# aws-sdk-go-bindings - unmaintained
-Helper to easily access some [aws-sdk-go](https://github.com/aws/aws-sdk-go)'s methods. It also contains multiple methods to cover tricky problems like preparing an sns default message and unmarshal an image coming out from a stream like:
+# aws-sdk-go-bindings
+Helper to easily access some [aws-sdk-go](https://github.com/aws/aws-sdk-go)'s methods and lambda utilities like preparing an sns default message and unmarshal an image coming out from a stream like:
 
 ```
-// UnmarshalStreamImage unmarshals a dynamo stream image in a pointer to an interface
-func UnmarshalStreamImage(in map[string]events.DynamoDBAttributeValue, out interface{}) error {
+// UnmarshalDynamoEvent unmarshals a events.DynamoDBEventRecord into a given target.
+// Out has to be a pointer.
+func UnmarshalDynamoEvent(event events.DynamoDBEventRecord, out interface{}) error {
 
-	dbAttrMap := make(map[string]*dynamodb.AttributeValue)
+	if reflect.DeepEqual(event, reflect.Zero(reflect.TypeOf(event)).Interface()) {
+		return errors.Wrap(bindings.ErrInvalidParameter, "event")
+	}
+	if reflect.ValueOf(out).Kind() != reflect.Ptr {
+		return errors.Wrap(bindings.ErrInvalidParameter, "out")
+	}
 
-	for k, v := range in {
+	img := event.Change.NewImage
+	if len(img) == 0 {
+		return errors.New("event's image is empty")
+	}
 
-		bytes, err := v.MarshalJSON()
+	m := make(map[string]*dynamodb.AttributeValue, len(img))
+
+	for k, v := range img {
+
+		b, err := v.MarshalJSON()
 		if err != nil {
-			return err
+			return errors.Wrap(err, "unable to marshal current element to json")
 		}
 
-		var dbAttr dynamodb.AttributeValue
+		var attr dynamodb.AttributeValue
 
-		json.Unmarshal(bytes, &dbAttr)
-		dbAttrMap[k] = &dbAttr
+		err = json.Unmarshal(b, &attr)
+		if err != nil {
+			return errors.Wrap(err, "unable to unmarshal current element to json")
+		}
+
+		m[k] = &attr
 
 	}
 
-	return dynamodbattribute.UnmarshalMap(dbAttrMap, out)
+	return dynamodbattribute.UnmarshalMap(m, out)
 
 }
 ```
 
-At the moment it covers SNS, SQS, DynamoDB, Rekognition and S3.
+## Contributors
 
-## Utilization
+Special thanks to:
 
-You can simply import code from `pkg` package. Almost all the methods are exported so you can access them easily.
-
-## Development
-
-Install [dep](https://github.com/golang/dep) and run `dep ensure` inside the project's folder to get project's vendors.
-If you want to fork it or just use it in local, edit `internal/configuration/configuration.json` as you wish. The default configuration contains endpoints to run the tests on [localstack](https://github.com/localstack/localstack). To run `Rekognition` tests you need to have an AWS account and use a region where the latter is available.
+ - [martingallagher](https://github.com/martingallagher/)
+ - [ferruvich](https://github.com/ferruvich/)
