@@ -44,14 +44,17 @@ func (db DynamoDB) PutItem(table string, item interface{}) error {
 		return errors.Wrap(bindings.ErrInvalidParameter, "table")
 	}
 
-	m, _ := dynamodbattribute.MarshalMap(item)
+	m, err := dynamodbattribute.MarshalMap(item)
+	if err != nil {
+		return errors.Wrap(err, "unable to convert item into map")
+	}
 
-	_, err := db.dynamoDB.PutItem(&dynamodb.PutItemInput{
+	_, err = db.dynamoDB.PutItem(&dynamodb.PutItemInput{
 		TableName: aws.String(table),
 		Item:      m,
 	})
 	if err != nil {
-		return errors.Wrapf(err, "uneble to insert item in table %s", table)
+		return errors.Wrapf(err, "unable to insert item in table %s", table)
 	}
 
 	return nil
@@ -89,7 +92,6 @@ func (db DynamoDB) GetItem(table string, key string, value string, out interface
 		return errors.Wrapf(err, "unable to get item with %s=%s from table %s", key, value, table)
 	}
 
-	dynamodbattribute.UnmarshalMap(item.Item, out)
+	return dynamodbattribute.UnmarshalMap(item.Item, out)
 
-	return nil
 }

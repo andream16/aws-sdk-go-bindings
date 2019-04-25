@@ -148,15 +148,15 @@ func TestDynamoDB_GetItem(t *testing.T) {
 		}
 	})
 
-	t.Run("should return an error because something went wrong marshalling map into struct", func(t *testing.T) {
+	t.Run("should return an error because something went wrong marshalling map into pointer", func(t *testing.T) {
 
 		dynamoDB := &DynamoDB{
 			dynamoDB: &mockDynamoDBClient{},
 		}
 
-		it := item{}
+		in := "val"
 
-		err := dynamoDB.GetItem("tableName", "keyName", "someValue", it)
+		err := dynamoDB.GetItem("tableName", "keyName", "someValue", &in)
 		if err == nil {
 			t.Fatal("expected error, got nil")
 		}
