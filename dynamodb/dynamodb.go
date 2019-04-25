@@ -37,7 +37,7 @@ func New(config *aws.Config) (*DynamoDB, error) {
 	}, nil
 }
 
-// PutItem add an item into a table
+// PutItem add an item into a table.
 func (db DynamoDB) PutItem(table string, item interface{}) error {
 
 	if table == "" {
@@ -60,22 +60,19 @@ func (db DynamoDB) PutItem(table string, item interface{}) error {
 	return nil
 }
 
-// GetItem reads from table the element having given primary key equal to given value
-// out has to be an pointer
+// GetItem reads from table the element having given primary key equal to given value.
+// Out has to be an pointer.
 func (db DynamoDB) GetItem(table string, key string, value string, out interface{}) error {
 
 	if table == "" {
 		return errors.Wrap(bindings.ErrInvalidParameter, "table")
 	}
-
 	if key == "" {
 		return errors.Wrap(bindings.ErrInvalidParameter, "key")
 	}
-
 	if value == "" {
 		return errors.Wrap(bindings.ErrInvalidParameter, "value")
 	}
-
 	if reflect.ValueOf(out).Kind() != reflect.Ptr {
 		return errors.Wrap(bindings.ErrInvalidParameter, "out")
 	}
