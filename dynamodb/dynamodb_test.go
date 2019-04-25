@@ -154,9 +154,9 @@ func TestDynamoDB_GetItem(t *testing.T) {
 			dynamoDB: &mockDynamoDBClient{},
 		}
 
-		it := item{}
+		in := "val"
 
-		err := dynamoDB.GetItem("tableName", "keyName", "someValue", it)
+		err := dynamoDB.GetItem("tableName", "keyName", "someValue", &in)
 		if err == nil {
 			t.Fatal("expected error, got nil")
 		}
