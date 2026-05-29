@@ -1,15 +1,10 @@
-// The Dev Container format allows you to configure your environment. At the heart of it
-// is a Docker image or Dockerfile which controls the tools available in your environment.
-//
-// See https://aka.ms/devcontainer.json for more information.
 {
 	"name": "aws-sdk-go-bindings",
-	// Official Go image: ships the Go toolchain plus gopls and common Go tooling.
-	"image": "mcr.microsoft.com/devcontainers/go:1-1.22-bookworm",
+	"image": "mcr.microsoft.com/devcontainers/go:2.1.3-1.26-bookworm",
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"golang.go"
+				"golang.Go"
 			]
 		}
 	}
