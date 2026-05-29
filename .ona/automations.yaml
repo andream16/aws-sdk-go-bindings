@@ -1,0 +1,28 @@
+# Ona automations for aws-sdk-go-bindings.
+# Tasks are one-shot workflows. This is a Go library with mock-based tests,
+# so there are no long-running services.
+# See https://ona.com/docs/ona/reference/automations-yaml-schema
+tasks:
+  deps:
+    name: Download dependencies
+    description: Download Go module dependencies.
+    triggeredBy:
+      - postDevcontainerStart
+    command: |
+      go mod download
+
+  build:
+    name: Build
+    description: Compile all packages.
+    dependsOn:
+      - deps
+    command: |
+      go build ./...
+
+  test:
+    name: Test
+    description: Run the test suite with race detector and coverage (mirrors CI).
+    dependsOn:
+      - deps
+    command: |
+      go test -v -cover -race ./...
