@@ -1,14 +1,12 @@
 {
 	"name": "aws-sdk-go-bindings",
-	"build": {
-		"context": ".",
-		"dockerfile": "Dockerfile"
-	},
+	"image": "mcr.microsoft.com/devcontainers/go:1-bookworm",
 	"customizations": {
 		"vscode": {
 			"extensions": [
 				"golang.Go"
 			]
 		}
-	}
+	},
+	"remoteUser": "vscode"
 }

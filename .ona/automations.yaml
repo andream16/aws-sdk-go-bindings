@@ -1,22 +1,21 @@
 tasks:
-  download:
-    name: Download Go modules
-    command: |
-      go mod download
-    triggeredBy:
-      - manual
-      - postDevcontainerStart
+    download-dependencies:
+        name: Download Go dependencies
+        command: |
+            go mod download
+        triggeredBy:
+            - manual
 
-  build:
-    name: Build
-    command: |
-      go build ./...
-    triggeredBy:
-      - manual
+    build:
+        name: Build packages
+        command: |
+            go test -run '^$' ./...
+        triggeredBy:
+            - manual
 
-  test:
-    name: Test
-    command: |
-      go test ./...
-    triggeredBy:
-      - manual
+    test:
+        name: Run Go tests
+        command: |
+            go test -v -cover -race ./...
+        triggeredBy:
+            - manual
