@@ -1,0 +1,18 @@
+tasks:
+  installDeps:
+    name: Install dependencies
+    description: Download Go module dependencies.
+    command: |
+      go mod download
+    triggeredBy:
+      - postDevcontainerStart
+
+  test:
+    name: Test
+    description: Run the test suite with race detector and coverage.
+    command: |
+      go test -v -cover -race ./...
+    triggeredBy:
+      - manual
+    dependsOn:
+      - installDeps

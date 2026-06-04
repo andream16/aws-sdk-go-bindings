@@ -1,0 +1,8 @@
+// The Dev Container format allows you to configure your environment. At the heart of it
+// is a Docker image or Dockerfile which controls the tools available in your environment.
+//
+// See https://aka.ms/devcontainer.json for more information.
+{
+	"name": "aws-sdk-go-bindings",
+	"image": "mcr.microsoft.com/devcontainers/go:1-bookworm"
+}
