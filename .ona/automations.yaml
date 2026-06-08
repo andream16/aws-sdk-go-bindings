@@ -1,14 +1,28 @@
 tasks:
-  install:
+  installDeps:
     name: Install dependencies
-    command: go mod download
+    description: Download Go module dependencies.
+    command: |
+      go mod download
     triggeredBy:
       - postDevcontainerStart
 
-  test:
-    name: Test
-    command: go test -v -cover -race ./...
+  build:
+    name: Build
+    description: Compile all Go packages.
+    command: |
+      go build ./...
     triggeredBy:
       - manual
     dependsOn:
-      - install
+      - installDeps
+
+  test:
+    name: Test
+    description: Run the Go test suite.
+    command: |
+      go test ./...
+    triggeredBy:
+      - manual
+    dependsOn:
+      - installDeps
