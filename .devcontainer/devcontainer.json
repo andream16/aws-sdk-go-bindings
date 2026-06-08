@@ -1,4 +1,4 @@
 {
   "name": "aws-sdk-go-bindings",
-  "image": "mcr.microsoft.com/devcontainers/go:0-1.17-bullseye"
+  "image": "mcr.microsoft.com/devcontainers/go:1.24"
 }
