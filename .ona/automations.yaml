@@ -1,12 +1,13 @@
 tasks:
-  install-dependencies:
+  install:
     name: Install dependencies
     command: go mod download
     triggeredBy:
       - postDevcontainerStart
-
   test:
-    name: Test
-    command: go test -v -cover -race ./...
+    name: Run tests
+    command: go test ./...
+    dependsOn:
+      - install
     triggeredBy:
       - manual
