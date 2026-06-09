@@ -1,0 +1,4 @@
+{
+	"name": "aws-sdk-go-bindings",
+	"image": "mcr.microsoft.com/devcontainers/go:1"
+}

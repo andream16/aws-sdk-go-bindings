@@ -1,0 +1,14 @@
+tasks:
+  install:
+    name: Install dependencies
+    command: go mod download
+    triggeredBy:
+      - postDevcontainerStart
+
+  test:
+    name: Test
+    command: go test ./...
+    dependsOn:
+      - install
+    triggeredBy:
+      - manual
