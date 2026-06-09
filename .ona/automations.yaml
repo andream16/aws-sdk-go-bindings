@@ -1,13 +1,15 @@
 tasks:
   install:
     name: Install dependencies
+    description: Download Go module dependencies.
     command: go mod download
     triggeredBy:
       - postDevcontainerStart
 
   test:
     name: Test
-    command: go test ./...
+    description: Run the test suite with race detector and coverage.
+    command: go test -v -cover -race ./...
     dependsOn:
       - install
     triggeredBy:
